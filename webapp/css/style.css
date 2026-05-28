@@ -8,8 +8,7 @@
 }
 
 /* L (medi-grandi) */
-@media (min-width: 992px) and (max-width: 1199px),
-(min-width: 768px) and (max-width: 991px) {
+@media (min-width: 992px) and (max-width: 1199px), (min-width: 768px) and (max-width: 991px) {
   .vertical-layout-responsive {
     width: calc(50% - 8px);
   }
@@ -33,4 +32,19 @@
 .m-label-hbox {
   margin-top: 1px;
   margin-right: 4px;
+}
+
+.posTable .sapMText {
+  max-width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: break-spaces;
+}
+
+.posTable .sapMListTblNavCol,
+.posTable .sapMListTblNavCell {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  background-color: var(--sapBaseColor, #fff);
 }

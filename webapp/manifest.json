@@ -67,8 +67,7 @@
         "sap.ui.table": {},
         "sap.ui.layout": {},
         "sap.ui.export": {},
-        "sap.ui.comp": {},
-        "sap.ui.fl": {}
+        "sap.ui.comp": {}
       }
     },
     "contentDensities": {
@@ -87,7 +86,8 @@
         "preload": true,
         "settings": {
           "operationMode": "Server",
-          "earlyRequests": true
+          "earlyRequests": true,
+          "groupId": "$direct"
         }
       }
     },

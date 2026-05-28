@@ -16,7 +16,8 @@ const xlsxUtils = {
     },
 
     getColumnsFromTable(that: any, oTable: any): object[] {
-        return (oTable._getVisibleColumns() as any[])
+        return (oTable.getColumns() as any[])
+            .filter((c: any) => c.getVisible())
             .map((c: any) => {
                 const sKey = c.data("p13nKey") as string;
                 const sI18nKey = c.data("i18nKey") as string;

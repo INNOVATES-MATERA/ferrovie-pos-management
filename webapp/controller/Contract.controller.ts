@@ -1,11 +1,11 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import MessageBox from "sap/m/MessageBox";
-import tableSettingsUtils from "../utils/tableSettingsUtils";
+import p13nDialogUtils from "../utils/p13nDialogUtils";
 import entityUtils from "../utils/entityUtils";
 import dateUtils from "../utils/dateUtils";
 import xlsxUtils from "../utils/xlsxUtils";
-import Table from "sap/ui/table/Table";
+import Table from "sap/m/Table";
 
 const DEFAULT_MODEL = {
     data: [] as object[],
@@ -143,7 +143,7 @@ export default class Contract extends BaseController {
     public onAfterRendering(): void {
         const oTable = this.byId("tblContract") as Table;
         if (oTable) {
-            tableSettingsUtils.registerForP13n(oTable);
+            p13nDialogUtils.register(oTable);
         }
     }
 
@@ -172,7 +172,7 @@ export default class Contract extends BaseController {
             this.setBusy(true);
             this._oModelPos.setProperty("/filters/qFilter", "");
             const oTable = this.byId("tblContract") as Table;
-            await tableSettingsUtils.resetTable(oTable);
+            await p13nDialogUtils.reset(oTable);
             await this._loadData();
         } catch (e) {
             entityUtils.handleError(e as Error);
@@ -195,7 +195,7 @@ export default class Contract extends BaseController {
     public onSettings(oEvent: any): void {
         const oTable = this.byId("tblContract") as Table;
         const sPanel = oEvent.getSource().data("panel") as string;
-        tableSettingsUtils.open(oTable, sPanel, oEvent.getSource());
+        p13nDialogUtils.open(oTable, sPanel as any, oEvent.getSource());
     }
 
     public async onDownload(): Promise<void> {
