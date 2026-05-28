@@ -1,0 +1,330 @@
+<mvc:View controllerName="posmanagement.controller.Contract"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:f="sap.f"
+    xmlns:l="sap.ui.layout"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:sap.ui.fl="sap.ui.fl"
+    xmlns:rowmodes="sap.ui.table.rowmodes">
+
+    <f:DynamicPage showFooter="true">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>lbl_contract}"/>
+                </f:heading>
+                <f:expandedContent>
+                    <Text text="{Contract>/contractCode} - {Contract>/contractTitle}"/>
+                </f:expandedContent>
+                <f:snappedContent>
+                    <Text text="{Contract>/contractCode} - {Contract>/contractTitle}"/>
+                </f:snappedContent>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <l:HorizontalLayout class="w-100"
+                    allowWrapping="true">
+
+                    <!-- Colonna 1 -->
+                    <l:VerticalLayout class="vertical-layout-responsive sapUiTinyMarginEnd">
+                        <HBox>
+                            <Label text="{i18n>lbl_contract_code}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/contractCode}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_contract_title}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/contractTitle}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_inventory_category}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/inventoryCategory}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_contract_type}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/contractType}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_tender_type}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/tenderType}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_contract_object}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/contractObject}"/>
+                        </HBox>
+                    </l:VerticalLayout>
+
+                    <!-- Colonna 2 -->
+                    <l:VerticalLayout class="vertical-layout-responsive sapUiTinyMarginEnd">
+                        <HBox>
+                            <Label text="{i18n>lbl_npp_code}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/nppCode}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_npp_description}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/nppDescription}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_cup}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/cup}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_derived_cig}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/derivedCig}"/>
+                        </HBox>
+                    </l:VerticalLayout>
+
+                    <!-- Colonna 3 -->
+                    <l:VerticalLayout class="vertical-layout-responsive sapUiTinyMarginEnd">
+                        <HBox>
+                            <Label text="{i18n>lbl_status}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/status}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_closure_document}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/closureDocument}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_cell_number}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/cellNumber}"/>
+                        </HBox>
+                    </l:VerticalLayout>
+
+                    <!-- Colonna 4 -->
+                    <l:VerticalLayout class="vertical-layout-responsive sapUiTinyMarginEnd">
+                        <HBox>
+                            <Label text="{i18n>lbl_sap_purchase_group_code}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/sapPurchaseGroupCode}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_sap_purchase_group_desc}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/sapPurchaseGroupDesc}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_sap_purchase_org_code}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/sapPurchaseOrgCode}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_sap_purchase_org_desc}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/sapPurchaseOrgDesc}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_technical_subject_responsibility}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/technicalSubjectResponsibility}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_technical_site}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/technicalSite}"/>
+                        </HBox>
+                        <HBox>
+                            <Label text="{i18n>lbl_asset_owner_structure}"
+                                showColon="true"
+                                class="m-label-hbox"/>
+                            <Text text="{Contract>/assetOwnerStructure}"/>
+                        </HBox>
+                    </l:VerticalLayout>
+
+                </l:HorizontalLayout>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <VBox>
+
+                <!-- FILTRI -->
+                <Panel>
+                    <l:Grid>
+                        <VBox>
+                            <Label text="{i18n>lbl_search_pos}"/>
+                            <SearchField id="sfContract"
+                                change="onFiltersChange"
+                                value="{Pos>/filters/qFilter}"
+                                placeholder="{i18n>plh_search}"/>
+                            <layoutData>
+                                <l:GridData span="XL4 L5 M6 S12"/>
+                            </layoutData>
+                        </VBox>
+
+                        <HBox justifyContent="End">
+                            <VBox class="sapUiTinyMarginEnd">
+                                <Label text=""/>
+                                <Button text="{i18n>btn_reset}"
+                                    icon="sap-icon://refresh"
+                                    press="onReset"/>
+                            </VBox>
+                            <layoutData>
+                                <l:GridData span="XL2 L3 M6 S12"
+                                    indent="XL6 L4 M6"/>
+                            </layoutData>
+                        </HBox>
+                    </l:Grid>
+                </Panel>
+
+                <!-- TABELLA -->
+                <Panel class="sapUiTinyMarginTop">
+                    <OverflowToolbar style="Standard"
+                        class="p-0">
+                        <Label text="{i18n>lbl_extracted_records}: {Pos>/count}"
+                            design="Bold"/>
+                        <ToolbarSpacer/>
+                        <Button icon="sap-icon://create"
+                            text="{i18n>btn_create}"
+                            press="onCreate"/>
+                        <Button icon="sap-icon://delete"
+                            text="{i18n>btn_delete}"
+                            press="onDelete"/>
+                        <Button icon="sap-icon://sort"
+                            press="onSettings"
+                            app:panel="Sorter"/>
+                        <Button icon="sap-icon://filter"
+                            press="onSettings"
+                            app:panel="Filter"/>
+                        <Button icon="sap-icon://action-settings"
+                            press="onSettings"
+                            app:panel="Columns"/>
+                        <Button icon="sap-icon://download"
+                            press="onDownload"/>
+                    </OverflowToolbar>
+
+                    <t:Table id="tblContract"
+                        rows="{Pos>/data}"
+                        selectionMode="Single"
+                        selectionBehavior="RowOnly"
+                        sap.ui.fl:flexibility="sap/m/flexibility/EngineFlex">
+                        <t:rowMode>
+                            <rowmodes:Fixed rowCount="15"/>
+                        </t:rowMode>
+
+                        <t:columns>
+
+                            <t:Column app:p13nKey="posId" app:i18nKey="lbl_pos_id">
+                                <Label text="{i18n>lbl_pos_id}"/>
+                                <t:template>
+                                    <Text text="{Pos>posId}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="contractCode" app:i18nKey="lbl_contract_code">
+                                <Label text="{i18n>lbl_contract_code}"/>
+                                <t:template>
+                                    <Text text="{Pos>contractCode}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="contractorCompany" app:i18nKey="lbl_contractor_company">
+                                <Label text="{i18n>lbl_contractor_company}"/>
+                                <t:template>
+                                    <Text text="{Pos>contractorCompany}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="companyRole" app:i18nKey="lbl_company_role">
+                                <Label text="{i18n>lbl_company_role}"/>
+                                <t:template>
+                                    <Text text="{Pos>companyRole}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="status" app:i18nKey="lbl_status">
+                                <Label text="{i18n>lbl_status}"/>
+                                <t:template>
+                                    <Text text="{Pos>status}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="revision" app:i18nKey="lbl_revision">
+                                <Label text="{i18n>lbl_revision}"/>
+                                <t:template>
+                                    <Text text="{Pos>revision}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="draftDate" app:i18nKey="lbl_draft_date">
+                                <Label text="{i18n>lbl_draft_date}"/>
+                                <t:template>
+                                    <Text text="{path: 'Pos>draftDate', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="validityStart" app:i18nKey="lbl_validity_start">
+                                <Label text="{i18n>lbl_validity_start}"/>
+                                <t:template>
+                                    <Text text="{path: 'Pos>validityStart', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <t:Column app:p13nKey="validityEnd" app:i18nKey="lbl_validity_end">
+                                <Label text="{i18n>lbl_validity_end}"/>
+                                <t:template>
+                                    <Text text="{path: 'Pos>validityEnd', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"/>
+                                </t:template>
+                            </t:Column>
+
+                            <!-- ACTION: edit -->
+                            <t:Column hAlign="Center" width="3.5rem">
+                                <Label text=""/>
+                                <t:template>
+                                    <Button icon="sap-icon://edit"
+                                        type="Transparent"
+                                        press="onEdit"
+                                        tooltip="{i18n>btn_edit}"/>
+                                </t:template>
+                            </t:Column>
+
+
+                        </t:columns>
+                    </t:Table>
+                </Panel>
+
+            </VBox>
+        </f:content>
+
+        <f:footer>
+            <OverflowToolbar>
+                <Button text="{i18n>btn_back}"
+                    type="Back"
+                    press="onBack"/>
+            </OverflowToolbar>
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View>

@@ -1,0 +1,33 @@
+{
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "explorer.confirmDelete": false,
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true,
+    "**/node_modules": true
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  },
+  "xmlTools.splitAttributesOnFormat": true,
+  "sap.ux.applicationModeler.disableMigrationPrompt": true,
+  "workbench.editor.empty.hint": "hidden",
+  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.startupEditor": "none",
+  "prettier.bracketSameLine": true,
+  "prettier.printWidth": 120,
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [120],
+  "editor.minimap.maxColumn": 120,
+  "editor.fontFamily": "Jetbrains Mono Light",
+  "editor.formatOnSave": true,
+  "terminal.integrated.fontFamily": "Jetbrains Mono Light",
+  "redhat.telemetry.enabled": true,
+  "javascript.validate.enable": false,
+  "prettier.experimentalTernaries": true
+}

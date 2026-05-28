@@ -1,0 +1,9 @@
+[
+    { "posId": "POS-001", "employeeId": "EMP-001", "firstName": "Mario", "lastName": "Rossi", "department": "Sicurezza", "role": "Responsabile" },
+    { "posId": "POS-001", "employeeId": "EMP-002", "firstName": "Anna", "lastName": "Bianchi", "department": "Operativo", "role": "Addetto" },
+    { "posId": "POS-002", "employeeId": "EMP-003", "firstName": "Carlo", "lastName": "Neri", "department": "Tecnico", "role": "Tecnico" },
+    { "posId": "POS-002", "employeeId": "EMP-004", "firstName": "Sara", "lastName": "Gialli", "department": "Operativo", "role": "Addetto" },
+    { "posId": "POS-003", "employeeId": "EMP-005", "firstName": "Luca", "lastName": "Blu", "department": "Sicurezza", "role": "RSPP" },
+    { "posId": "POS-004", "employeeId": "EMP-006", "firstName": "Elena", "lastName": "Verdi", "department": "Operativo", "role": "Addetto" },
+    { "posId": "POS-005", "employeeId": "EMP-007", "firstName": "Marco", "lastName": "Ferrari", "department": "Tecnico", "role": "DL" }
+]

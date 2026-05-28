@@ -1,0 +1,9 @@
+[
+    { "posId": "POS-001", "contractCode": "CONTR-001", "contractorCompany": "Impresa Rossi S.r.l.", "companyRole": "Appaltatore", "status": "approved", "revision": "1", "draftDate": "2024-01-15", "validityStart": "2024-02-01", "validityEnd": "2025-01-31" },
+    { "posId": "POS-002", "contractCode": "CONTR-001", "contractorCompany": "Tecno Edil S.p.A.", "companyRole": "Subappaltatore", "status": "toApprove", "revision": "0", "draftDate": "2024-03-10", "validityStart": "2024-04-01", "validityEnd": "2025-03-31" },
+    { "posId": "POS-003", "contractCode": "CONTR-002", "contractorCompany": "Costruzioni Bianchi S.r.l.", "companyRole": "Appaltatore", "status": "draft", "revision": "0", "draftDate": "2024-02-20", "validityStart": "2024-03-01", "validityEnd": "2025-02-28" },
+    { "posId": "POS-004", "contractCode": "CONTR-003", "contractorCompany": "MedTech Italia S.p.A.", "companyRole": "Appaltatore", "status": "approved", "revision": "2", "draftDate": "2023-11-05", "validityStart": "2024-01-01", "validityEnd": "2024-12-31" },
+    { "posId": "POS-005", "contractCode": "CONTR-003", "contractorCompany": "Forniture Mediche S.r.l.", "companyRole": "Subappaltatore", "status": "closed", "revision": "1", "draftDate": "2023-12-01", "validityStart": "2024-01-01", "validityEnd": "2024-06-30" },
+    { "posId": "POS-006", "contractCode": "CONTR-004", "contractorCompany": "Verde & Ambiente S.r.l.", "companyRole": "Appaltatore", "status": "approved", "revision": "1", "draftDate": "2023-06-15", "validityStart": "2023-07-01", "validityEnd": "2024-06-30" },
+    { "posId": "POS-007", "contractCode": "CONTR-005", "contractorCompany": "SoftWorks S.p.A.", "companyRole": "Appaltatore", "status": "toApprove", "revision": "0", "draftDate": "2024-04-01", "validityStart": "2024-05-01", "validityEnd": "2025-04-30" }
+]

@@ -1,0 +1,363 @@
+<mvc:View controllerName="posmanagement.controller.Pos"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:t="sap.ui.table"
+    xmlns:f="sap.f"
+    xmlns:l="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:sap.ui.fl="sap.ui.fl"
+    xmlns:rowmodes="sap.ui.table.rowmodes">
+
+    <f:DynamicPage showFooter="true">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>lbl_pos_form}"/>
+                </f:heading>
+                <f:expandedContent>
+                    <Text text="{POS>/posId}" visible="{POS>/isEdit}"/>
+                </f:expandedContent>
+                <f:snappedContent>
+                    <Text text="{POS>/posId}" visible="{POS>/isEdit}"/>
+                </f:snappedContent>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- HEADER PINNABLE: dati testata POS -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <form:Form id="frmPosEdit" editable="true">
+                    <form:layout>
+                        <form:ResponsiveGridLayout
+                            labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+                            adjustLabelSpan="false"
+                            emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0"
+                            columnsXL="3" columnsL="2" columnsM="1"
+                            singleContainerFullSize="false"/>
+                    </form:layout>
+                    <form:formContainers>
+
+                        <!-- Container 1: Identificatori -->
+                        <form:FormContainer>
+                            <form:formElements>
+                                <form:FormElement label="{i18n>lbl_pos_id}">
+                                    <form:fields>
+                                        <Input id="inpPosId"
+                                            value="{POS>/posId}"
+                                            editable="false"
+                                            visible="{POS>/isEdit}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_contract}">
+                                    <form:fields>
+                                        <Input id="inpContractCode"
+                                            value="{POS>/contractCode}"
+                                            editable="false"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_contractor_company}">
+                                    <form:fields>
+                                        <Input id="inpContractorCompany"
+                                            value="{POS>/contractorCompany}"
+                                            editable="false"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_company_role}">
+                                    <form:fields>
+                                        <Input id="inpCompanyRole"
+                                            value="{POS>/companyRole}"
+                                            editable="false"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_parent_contract_code}">
+                                    <form:fields>
+                                        <Input id="inpParentContractCode"
+                                            value="{POS>/parentContractCode}"
+                                            editable="false"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_client}">
+                                    <form:fields>
+                                        <Input id="inpClient"
+                                            value="{POS>/client}"
+                                            editable="false"/>
+                                    </form:fields>
+                                </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+
+                        <!-- Container 2: Figure di sicurezza -->
+                        <form:FormContainer>
+                            <form:formElements>
+                                <form:FormElement label="{i18n>lbl_employer}">
+                                    <form:fields>
+                                        <Input id="inpEmployer"
+                                            value="{POS>/employer}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_rspp}">
+                                    <form:fields>
+                                        <Input id="inpRspp"
+                                            value="{POS>/rspp}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_rls}">
+                                    <form:fields>
+                                        <Input id="inpRls"
+                                            value="{POS>/rls}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_works_director}">
+                                    <form:fields>
+                                        <Input id="inpWorksDirector"
+                                            value="{POS>/worksDirector}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_first_aid_personnel}">
+                                    <form:fields>
+                                        <Input id="inpFirstAidPersonnel"
+                                            value="{POS>/firstAidPersonnel}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_fire_personnel}">
+                                    <form:fields>
+                                        <Input id="inpFirePersonnel"
+                                            value="{POS>/firePersonnel}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+
+                        <!-- Container 3: Stato e date -->
+                        <form:FormContainer>
+                            <form:formElements>
+                                <form:FormElement label="{i18n>lbl_status}">
+                                    <form:fields>
+                                        <Select id="selStatus"
+                                            selectedKey="{POS>/status}"
+                                            width="100%"
+                                            items="{PosStatus>/}">
+                                            <core:Item key="{PosStatus>key}"
+                                                text="{PosStatus>text}"/>
+                                        </Select>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_revision}">
+                                    <form:fields>
+                                        <Input id="inpRevision"
+                                            value="{POS>/revision}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_draft_date}">
+                                    <form:fields>
+                                        <DatePicker id="dpDraftDate"
+                                            value="{POS>/draftDate}"
+                                            valueFormat="yyyy-MM-dd"
+                                            displayFormat="dd/MM/yyyy"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_reception_date}">
+                                    <form:fields>
+                                        <DatePicker id="dpReceptionDate"
+                                            value="{POS>/receptionDate}"
+                                            valueFormat="yyyy-MM-dd"
+                                            displayFormat="dd/MM/yyyy"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_validity_start}">
+                                    <form:fields>
+                                        <DatePicker id="dpValidityStart"
+                                            value="{POS>/validityStart}"
+                                            valueFormat="yyyy-MM-dd"
+                                            displayFormat="dd/MM/yyyy"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_validity_end}">
+                                    <form:fields>
+                                        <DatePicker id="dpValidityEnd"
+                                            value="{POS>/validityEnd}"
+                                            valueFormat="yyyy-MM-dd"
+                                            displayFormat="dd/MM/yyyy"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_link}">
+                                    <form:fields>
+                                        <Input id="inpLink"
+                                            value="{POS>/link}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+
+                    </form:formContainers>
+                </form:Form>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!-- CONTENT: tabella utenti + colonna abilitazioni -->
+        <f:content>
+            <f:FlexibleColumnLayout id="fclStaff"
+                layout="{= ${Skills>/isOpen} ? 'TwoColumnsBeginExpanded' : 'OneColumn' }">
+
+                <!-- Colonna master: tabella utenti -->
+                <f:beginColumnPages>
+                    <Panel>
+                        <OverflowToolbar style="Standard" class="p-0">
+                            <Label text="{i18n>lbl_extracted_records}: {Staff>/count}" design="Bold"/>
+                            <ToolbarSpacer/>
+                            <Button icon="sap-icon://add"
+                                text="{i18n>btn_add}"
+                                press="onAddStaff"/>
+                            <Button icon="sap-icon://delete"
+                                text="{i18n>btn_delete}"
+                                press="onDeleteStaff"/>
+                        </OverflowToolbar>
+
+                        <t:Table id="tblStaff"
+                            rows="{Staff>/data}"
+                            selectionMode="MultiToggle"
+                            selectionBehavior="RowOnly"
+                            sap.ui.fl:flexibility="sap/m/flexibility/EngineFlex">
+                            <t:rowMode>
+                                <rowmodes:Fixed rowCount="10"/>
+                            </t:rowMode>
+                            <t:columns>
+
+                                <t:Column app:p13nKey="employeeId">
+                                    <Label text="{i18n>lbl_employee_id}"/>
+                                    <t:template>
+                                        <Text text="{Staff>employeeId}"/>
+                                    </t:template>
+                                </t:Column>
+
+                                <t:Column app:p13nKey="firstName">
+                                    <Label text="{i18n>lbl_first_name}"/>
+                                    <t:template>
+                                        <Input value="{Staff>firstName}"/>
+                                    </t:template>
+                                </t:Column>
+
+                                <t:Column app:p13nKey="lastName">
+                                    <Label text="{i18n>lbl_last_name}"/>
+                                    <t:template>
+                                        <Input value="{Staff>lastName}"/>
+                                    </t:template>
+                                </t:Column>
+
+                                <t:Column app:p13nKey="department">
+                                    <Label text="{i18n>lbl_department}"/>
+                                    <t:template>
+                                        <Input value="{Staff>department}"/>
+                                    </t:template>
+                                </t:Column>
+
+                                <t:Column app:p13nKey="role">
+                                    <Label text="{i18n>lbl_role}"/>
+                                    <t:template>
+                                        <Input value="{Staff>role}"/>
+                                    </t:template>
+                                </t:Column>
+
+                                <!-- Pulsante apertura abilitazioni -->
+                                <t:Column hAlign="Center" width="3.5rem">
+                                    <Label text=""/>
+                                    <t:template>
+                                        <Button icon="sap-icon://permission"
+                                            type="Transparent"
+                                            press="onOpenSkills"
+                                            tooltip="{i18n>btn_skills}"/>
+                                    </t:template>
+                                </t:Column>
+
+                            </t:columns>
+                        </t:Table>
+                    </Panel>
+                </f:beginColumnPages>
+
+                <!-- Colonna detail: abilitazioni dipendente -->
+                <f:midColumnPages>
+                    <Page
+                        title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/firstName} + ' ' + ${Skills>/lastName} }"
+                        showNavButton="true"
+                        navButtonPress="onCancelSkills">
+                        <content>
+                            <VBox class="sapUiMediumMargin">
+
+                                <!-- Seleziona tutto -->
+                                <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+                                    <CheckBox id="chkSelectAll"
+                                        text="{i18n>lbl_select_all}"
+                                        select="onSelectAll"/>
+                                </HBox>
+
+                                <!-- Lista dinamica abilitazioni -->
+                                <List
+                                    items="{Skills>/items}"
+                                    showSeparators="None">
+                                    <CustomListItem>
+                                        <VBox class="sapUiTinyMarginBottom">
+                                            <CheckBox
+                                                text="{Skills>label}"
+                                                selected="{Skills>selected}"
+                                                select="onSkillChange"/>
+                                            <HBox alignItems="Center" class="sapUiTinyMarginTop" visible="{Skills>selected}">
+                                                <Label text="{i18n>lbl_skill_start}" class="sapUiTinyMarginEnd" width="3rem"/>
+                                                <DatePicker
+                                                    value="{Skills>startDate}"
+                                                    valueFormat="yyyy-MM-dd"
+                                                    displayFormat="dd/MM/yyyy"
+                                                    enabled="{Skills>selected}"
+                                                    width="9rem"/>
+                                                <Label text="{i18n>lbl_skill_end}" class="sapUiSmallMarginBegin sapUiTinyMarginEnd" width="3rem"/>
+                                                <DatePicker
+                                                    value="{Skills>endDate}"
+                                                    valueFormat="yyyy-MM-dd"
+                                                    displayFormat="dd/MM/yyyy"
+                                                    enabled="{Skills>selected}"
+                                                    width="9rem"/>
+                                            </HBox>
+                                        </VBox>
+                                    </CustomListItem>
+                                </List>
+
+                            </VBox>
+                        </content>
+                        <footer>
+                            <OverflowToolbar>
+                                <ToolbarSpacer/>
+                                <Button text="{i18n>btn_save}"
+                                    type="Emphasized"
+                                    press="onSaveSkills"
+                                    class="sapUiTinyMarginEnd"/>
+                                <Button text="{i18n>btn_cancel}"
+                                    press="onCancelSkills"/>
+                            </OverflowToolbar>
+                        </footer>
+                    </Page>
+                </f:midColumnPages>
+
+            </f:FlexibleColumnLayout>
+        </f:content>
+
+        <f:footer>
+            <OverflowToolbar>
+                <Button text="{i18n>btn_back}"
+                    type="Back"
+                    press="onBack"/>
+                <ToolbarSpacer/>
+                <Button id="btnSave"
+                    text="{i18n>btn_save}"
+                    type="Emphasized"
+                    icon="sap-icon://save"
+                    press="onSave"/>
+                <Button id="btnCancel"
+                    text="{i18n>btn_cancel}"
+                    press="onCancel"/>
+            </OverflowToolbar>
+        </f:footer>
+    </f:DynamicPage>
+
+
+</mvc:View>

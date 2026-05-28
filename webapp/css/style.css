@@ -1,0 +1,36 @@
+/* Enter your custom styles here */
+
+/* XL (schermi grandi) */
+@media (min-width: 1200px) {
+  .vertical-layout-responsive {
+    width: calc(25% - 8px);
+  }
+}
+
+/* L (medi-grandi) */
+@media (min-width: 992px) and (max-width: 1199px),
+(min-width: 768px) and (max-width: 991px) {
+  .vertical-layout-responsive {
+    width: calc(50% - 8px);
+  }
+}
+
+/* S (smartphone) */
+@media (max-width: 767px) {
+  .vertical-layout-responsive {
+    width: calc(100% - 8px);
+  }
+}
+
+.p-0 {
+  padding: 0% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.m-label-hbox {
+  margin-top: 1px;
+  margin-right: 4px;
+}
