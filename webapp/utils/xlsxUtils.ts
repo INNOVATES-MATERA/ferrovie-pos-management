@@ -15,17 +15,14 @@ const xlsxUtils = {
         });
     },
 
-    getColumnsFromTable(that: any, oTable: any): object[] {
+    getColumnsFromTable(_that: any, oTable: any): object[] {
         return (oTable.getColumns() as any[])
             .filter((c: any) => c.getVisible())
             .map((c: any) => {
                 const sKey = c.data("p13nKey") as string;
-                const sI18nKey = c.data("i18nKey") as string;
                 const sProp = (c.data("prop") as string) || sKey;
                 if (!sKey) return null;
-                const sLabel = sI18nKey
-                    ? that.getText(sI18nKey)
-                    : that.getText(`lbl_${sKey}`);
+                const sLabel = c.getHeader()?.getText?.() ?? sKey;
                 return {
                     label: sLabel,
                     property: sProp,

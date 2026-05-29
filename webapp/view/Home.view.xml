@@ -28,6 +28,7 @@
                             tooltip="{i18n>btn_reset}"/>
                         <Button icon="sap-icon://sort"
                             press="onSettings"
+                            tooltip="{i18n>btn_sort}"
                             app:panel="Sorter"/>
                         <Button icon="sap-icon://filter"
                             press="onSettings"

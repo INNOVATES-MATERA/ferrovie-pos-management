@@ -2,13 +2,11 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
-    xmlns:t="sap.ui.table"
     xmlns:f="sap.f"
     xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
-    xmlns:sap.ui.fl="sap.ui.fl"
-    xmlns:rowmodes="sap.ui.table.rowmodes">
+    xmlns:sap.ui.fl="sap.ui.fl">
 
     <f:DynamicPage showFooter="true">
         <f:title>
@@ -17,10 +15,14 @@
                     <Title text="{i18n>lbl_pos_form}"/>
                 </f:heading>
                 <f:expandedContent>
-                    <Text text="{POS>/posId}" visible="{POS>/isEdit}"/>
+                    <Title text="{POS>/posId}"
+                        visible="{POS>/isEdit}"
+                        level="H3"/>
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Text text="{POS>/posId}" visible="{POS>/isEdit}"/>
+                    <Title text="{POS>/posId}"
+                        visible="{POS>/isEdit}"
+                        level="H3"/>
                 </f:snappedContent>
             </f:DynamicPageTitle>
         </f:title>
@@ -28,13 +30,21 @@
         <!-- HEADER PINNABLE: dati testata POS -->
         <f:header>
             <f:DynamicPageHeader pinnable="true">
-                <form:Form id="frmPosEdit" editable="true">
+                <form:Form id="frmPosEdit"
+                    editable="true">
                     <form:layout>
-                        <form:ResponsiveGridLayout
-                            labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12"
+                        <form:ResponsiveGridLayout labelSpanXL="4"
+                            labelSpanL="4"
+                            labelSpanM="4"
+                            labelSpanS="12"
                             adjustLabelSpan="false"
-                            emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0"
-                            columnsXL="3" columnsL="2" columnsM="1"
+                            emptySpanXL="0"
+                            emptySpanL="0"
+                            emptySpanM="0"
+                            emptySpanS="0"
+                            columnsXL="3"
+                            columnsL="2"
+                            columnsM="1"
                             singleContainerFullSize="false"/>
                     </form:layout>
                     <form:formContainers>
@@ -204,8 +214,10 @@
                 <!-- Colonna master: tabella utenti -->
                 <f:beginColumnPages>
                     <Panel>
-                        <OverflowToolbar style="Standard" class="p-0">
-                            <Label text="{i18n>lbl_extracted_records}: {Staff>/count}" design="Bold"/>
+                        <OverflowToolbar style="Standard"
+                            class="p-0">
+                            <Title text="{i18n>lbl_employees}: {Staff>/count}"
+                                level="H2"/>
                             <ToolbarSpacer/>
                             <Button icon="sap-icon://add"
                                 text="{i18n>btn_add}"
@@ -213,106 +225,145 @@
                             <Button icon="sap-icon://delete"
                                 text="{i18n>btn_delete}"
                                 press="onDeleteStaff"/>
+                            <Button id="btnStaffReset"
+                                icon="sap-icon://refresh"
+                                press="onReset"
+                                tooltip="{i18n>btn_reset}"/>
+                            <Button icon="sap-icon://sort"
+                                press="onSettings"
+                                tooltip="{i18n>btn_sort}"
+                                app:panel="Sorter"/>
+                            <Button icon="sap-icon://filter"
+                                press="onSettings"
+                                app:panel="Filter"/>
+                            <Button icon="sap-icon://action-settings"
+                                press="onSettings"
+                                app:panel="Columns"/>
+                            <Button icon="sap-icon://download"
+                                press="onDownload"/>
                         </OverflowToolbar>
 
-                        <t:Table id="tblStaff"
-                            rows="{Staff>/data}"
-                            selectionMode="MultiToggle"
-                            selectionBehavior="RowOnly"
-                            sap.ui.fl:flexibility="sap/m/flexibility/EngineFlex">
-                            <t:rowMode>
-                                <rowmodes:Fixed rowCount="10"/>
-                            </t:rowMode>
-                            <t:columns>
+                        <ScrollContainer horizontal="true"
+                            vertical="false"
+                            width="100%">
+                            <Table id="tblStaff"
+                                items="{Staff>/data}"
+                                mode="MultiSelect"
+                                fixedLayout="true"
+                                class="posTable">
 
-                                <t:Column app:p13nKey="employeeId">
-                                    <Label text="{i18n>lbl_employee_id}"/>
-                                    <t:template>
-                                        <Text text="{Staff>employeeId}"/>
-                                    </t:template>
-                                </t:Column>
+                                <columns>
 
-                                <t:Column app:p13nKey="firstName">
-                                    <Label text="{i18n>lbl_first_name}"/>
-                                    <t:template>
-                                        <Input value="{Staff>firstName}"/>
-                                    </t:template>
-                                </t:Column>
+                                    <Column app:p13nKey="employeeId"
+                                        width="9rem">
+                                        <header>
+                                            <Label text="{i18n>lbl_employee_id}"
+                                                wrapping="false"/>
+                                        </header>
+                                    </Column>
 
-                                <t:Column app:p13nKey="lastName">
-                                    <Label text="{i18n>lbl_last_name}"/>
-                                    <t:template>
-                                        <Input value="{Staff>lastName}"/>
-                                    </t:template>
-                                </t:Column>
+                                    <Column app:p13nKey="firstName"
+                                        width="10rem">
+                                        <header>
+                                            <Label text="{i18n>lbl_first_name}"
+                                                wrapping="false"/>
+                                        </header>
+                                    </Column>
 
-                                <t:Column app:p13nKey="department">
-                                    <Label text="{i18n>lbl_department}"/>
-                                    <t:template>
-                                        <Input value="{Staff>department}"/>
-                                    </t:template>
-                                </t:Column>
+                                    <Column app:p13nKey="lastName"
+                                        width="10rem">
+                                        <header>
+                                            <Label text="{i18n>lbl_last_name}"
+                                                wrapping="false"/>
+                                        </header>
+                                    </Column>
 
-                                <t:Column app:p13nKey="role">
-                                    <Label text="{i18n>lbl_role}"/>
-                                    <t:template>
-                                        <Input value="{Staff>role}"/>
-                                    </t:template>
-                                </t:Column>
+                                    <Column app:p13nKey="department"
+                                        width="12rem">
+                                        <header>
+                                            <Label text="{i18n>lbl_department}"
+                                                wrapping="false"/>
+                                        </header>
+                                    </Column>
 
-                                <!-- Pulsante apertura abilitazioni -->
-                                <t:Column hAlign="Center" width="3.5rem">
-                                    <Label text=""/>
-                                    <t:template>
-                                        <Button icon="sap-icon://permission"
-                                            type="Transparent"
-                                            press="onOpenSkills"
-                                            tooltip="{i18n>btn_skills}"/>
-                                    </t:template>
-                                </t:Column>
+                                    <Column app:p13nKey="role"
+                                        width="10rem">
+                                        <header>
+                                            <Label text="{i18n>lbl_role}"
+                                                wrapping="false"/>
+                                        </header>
+                                    </Column>
 
-                            </t:columns>
-                        </t:Table>
+                                    <Column width="3.5rem"
+                                        hAlign="Center">
+                                        <header>
+                                            <Label text=""/>
+                                        </header>
+                                    </Column>
+
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{Staff>employeeId}"
+                                                wrapping="false"/>
+                                            <Input value="{Staff>firstName}"/>
+                                            <Input value="{Staff>lastName}"/>
+                                            <Input value="{Staff>department}"/>
+                                            <Input value="{Staff>role}"/>
+                                            <Button icon="sap-icon://permission"
+                                                type="Transparent"
+                                                press="onOpenSkills"
+                                                tooltip="{i18n>btn_skills}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+
+                            </Table>
+                        </ScrollContainer>
                     </Panel>
                 </f:beginColumnPages>
 
                 <!-- Colonna detail: abilitazioni dipendente -->
                 <f:midColumnPages>
-                    <Page
-                        title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/firstName} + ' ' + ${Skills>/lastName} }"
+                    <Page title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/firstName} + ' ' + ${Skills>/lastName} }"
                         showNavButton="true"
-                        navButtonPress="onCancelSkills">
+                        navButtonPress="onCloseSkills">
                         <content>
                             <VBox class="sapUiMediumMargin">
 
                                 <!-- Seleziona tutto -->
-                                <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+                                <HBox alignItems="Center"
+                                    class="sapUiSmallMarginBottom">
                                     <CheckBox id="chkSelectAll"
                                         text="{i18n>lbl_select_all}"
                                         select="onSelectAll"/>
                                 </HBox>
 
                                 <!-- Lista dinamica abilitazioni -->
-                                <List
-                                    items="{Skills>/items}"
+                                <List items="{Skills>/items}"
                                     showSeparators="None">
                                     <CustomListItem>
                                         <VBox class="sapUiTinyMarginBottom">
-                                            <CheckBox
-                                                text="{Skills>label}"
+                                            <CheckBox text="{Skills>label}"
                                                 selected="{Skills>selected}"
                                                 select="onSkillChange"/>
-                                            <HBox alignItems="Center" class="sapUiTinyMarginTop" visible="{Skills>selected}">
-                                                <Label text="{i18n>lbl_skill_start}" class="sapUiTinyMarginEnd" width="3rem"/>
-                                                <DatePicker
-                                                    value="{Skills>startDate}"
+                                            <HBox alignItems="Center"
+                                                class="sapUiTinyMarginTop"
+                                                visible="{Skills>selected}">
+                                                <Label text="{i18n>lbl_skill_start}"
+                                                    class="sapUiTinyMarginEnd"
+                                                    width="3rem"/>
+                                                <DatePicker value="{Skills>startDate}"
                                                     valueFormat="yyyy-MM-dd"
                                                     displayFormat="dd/MM/yyyy"
                                                     enabled="{Skills>selected}"
                                                     width="9rem"/>
-                                                <Label text="{i18n>lbl_skill_end}" class="sapUiSmallMarginBegin sapUiTinyMarginEnd" width="3rem"/>
-                                                <DatePicker
-                                                    value="{Skills>endDate}"
+                                                <Label text="{i18n>lbl_skill_end}"
+                                                    class="sapUiSmallMarginBegin sapUiTinyMarginEnd"
+                                                    width="3rem"/>
+                                                <DatePicker value="{Skills>endDate}"
                                                     valueFormat="yyyy-MM-dd"
                                                     displayFormat="dd/MM/yyyy"
                                                     enabled="{Skills>selected}"
@@ -324,17 +375,6 @@
 
                             </VBox>
                         </content>
-                        <footer>
-                            <OverflowToolbar>
-                                <ToolbarSpacer/>
-                                <Button text="{i18n>btn_save}"
-                                    type="Emphasized"
-                                    press="onSaveSkills"
-                                    class="sapUiTinyMarginEnd"/>
-                                <Button text="{i18n>btn_cancel}"
-                                    press="onCancelSkills"/>
-                            </OverflowToolbar>
-                        </footer>
                     </Page>
                 </f:midColumnPages>
 
