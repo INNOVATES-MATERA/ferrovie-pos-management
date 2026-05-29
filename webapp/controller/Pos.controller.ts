@@ -33,7 +33,56 @@ const DEFAULT_POS = {
   formTitle: "",
 };
 
-const DEFAULT_STAFF = { data: [] as object[], count: 0 };
+const MOCK_POS: Record<string, typeof DEFAULT_POS> = {
+  "POS-001": {
+    posId: "POS-001",
+    contractCode: "1004/2025_002/2025",
+    contractorCompany: "Impresa Rossi S.r.l.",
+    companyRole: "Appaltante",
+    parentContractCode: "1004/2025",
+    client: "RFI S.p.A.",
+    employer: "Mario Rossi",
+    rspp: "Luca Bianchi",
+    rls: "Anna Verdi",
+    worksDirector: "Paolo Neri",
+    firstAidPersonnel: "Giorgio Esposito",
+    firePersonnel: "Carla Ferri",
+    status: "Approvato",
+    revision: "3",
+    draftDate: "2024-01-15",
+    receptionDate: "2024-01-20",
+    validityStart: "2024-02-01",
+    validityEnd: "2025-01-31",
+    link: "",
+    isEdit: true,
+    formTitle: "",
+  },
+  "POS-002": {
+    posId: "POS-002",
+    contractCode: "1004/2025_002/2025",
+    contractorCompany: "Tecno Edil S.p.A.",
+    companyRole: "Subappaltatore",
+    parentContractCode: "1004/2025",
+    client: "RFI S.p.A.",
+    employer: "Giulia Marini",
+    rspp: "Roberto Conti",
+    rls: "Silvia Greco",
+    worksDirector: "Federico Mancini",
+    firstAidPersonnel: "Teresa Bruno",
+    firePersonnel: "Davide Ricci",
+    status: "Da approvare",
+    revision: "1",
+    draftDate: "2024-03-10",
+    receptionDate: "2024-03-15",
+    validityStart: "2024-04-01",
+    validityEnd: "2025-03-31",
+    link: "",
+    isEdit: true,
+    formTitle: "",
+  },
+};
+
+const DEFAULT_STAFF = { data: [] as object[], count: 0, sortCount: 0, filterCount: 0 };
 
 const DEFAULT_STAFF_ROW = {
   posId: "",
@@ -193,7 +242,10 @@ export default class Pos extends BaseController {
     if (this._bP13nRegistered) return;
     const oTable = this.byId("tblStaff") as Table;
     if (oTable) {
-      p13nDialogUtils.register(oTable);
+      p13nDialogUtils.register(oTable, (s, f) => {
+        this._oModelStaff.setProperty("/sortCount", s);
+        this._oModelStaff.setProperty("/filterCount", f);
+      });
       this._bP13nRegistered = true;
     }
   }
@@ -203,6 +255,8 @@ export default class Pos extends BaseController {
       this.setBusy(true);
       const oTable = this.byId("tblStaff") as Table;
       await p13nDialogUtils.reset(oTable);
+      this._oModelStaff.setProperty("/sortCount", 0);
+      this._oModelStaff.setProperty("/filterCount", 0);
     } catch (e) {
       entityUtils.handleError(e as Error);
     } finally {
@@ -409,9 +463,14 @@ export default class Pos extends BaseController {
   // ── Data loading ──────────────────────────────────────────────────────────
 
   private async _loadPOS(): Promise<void> {
-    // Stub: caricare POS per posId
-    // const data = await this.getEntity("POS", { posId: this._sPosId });
-    // this._oModelPOS.setData({ ...data, isEdit: true, formTitle: ... });
+    const oData = MOCK_POS[this._sPosId];
+    if (oData) {
+      this._oModelPOS.setData({
+        ...structuredClone(oData),
+        isEdit: true,
+        formTitle: this.getText("lbl_pos_form") + ": " + this._sPosId,
+      });
+    }
   }
 
   private async _loadStaff(): Promise<void> {

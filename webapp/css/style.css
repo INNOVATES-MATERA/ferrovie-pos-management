@@ -1,5 +1,23 @@
 /* Enter your custom styles here */
 
+/* Sposta il badge dei pulsanti in alto a destra */
+.sapMBadge .sapMBadgeIndicator {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  bottom: auto !important;
+  left: auto !important;
+}
+
+.skillsPanel {
+  margin: 0 !important;
+  padding: 8px !important;
+}
+
+.skillDatesRow {
+  padding-left: 1rem;
+}
+
 /* XL (schermi grandi) */
 @media (min-width: 1200px) {
   .vertical-layout-responsive {
@@ -23,6 +41,11 @@
 
 .p-0 {
   padding: 0% !important;
+}
+
+.pt-auto-10 {
+  padding-top: 10px !important;
+  height: auto !important;
 }
 
 .w-100 {

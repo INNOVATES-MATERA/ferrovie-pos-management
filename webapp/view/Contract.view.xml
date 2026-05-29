@@ -174,7 +174,7 @@
                 <!-- TABELLA POS -->
                 <Panel class="sapUiTinyMarginTop">
                     <OverflowToolbar style="Standard"
-                        class="p-0">
+                        class="pt-auto-10">
                         <Title text="{i18n>lbl_pos_table} ({Pos>/count})"
                             level="H2"/>
                         <ToolbarSpacer/>
@@ -191,10 +191,18 @@
                         <Button icon="sap-icon://sort"
                             press="onSettings"
                             tooltip="{i18n>btn_sort}"
-                            app:panel="Sorter"/>
+                            app:panel="Sorter">
+                            <customData>
+                                <BadgeCustomData value="{Pos>/sortCount}"/>
+                            </customData>
+                        </Button>
                         <Button icon="sap-icon://filter"
                             press="onSettings"
-                            app:panel="Filter"/>
+                            app:panel="Filter">
+                            <customData>
+                                <BadgeCustomData value="{Pos>/filterCount}"/>
+                            </customData>
+                        </Button>
                         <Button icon="sap-icon://action-settings"
                             press="onSettings"
                             app:panel="Columns"/>
@@ -247,16 +255,9 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="status"
-                                    width="7rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_status}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-
                                 <Column app:p13nKey="revision"
-                                    width="6rem">
+                                    width="6rem"
+                                    visible="false">
                                     <header>
                                         <Label text="{i18n>lbl_revision}"
                                             wrapping="false"/>
@@ -264,7 +265,7 @@
                                 </Column>
 
                                 <Column app:p13nKey="draftDate"
-                                    width="8rem">
+                                    width="9rem">
                                     <header>
                                         <Label text="{i18n>lbl_draft_date}"
                                             wrapping="false"/>
@@ -283,6 +284,14 @@
                                     width="8rem">
                                     <header>
                                         <Label text="{i18n>lbl_validity_end}"
+                                            wrapping="false"/>
+                                    </header>
+                                </Column>
+
+                                <Column app:p13nKey="status"
+                                    width="7rem">
+                                    <header>
+                                        <Label text="{i18n>lbl_status}"
                                             wrapping="false"/>
                                     </header>
                                 </Column>
@@ -392,8 +401,6 @@
                                             wrapping="false"/>
                                         <Text text="{Pos>companyRole}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>status}"
-                                            wrapping="false"/>
                                         <Text text="{Pos>revision}"
                                             wrapping="false"/>
                                         <Text text="{path: 'Pos>draftDate', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
@@ -401,6 +408,8 @@
                                         <Text text="{path: 'Pos>validityStart', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
                                             wrapping="false"/>
                                         <Text text="{path: 'Pos>validityEnd', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
+                                            wrapping="false"/>
+                                        <Text text="{Pos>status}"
                                             wrapping="false"/>
                                         <Text text="{Pos>parentContractCode}"
                                             wrapping="false"/>

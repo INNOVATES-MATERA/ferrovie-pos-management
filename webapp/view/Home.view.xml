@@ -18,7 +18,8 @@
 
                 <!-- TABELLA -->
                 <Panel class="sapUiTinyMarginTop">
-                    <OverflowToolbar style="Standard">
+                    <OverflowToolbar style="Standard"
+                        class="pt-auto-10">
                         <Title text="{i18n>lbl_contracts} ({Pos>/count})"
                             level="H2"/>
                         <ToolbarSpacer/>
@@ -29,10 +30,18 @@
                         <Button icon="sap-icon://sort"
                             press="onSettings"
                             tooltip="{i18n>btn_sort}"
-                            app:panel="Sorter"/>
+                            app:panel="Sorter">
+                            <customData>
+                                <BadgeCustomData value="{Pos>/sortCount}"/>
+                            </customData>
+                        </Button>
                         <Button icon="sap-icon://filter"
                             press="onSettings"
-                            app:panel="Filter"/>
+                            app:panel="Filter">
+                            <customData>
+                                <BadgeCustomData value="{Pos>/filterCount}"/>
+                            </customData>
+                        </Button>
                         <Button icon="sap-icon://action-settings"
                             press="onSettings"
                             app:panel="Columns"/>
@@ -96,42 +105,40 @@
                                     </header>
                                 </Column>
                                 <Column app:p13nKey="codiceNPP"
-                                    width="6rem">
+                                    width="6rem"
+                                    visible="false">
                                     <header>
                                         <Label text="{i18n>lbl_npp_code}"
                                             wrapping="false"/>
                                     </header>
                                 </Column>
                                 <Column app:p13nKey="descrizioneNPP"
-                                    width="10rem">
+                                    width="10rem"
+                                    visible="false">
                                     <header>
                                         <Label text="{i18n>lbl_npp_description}"
                                             wrapping="false"/>
                                     </header>
                                 </Column>
                                 <Column app:p13nKey="CUP"
-                                    width="12rem">
+                                    width="12rem"
+                                    visible="false">
                                     <header>
                                         <Label text="{i18n>lbl_cup}"
                                             wrapping="false"/>
                                     </header>
                                 </Column>
                                 <Column app:p13nKey="CIGDerivato"
-                                    width="8rem">
+                                    width="8rem"
+                                    visible="false">
                                     <header>
                                         <Label text="{i18n>lbl_derived_cig}"
                                             wrapping="false"/>
                                     </header>
                                 </Column>
-                                <Column app:p13nKey="stato"
-                                    width="7rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_status}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
                                 <Column app:p13nKey="documentoDiChiusuraContratto"
-                                    width="14rem">
+                                    width="14rem"
+                                    visible="false">
                                     <header>
                                         <Label text="{i18n>lbl_closure_document}"
                                             wrapping="false"/>
@@ -146,8 +153,7 @@
                                     </header>
                                 </Column>
                                 <Column app:p13nKey="codiceSAPOrganizzazioneAcquisti"
-                                    width="12rem"
-                                    visible="false">
+                                    width="12rem">
                                     <header>
                                         <Label text="{i18n>lbl_sap_purchase_org_code}"
                                             wrapping="false"/>
@@ -162,10 +168,16 @@
                                     </header>
                                 </Column>
                                 <Column app:p13nKey="codiceSAPGruppoAcquisti"
-                                    width="12rem"
-                                    visible="false">
+                                    width="12rem">
                                     <header>
                                         <Label text="{i18n>lbl_sap_purchase_group_code}"
+                                            wrapping="false"/>
+                                    </header>
+                                </Column>
+                                <Column app:p13nKey="stato"
+                                    width="7rem">
+                                    <header>
+                                        <Label text="{i18n>lbl_status}"
                                             wrapping="false"/>
                                     </header>
                                 </Column>
@@ -268,8 +280,6 @@
                                             wrapping="false"/>
                                         <Text text="{CIGDerivato}"
                                             wrapping="false"/>
-                                        <Text text="{stato}"
-                                            wrapping="false"/>
                                         <Text text="{documentoDiChiusuraContratto}"
                                             wrapping="false"/>
                                         <Text text="{numCel}"
@@ -279,6 +289,8 @@
                                         <Text text="{descrizioneSAPOrganizzazioneAcquisti}"
                                             wrapping="false"/>
                                         <Text text="{codiceSAPGruppoAcquisti}"
+                                            wrapping="false"/>
+                                        <Text text="{stato}"
                                             wrapping="false"/>
                                         <Text text="{descrizioneSAPGruppoAcquisti}"
                                             wrapping="false"/>

@@ -70,29 +70,25 @@
                                 <form:FormElement label="{i18n>lbl_contractor_company}">
                                     <form:fields>
                                         <Input id="inpContractorCompany"
-                                            value="{POS>/contractorCompany}"
-                                            editable="false"/>
+                                            value="{POS>/contractorCompany}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_company_role}">
                                     <form:fields>
                                         <Input id="inpCompanyRole"
-                                            value="{POS>/companyRole}"
-                                            editable="false"/>
+                                            value="{POS>/companyRole}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_parent_contract_code}">
                                     <form:fields>
                                         <Input id="inpParentContractCode"
-                                            value="{POS>/parentContractCode}"
-                                            editable="false"/>
+                                            value="{POS>/parentContractCode}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_client}">
                                     <form:fields>
                                         <Input id="inpClient"
-                                            value="{POS>/client}"
-                                            editable="false"/>
+                                            value="{POS>/client}"/>
                                     </form:fields>
                                 </form:FormElement>
                             </form:formElements>
@@ -215,8 +211,8 @@
                 <f:beginColumnPages>
                     <Panel>
                         <OverflowToolbar style="Standard"
-                            class="p-0">
-                            <Title text="{i18n>lbl_employees}: {Staff>/count}"
+                            class="pt-auto-10">
+                            <Title text="{i18n>lbl_employees} ({Staff>/count})"
                                 level="H2"/>
                             <ToolbarSpacer/>
                             <Button icon="sap-icon://add"
@@ -232,10 +228,18 @@
                             <Button icon="sap-icon://sort"
                                 press="onSettings"
                                 tooltip="{i18n>btn_sort}"
-                                app:panel="Sorter"/>
+                                app:panel="Sorter">
+                                <customData>
+                                    <BadgeCustomData value="{Staff>/sortCount}"/>
+                                </customData>
+                            </Button>
                             <Button icon="sap-icon://filter"
                                 press="onSettings"
-                                app:panel="Filter"/>
+                                app:panel="Filter">
+                                <customData>
+                                    <BadgeCustomData value="{Staff>/filterCount}"/>
+                                </customData>
+                            </Button>
                             <Button icon="sap-icon://action-settings"
                                 press="onSettings"
                                 app:panel="Columns"/>
@@ -331,7 +335,7 @@
                         showNavButton="true"
                         navButtonPress="onCloseSkills">
                         <content>
-                            <VBox class="sapUiMediumMargin">
+                            <VBox class="skillsPanel">
 
                                 <!-- Seleziona tutto -->
                                 <HBox alignItems="Center"
@@ -350,11 +354,11 @@
                                                 selected="{Skills>selected}"
                                                 select="onSkillChange"/>
                                             <HBox alignItems="Center"
-                                                class="sapUiTinyMarginTop"
+                                                class="sapUiTinyMarginTop skillDatesRow"
                                                 visible="{Skills>selected}">
                                                 <Label text="{i18n>lbl_skill_start}"
                                                     class="sapUiTinyMarginEnd"
-                                                    width="3rem"/>
+                                                    width="4rem"/>
                                                 <DatePicker value="{Skills>startDate}"
                                                     valueFormat="yyyy-MM-dd"
                                                     displayFormat="dd/MM/yyyy"
@@ -362,7 +366,7 @@
                                                     width="9rem"/>
                                                 <Label text="{i18n>lbl_skill_end}"
                                                     class="sapUiSmallMarginBegin sapUiTinyMarginEnd"
-                                                    width="3rem"/>
+                                                    width="5rem"/>
                                                 <DatePicker value="{Skills>endDate}"
                                                     valueFormat="yyyy-MM-dd"
                                                     displayFormat="dd/MM/yyyy"

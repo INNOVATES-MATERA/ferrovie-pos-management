@@ -11,16 +11,17 @@ import ColumnListItem from "sap/m/ColumnListItem";
 const DEFAULT_MODEL = {
   data: [] as object[],
   count: 0,
+  sortCount: 0,
+  filterCount: 0,
 };
 
 const MOCK_POS_DATA = [
-  // CONTR-001
   {
     posId: "POS-001",
-    contractCode: "CONTR-001",
+    contractCode: "1004/2025",
     contractorCompany: "Impresa Rossi S.r.l.",
-    companyRole: "Appaltatore",
-    status: "approved",
+    companyRole: "Appaltante",
+    status: "Approvato",
     revision: "3",
     draftDate: "2024-01-15",
     validityStart: "2024-02-01",
@@ -28,205 +29,14 @@ const MOCK_POS_DATA = [
   },
   {
     posId: "POS-002",
-    contractCode: "CONTR-001",
+    contractCode: "1004/2025",
     contractorCompany: "Tecno Edil S.p.A.",
     companyRole: "Subappaltatore",
-    status: "toApprove",
+    status: "Da approvare",
     revision: "1",
     draftDate: "2024-03-10",
     validityStart: "2024-04-01",
     validityEnd: "2025-03-31",
-  },
-  {
-    posId: "POS-003",
-    contractCode: "CONTR-001",
-    contractorCompany: "Elettra Impianti S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "approved",
-    revision: "2",
-    draftDate: "2024-02-05",
-    validityStart: "2024-03-01",
-    validityEnd: "2025-02-28",
-  },
-  {
-    posId: "POS-004",
-    contractCode: "CONTR-001",
-    contractorCompany: "Sicurezza Lavoro S.p.A.",
-    companyRole: "CSE",
-    status: "approved",
-    revision: "1",
-    draftDate: "2024-01-20",
-    validityStart: "2024-02-01",
-    validityEnd: "2025-01-31",
-  },
-  {
-    posId: "POS-005",
-    contractCode: "CONTR-001",
-    contractorCompany: "Ponteggi Nord S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "draft",
-    revision: "0",
-    draftDate: "2024-05-12",
-    validityStart: "2024-06-01",
-    validityEnd: "2025-05-31",
-  },
-  // CONTR-002
-  {
-    posId: "POS-006",
-    contractCode: "CONTR-002",
-    contractorCompany: "Costruzioni Bianchi S.r.l.",
-    companyRole: "Appaltatore",
-    status: "draft",
-    revision: "0",
-    draftDate: "2024-02-20",
-    validityStart: "2024-03-01",
-    validityEnd: "2025-02-28",
-  },
-  {
-    posId: "POS-007",
-    contractCode: "CONTR-002",
-    contractorCompany: "Calcestruzzi Milano S.p.A.",
-    companyRole: "Subappaltatore",
-    status: "toApprove",
-    revision: "0",
-    draftDate: "2024-04-18",
-    validityStart: "2024-05-01",
-    validityEnd: "2025-04-30",
-  },
-  {
-    posId: "POS-008",
-    contractCode: "CONTR-002",
-    contractorCompany: "Impianti Termici Centro S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "draft",
-    revision: "0",
-    draftDate: "2024-04-25",
-    validityStart: "2024-06-01",
-    validityEnd: "2025-05-31",
-  },
-  // CONTR-003
-  {
-    posId: "POS-009",
-    contractCode: "CONTR-003",
-    contractorCompany: "MedTech Italia S.p.A.",
-    companyRole: "Appaltatore",
-    status: "approved",
-    revision: "2",
-    draftDate: "2023-11-05",
-    validityStart: "2024-01-01",
-    validityEnd: "2024-12-31",
-  },
-  {
-    posId: "POS-010",
-    contractCode: "CONTR-003",
-    contractorCompany: "Forniture Mediche S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "closed",
-    revision: "1",
-    draftDate: "2023-12-01",
-    validityStart: "2024-01-01",
-    validityEnd: "2024-06-30",
-  },
-  {
-    posId: "POS-011",
-    contractCode: "CONTR-003",
-    contractorCompany: "BioService S.p.A.",
-    companyRole: "Subappaltatore",
-    status: "approved",
-    revision: "1",
-    draftDate: "2024-01-10",
-    validityStart: "2024-02-01",
-    validityEnd: "2024-12-31",
-  },
-  {
-    posId: "POS-012",
-    contractCode: "CONTR-003",
-    contractorCompany: "Steriltech S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "toApprove",
-    revision: "0",
-    draftDate: "2024-03-22",
-    validityStart: "2024-04-01",
-    validityEnd: "2024-12-31",
-  },
-  // CONTR-004
-  {
-    posId: "POS-013",
-    contractCode: "CONTR-004",
-    contractorCompany: "Verde & Ambiente S.r.l.",
-    companyRole: "Appaltatore",
-    status: "approved",
-    revision: "1",
-    draftDate: "2023-06-15",
-    validityStart: "2023-07-01",
-    validityEnd: "2024-06-30",
-  },
-  {
-    posId: "POS-014",
-    contractCode: "CONTR-004",
-    contractorCompany: "Giardini Sud S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "closed",
-    revision: "1",
-    draftDate: "2023-07-01",
-    validityStart: "2023-07-15",
-    validityEnd: "2024-01-31",
-  },
-  {
-    posId: "POS-015",
-    contractCode: "CONTR-004",
-    contractorCompany: "Irrigazione Italia S.p.A.",
-    companyRole: "Subappaltatore",
-    status: "approved",
-    revision: "1",
-    draftDate: "2023-08-10",
-    validityStart: "2023-09-01",
-    validityEnd: "2024-06-30",
-  },
-  // CONTR-005
-  {
-    posId: "POS-016",
-    contractCode: "CONTR-005",
-    contractorCompany: "SoftWorks S.p.A.",
-    companyRole: "Appaltatore",
-    status: "toApprove",
-    revision: "0",
-    draftDate: "2024-04-01",
-    validityStart: "2024-05-01",
-    validityEnd: "2025-04-30",
-  },
-  {
-    posId: "POS-017",
-    contractCode: "CONTR-005",
-    contractorCompany: "DataCloud S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "draft",
-    revision: "0",
-    draftDate: "2024-04-15",
-    validityStart: "2024-05-01",
-    validityEnd: "2025-04-30",
-  },
-  {
-    posId: "POS-018",
-    contractCode: "CONTR-005",
-    contractorCompany: "NetSecure S.r.l.",
-    companyRole: "Subappaltatore",
-    status: "draft",
-    revision: "0",
-    draftDate: "2024-05-02",
-    validityStart: "2024-06-01",
-    validityEnd: "2025-05-31",
-  },
-  {
-    posId: "POS-019",
-    contractCode: "CONTR-005",
-    contractorCompany: "Consulenza IT S.p.A.",
-    companyRole: "Subappaltatore",
-    status: "toApprove",
-    revision: "0",
-    draftDate: "2024-05-20",
-    validityStart: "2024-06-15",
-    validityEnd: "2025-06-14",
   },
 ];
 
@@ -256,26 +66,27 @@ const DEFAULT_CONTRACT = {
 // Mock: dati contratto indicizzati per contractCode
 const MOCK_CONTRACTS: Record<string, typeof DEFAULT_CONTRACT> = {
   "CONTR-001": {
-    contractCode: "CONTR-001",
-    contractTitle: "Manutenzione Impianti Elettrici",
-    contractObject: "Impianti civili ed industriali",
-    contractType: "Appalto",
-    tenderType: "Procedura aperta",
-    nppCode: "NPP-101",
-    nppDescription: "Lavori edili generali",
-    cup: "B12345678901234",
-    derivedCig: "CIG-001",
-    status: "approved",
-    closureDocument: "",
-    cellNumber: "CEL-001",
-    sapPurchaseOrgCode: "1000",
-    sapPurchaseOrgDesc: "Org. Acquisti Italia",
-    sapPurchaseGroupCode: "G01",
-    sapPurchaseGroupDesc: "Gruppo Tecnico",
-    inventoryCategory: "Impianti",
-    technicalSubjectResponsibility: "mario.rossi",
-    technicalSite: "Roma",
-    assetOwnerStructure: "Struttura A",
+    contractCode: "1004/2025_002/2025",
+    contractTitle: "Lavori di conservazione e risanamento delle opere d'arte",
+    contractObject:
+      "Lavori di conservazione e risanamento delle opere d'arte ai km. 4+846, 33+901, 35+199, 61+216 della linea Foligno-Terontola ",
+    contractType: "01- Contratto Applicativo ",
+    tenderType: "servizi",
+    nppCode: "1707",
+    nppDescription: "Opere d'arte",
+    cup: "J87F20000220001",
+    derivedCig: "8908585CE5",
+    status: "Prenotato",
+    closureDocument: "Certificato Regolare Esecuzione",
+    cellNumber: "",
+    sapPurchaseOrgCode: "IT01",
+    sapPurchaseOrgDesc: "",
+    sapPurchaseGroupCode: "FST",
+    sapPurchaseGroupDesc: "",
+    inventoryCategory: "",
+    technicalSubjectResponsibility: "",
+    technicalSite: "",
+    assetOwnerStructure: "",
   },
   "CONTR-002": {
     contractCode: "CONTR-002",
@@ -390,7 +201,10 @@ export default class Contract extends BaseController {
     if (this._bP13nRegistered) return;
     const oTable = this.byId("tblContract") as Table;
     if (oTable) {
-      p13nDialogUtils.register(oTable);
+      p13nDialogUtils.register(oTable, (s, f) => {
+        this._oModelPos.setProperty("/sortCount", s);
+        this._oModelPos.setProperty("/filterCount", f);
+      });
       this._bP13nRegistered = true;
     }
   }
@@ -421,6 +235,8 @@ export default class Contract extends BaseController {
       this.setBusy(true);
       const oTable = this.byId("tblContract") as Table;
       await p13nDialogUtils.reset(oTable);
+      this._oModelPos.setProperty("/sortCount", 0);
+      this._oModelPos.setProperty("/filterCount", 0);
     } catch (e) {
       entityUtils.handleError(e as Error);
     } finally {

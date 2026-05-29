@@ -8,6 +8,8 @@ import Table from "sap/m/Table";
 
 const DEFAULT_MODEL = {
   count: 0,
+  sortCount: 0,
+  filterCount: 0,
 };
 
 /**
@@ -27,7 +29,10 @@ export default class Home extends BaseController {
   public onAfterRendering(): void {
     const oTable = this.byId("tblPos") as Table;
     if (oTable) {
-      p13nDialogUtils.register(oTable);
+      p13nDialogUtils.register(oTable, (s, f) => {
+        this._oModelPos.setProperty("/sortCount", s);
+        this._oModelPos.setProperty("/filterCount", f);
+      });
     }
   }
 
@@ -43,6 +48,8 @@ export default class Home extends BaseController {
   public async onReset(): Promise<void> {
     const oTable = this.byId("tblPos") as Table;
     await p13nDialogUtils.reset(oTable);
+    this._oModelPos.setProperty("/sortCount", 0);
+    this._oModelPos.setProperty("/filterCount", 0);
   }
 
   public onSettings(oEvent: any): void {

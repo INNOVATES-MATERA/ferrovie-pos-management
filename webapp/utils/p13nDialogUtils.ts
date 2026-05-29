@@ -26,7 +26,10 @@ const _mInitialStates = new Map<string, object>();
  * Must be called once after the table is rendered (e.g. in onAfterRendering).
  * Captures the initial column state (visibility = view-XML defaults) for reset().
  */
-function register(oTable: Table): void {
+function register(
+    oTable: Table,
+    onStateChange?: (sortCount: number, filterCount: number) => void
+): void {
     const oMetadataHelper = _buildMetadataHelper(oTable);
 
     Engine.getInstance().register(oTable, {
@@ -61,6 +64,12 @@ function register(oTable: Table): void {
         p13nColumnUtils.applyWidths(oState, oTable);
         p13nSortUtils.applyFromState(oState, oTable);
         p13nFilterUtils.applyFromState(oState, oTable);
+
+        if (onStateChange) {
+            const sortCount = (oState.Sorter || []).length;
+            const filterCount = Object.keys(oState.Filter || {}).length;
+            onStateChange(sortCount, filterCount);
+        }
     });
 }
 
