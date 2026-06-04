@@ -337,45 +337,106 @@
                         <content>
                             <VBox class="skillsPanel">
 
-                                <!-- Seleziona tutto -->
-                                <HBox alignItems="Center"
-                                    class="sapUiSmallMarginBottom">
-                                    <CheckBox id="chkSelectAll"
-                                        text="{i18n>lbl_select_all}"
-                                        select="onSelectAll"/>
-                                </HBox>
+                                <IconTabBar id="tabSkills"
+                                    expanded="true">
+                                    <items>
 
-                                <!-- Lista dinamica abilitazioni -->
-                                <List items="{Skills>/items}"
-                                    showSeparators="None">
-                                    <CustomListItem>
-                                        <VBox class="sapUiTinyMarginBottom">
-                                            <CheckBox text="{Skills>label}"
-                                                selected="{Skills>selected}"
-                                                select="onSkillChange"/>
-                                            <HBox alignItems="Center"
-                                                class="sapUiTinyMarginTop skillDatesRow"
-                                                visible="{Skills>selected}">
-                                                <Label text="{i18n>lbl_skill_start}"
-                                                    class="sapUiTinyMarginEnd"
-                                                    width="4rem"/>
-                                                <DatePicker value="{Skills>startDate}"
-                                                    valueFormat="yyyy-MM-dd"
-                                                    displayFormat="dd/MM/yyyy"
-                                                    enabled="{Skills>selected}"
-                                                    width="9rem"/>
-                                                <Label text="{i18n>lbl_skill_end}"
-                                                    class="sapUiSmallMarginBegin sapUiTinyMarginEnd"
-                                                    width="5rem"/>
-                                                <DatePicker value="{Skills>endDate}"
-                                                    valueFormat="yyyy-MM-dd"
-                                                    displayFormat="dd/MM/yyyy"
-                                                    enabled="{Skills>selected}"
-                                                    width="9rem"/>
-                                            </HBox>
-                                        </VBox>
-                                    </CustomListItem>
-                                </List>
+                                        <!-- Tab 1: Abilitazioni Ferroviarie -->
+                                        <IconTabFilter text="{i18n>lbl_tab_ferroviaria}"
+                                            key="ferroviaria">
+                                            <Table id="tblFerroviaria"
+                                                items="{path: 'Skills>/items', filters: [{path: 'category', operator: 'EQ', value1: 'ferroviaria'}]}"
+                                                mode="MultiSelect"
+                                                selectionChange="onSkillSelectionChange"
+                                                fixedLayout="false">
+                                                <columns>
+                                                    <Column>
+                                                        <header>
+                                                            <Label text="{i18n>lbl_skills}"/>
+                                                        </header>
+                                                    </Column>
+                                                    <Column width="10rem">
+                                                        <header>
+                                                            <Label text="{i18n>lbl_skill_start}"/>
+                                                        </header>
+                                                    </Column>
+                                                    <Column width="10rem">
+                                                        <header>
+                                                            <Label text="{i18n>lbl_skill_end}"/>
+                                                        </header>
+                                                    </Column>
+                                                </columns>
+                                                <items>
+                                                    <ColumnListItem selected="{Skills>selected}"
+                                                        type="Inactive">
+                                                        <cells>
+                                                            <Text text="{Skills>label}"
+                                                                wrapping="false"/>
+                                                            <DatePicker value="{Skills>startDate}"
+                                                                valueFormat="yyyy-MM-dd"
+                                                                displayFormat="dd/MM/yyyy"
+                                                                visible="{Skills>selected}"
+                                                                width="9rem"/>
+                                                            <DatePicker value="{Skills>endDate}"
+                                                                valueFormat="yyyy-MM-dd"
+                                                                displayFormat="dd/MM/yyyy"
+                                                                visible="{Skills>selected}"
+                                                                width="9rem"/>
+                                                        </cells>
+                                                    </ColumnListItem>
+                                                </items>
+                                            </Table>
+                                        </IconTabFilter>
+
+                                        <!-- Tab 2: Decreto 81/2008 -->
+                                        <IconTabFilter text="{i18n>lbl_tab_decreto}"
+                                            key="decreto">
+                                            <Table id="tblDecreto"
+                                                items="{path: 'Skills>/items', filters: [{path: 'category', operator: 'EQ', value1: 'decreto'}]}"
+                                                mode="MultiSelect"
+                                                selectionChange="onSkillSelectionChange"
+                                                fixedLayout="false">
+                                                <columns>
+                                                    <Column>
+                                                        <header>
+                                                            <Label text="{i18n>lbl_skills}"/>
+                                                        </header>
+                                                    </Column>
+                                                    <Column width="10rem">
+                                                        <header>
+                                                            <Label text="{i18n>lbl_skill_start}"/>
+                                                        </header>
+                                                    </Column>
+                                                    <Column width="10rem">
+                                                        <header>
+                                                            <Label text="{i18n>lbl_skill_end}"/>
+                                                        </header>
+                                                    </Column>
+                                                </columns>
+                                                <items>
+                                                    <ColumnListItem selected="{Skills>selected}"
+                                                        type="Inactive">
+                                                        <cells>
+                                                            <Text text="{Skills>label}"
+                                                                wrapping="false"/>
+                                                            <DatePicker value="{Skills>startDate}"
+                                                                valueFormat="yyyy-MM-dd"
+                                                                displayFormat="dd/MM/yyyy"
+                                                                visible="{Skills>selected}"
+                                                                width="9rem"/>
+                                                            <DatePicker value="{Skills>endDate}"
+                                                                valueFormat="yyyy-MM-dd"
+                                                                displayFormat="dd/MM/yyyy"
+                                                                visible="{Skills>selected}"
+                                                                width="9rem"/>
+                                                        </cells>
+                                                    </ColumnListItem>
+                                                </items>
+                                            </Table>
+                                        </IconTabFilter>
+
+                                    </items>
+                                </IconTabBar>
 
                             </VBox>
                         </content>

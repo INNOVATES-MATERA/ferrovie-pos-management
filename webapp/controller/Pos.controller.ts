@@ -97,6 +97,7 @@ const DEFAULT_STAFF_ROW = {
 type SkillItem = {
   skillId: string;
   label: string;
+  category: "ferroviaria" | "decreto";
   selected: boolean;
   startDate: string | null;
   endDate: string | null;
@@ -111,18 +112,29 @@ type SkillsModel = {
   items: SkillItem[];
 };
 
-const SKILL_TYPES: { skillId: string; label: string }[] = [
-  { skillId: "SK-01", label: "Primo Soccorso" },
-  { skillId: "SK-02", label: "Antincendio Base" },
-  { skillId: "SK-03", label: "Antincendio Avanzato" },
-  { skillId: "SK-04", label: "Lavori in Quota" },
-  { skillId: "SK-05", label: "Spazi Confinati" },
-  { skillId: "SK-06", label: "Rischio Elettrico" },
-  { skillId: "SK-07", label: "Movimentazione Carichi" },
-  { skillId: "SK-08", label: "Uso DPI" },
-  { skillId: "SK-09", label: "Ponteggi" },
-  { skillId: "SK-10", label: "Gru e Apparecchi di Sollevamento" },
-  { skillId: "SK-11", label: "Amianto" },
+const SKILL_TYPES: { skillId: string; label: string; category: "ferroviaria" | "decreto" }[] = [
+  { skillId: "RFI-01", label: "MI.IA.MEPC e MI.IA.QP.METT", category: "ferroviaria" },
+  { skillId: "RFI-02", label: "MI.IA.QP.MDO", category: "ferroviaria" },
+  { skillId: "RFI-03", label: "MI.IA.QP.ARM", category: "ferroviaria" },
+  { skillId: "RFI-04", label: "MI.IA.QP.TE / SSE / DOTE", category: "ferroviaria" },
+  { skillId: "RFI-05", label: "MI.IA.QP.SALD", category: "ferroviaria" },
+  { skillId: "RFI-06", label: "MI.IA.QP.SCINT", category: "ferroviaria" },
+  { skillId: "RFI-07", label: "MI.IA.QP.APME", category: "ferroviaria" },
+  { skillId: "RFI-08", label: "MI.IA.QP.CND US", category: "ferroviaria" },
+  { skillId: "RFI-09", label: "MI.IA.QP.GEST-TWS e PROG-TWS", category: "ferroviaria" },
+  { skillId: "RFI-10", label: "MI.IA.QP.IS", category: "ferroviaria" },
+  { skillId: "RFI-11", label: "MI.IA.QP.TLC", category: "ferroviaria" },
+  { skillId: "SK-01", label: "Primo Soccorso", category: "decreto" },
+  { skillId: "SK-02", label: "Antincendio Base", category: "decreto" },
+  { skillId: "SK-03", label: "Antincendio Avanzato", category: "decreto" },
+  { skillId: "SK-04", label: "Lavori in Quota", category: "decreto" },
+  { skillId: "SK-05", label: "Spazi Confinati", category: "decreto" },
+  { skillId: "SK-06", label: "Rischio Elettrico", category: "decreto" },
+  { skillId: "SK-07", label: "Movimentazione Carichi", category: "decreto" },
+  { skillId: "SK-08", label: "Uso DPI", category: "decreto" },
+  { skillId: "SK-09", label: "Ponteggi", category: "decreto" },
+  { skillId: "SK-10", label: "Gru e Apparecchi di Sollevamento", category: "decreto" },
+  { skillId: "SK-11", label: "Amianto", category: "decreto" },
 ];
 
 const MOCK_EMPLOYEE_SKILLS: { employeeId: string; skillId: string; startDate: string; endDate: string }[] = [
@@ -398,13 +410,17 @@ export default class Pos extends BaseController {
 
     // Legge dalla cache (modifiche in sessione) o dalla sorgente mock
     const aCached = this._oSkillsCache.get(sKey);
-    const aItems: SkillItem[] = aCached
-      ? structuredClone(aCached)
+    const aItems: SkillItem[] =
+      aCached ?
+        structuredClone(aCached)
       : SKILL_TYPES.map((type) => {
-          const found = MOCK_EMPLOYEE_SKILLS.find((s) => s.employeeId === oRow.employeeId && s.skillId === type.skillId);
+          const found = MOCK_EMPLOYEE_SKILLS.find(
+            (s) => s.employeeId === oRow.employeeId && s.skillId === type.skillId,
+          );
           return {
             skillId: type.skillId,
             label: type.label,
+            category: type.category,
             selected: !!found,
             startDate: found?.startDate ?? null,
             endDate: found?.endDate ?? null,
@@ -421,35 +437,19 @@ export default class Pos extends BaseController {
     });
   }
 
-  public onSelectAll(oEvent: any): void {
-    const bSelected = oEvent.getSource().getSelected() as boolean;
-    const aItems = this._oModelSkills.getProperty("/items") as SkillItem[];
-    aItems.forEach((item, i) => {
-      this._oModelSkills.setProperty(`/items/${i}/selected`, bSelected);
+  public onSkillSelectionChange(oEvent: any): void {
+    const oTable = oEvent.getSource() as Table;
+    oTable.getItems().forEach((oItem: any) => {
+      const oCtx = oItem.getBindingContext("Skills");
+      if (!oCtx) return;
+      const sPath = oCtx.getPath();
+      const bSelected = oItem.isSelected() as boolean;
+      this._oModelSkills.setProperty(`${sPath}/selected`, bSelected);
       if (!bSelected) {
-        this._oModelSkills.setProperty(`/items/${i}/startDate`, null);
-        this._oModelSkills.setProperty(`/items/${i}/endDate`, null);
+        this._oModelSkills.setProperty(`${sPath}/startDate`, null);
+        this._oModelSkills.setProperty(`${sPath}/endDate`, null);
       }
     });
-  }
-
-  public onSkillChange(oEvent: any): void {
-    const oCheckBox = oEvent.getSource();
-    const oCtx = oCheckBox.getBindingContext("Skills");
-    if (!oCtx) return;
-
-    const sPath = oCtx.getPath(); // e.g. "/items/2"
-    const bSelected = oCheckBox.getSelected() as boolean;
-    if (!bSelected) {
-      this._oModelSkills.setProperty(`${sPath}/startDate`, null);
-      this._oModelSkills.setProperty(`${sPath}/endDate`, null);
-    }
-
-    // Aggiorna stato "Seleziona tutto"
-    const aItems = this._oModelSkills.getProperty("/items") as SkillItem[];
-    const bAllSelected = aItems.length > 0 && aItems.every((item) => item.selected);
-    const oChk = this.byId("chkSelectAll") as any;
-    if (oChk) oChk.setSelected(bAllSelected);
   }
 
   public onCloseSkills(): void {
