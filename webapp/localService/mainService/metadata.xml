@@ -40,6 +40,18 @@
                 <EntitySet Name="SuddivisioniCategorie" EntityType="AttiService.SuddivisioniCategorie"/>
                 <EntitySet Name="NomineContratto" EntityType="AttiService.NomineContratto"/>
                 <EntitySet Name="NoteContratto" EntityType="AttiService.NoteContratto"/>
+                <EntitySet Name="PosTestataSet" EntityType="AttiService.PosTestataSet">
+                    <NavigationPropertyBinding Path="personale" Target="PosDettaglioPersonaleSet"/>
+                </EntitySet>
+                <EntitySet Name="PosDettaglioPersonaleSet" EntityType="AttiService.PosDettaglioPersonaleSet">
+                    <NavigationPropertyBinding Path="posTestata" Target="PosTestataSet"/>
+                    <NavigationPropertyBinding Path="abilitazioni" Target="PosDettaglioAbilitazioniSet"/>
+                </EntitySet>
+                <EntitySet Name="PosDettaglioAbilitazioniSet" EntityType="AttiService.PosDettaglioAbilitazioniSet">
+                    <NavigationPropertyBinding Path="personale" Target="PosDettaglioPersonaleSet"/>
+                    <NavigationPropertyBinding Path="tipoAbilitazione" Target="AnagraficaAbilitazioniSet"/>
+                </EntitySet>
+                <EntitySet Name="AnagraficaAbilitazioniSet" EntityType="AttiService.AnagraficaAbilitazioniSet"/>
                 <EntitySet Name="AnagraficaSoa" EntityType="AttiService.AnagraficaSoa"/>
                 <ActionImport Name="deleteByAttoID" Action="AttiService.deleteByAttoID"/>
                 <ActionImport Name="deleteByContrattoID" Action="AttiService.deleteByContrattoID"/>
@@ -407,6 +419,82 @@
                 <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
                 <Property Name="ContrattoID" Type="Edm.String" Nullable="false"/>
                 <Property Name="testo" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="PosTestataSet">
+                <Key>
+                    <PropertyRef Name="idPos"/>
+                </Key>
+                <Property Name="idPos" Type="Edm.String" MaxLength="20" Nullable="false"/>
+                <Property Name="contratto" Type="Edm.String" MaxLength="50"/>
+                <Property Name="impresaAppaltatrice" Type="Edm.String" MaxLength="100"/>
+                <Property Name="ruoloImpresa" Type="Edm.String" MaxLength="50"/>
+                <Property Name="codiceContrattoSuperiore" Type="Edm.String" MaxLength="50"/>
+                <Property Name="committente" Type="Edm.String" MaxLength="100"/>
+                <Property Name="datoreLavoro" Type="Edm.String" MaxLength="100" Nullable="false"/>
+                <Property Name="medicocompetente" Type="Edm.String" MaxLength="100" Nullable="false"/>
+                <Property Name="rls" Type="Edm.String" MaxLength="100" Nullable="false"/>
+                <Property Name="rspp" Type="Edm.String" MaxLength="100"/>
+                <Property Name="direttoreLavori" Type="Edm.String" MaxLength="100"/>
+                <Property Name="direttoreCantiere" Type="Edm.String" MaxLength="100"/>
+                <Property Name="capocantiere" Type="Edm.String" MaxLength="100"/>
+                <Property Name="preposto" Type="Edm.String" MaxLength="100"/>
+                <Property Name="addettiPrimoSoccorso" Type="Edm.String" MaxLength="255"/>
+                <Property Name="addettiPrimoAntincendio" Type="Edm.String" MaxLength="255"/>
+                <Property Name="revisione" Type="Edm.Int32" DefaultValue="0"/>
+                <Property Name="dataRedazione" Type="Edm.Date"/>
+                <Property Name="dataRicezioneCruscotto" Type="Edm.DateTimeOffset"/>
+                <Property Name="inizioValidita" Type="Edm.Date"/>
+                <Property Name="fineValidita" Type="Edm.Date"/>
+                <Property Name="linkCde" Type="Edm.String" MaxLength="1000"/>
+                <NavigationProperty Name="personale" Type="Collection(AttiService.PosDettaglioPersonaleSet)" Partner="posTestata">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="PosDettaglioPersonaleSet">
+                <Key>
+                    <PropertyRef Name="posTestata_idPos"/>
+                    <PropertyRef Name="idDipendente"/>
+                </Key>
+                <NavigationProperty Name="posTestata" Type="AttiService.PosTestataSet" Partner="personale">
+                    <ReferentialConstraint Property="posTestata_idPos" ReferencedProperty="idPos"/>
+                </NavigationProperty>
+                <Property Name="posTestata_idPos" Type="Edm.String" MaxLength="20" Nullable="false"/>
+                <Property Name="idDipendente" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="nome" Type="Edm.String" MaxLength="50"/>
+                <Property Name="cognome" Type="Edm.String" MaxLength="50"/>
+                <Property Name="reparto" Type="Edm.String" MaxLength="50"/>
+                <Property Name="mansione" Type="Edm.String" MaxLength="50"/>
+                <NavigationProperty Name="abilitazioni" Type="Collection(AttiService.PosDettaglioAbilitazioniSet)" Partner="personale">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="PosDettaglioAbilitazioniSet">
+                <Key>
+                    <PropertyRef Name="personale_posTestata_idPos"/>
+                    <PropertyRef Name="personale_idDipendente"/>
+                    <PropertyRef Name="tipoAbilitazione_codice"/>
+                </Key>
+                <NavigationProperty Name="personale" Type="AttiService.PosDettaglioPersonaleSet" Partner="abilitazioni">
+                    <ReferentialConstraint Property="personale_posTestata_idPos" ReferencedProperty="posTestata_idPos"/>
+                    <ReferentialConstraint Property="personale_idDipendente" ReferencedProperty="idDipendente"/>
+                </NavigationProperty>
+                <Property Name="personale_posTestata_idPos" Type="Edm.String" MaxLength="20" Nullable="false"/>
+                <Property Name="personale_idDipendente" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <NavigationProperty Name="tipoAbilitazione" Type="AttiService.AnagraficaAbilitazioniSet">
+                    <ReferentialConstraint Property="tipoAbilitazione_codice" ReferencedProperty="codice"/>
+                </NavigationProperty>
+                <Property Name="tipoAbilitazione_codice" Type="Edm.String" MaxLength="20" Nullable="false"/>
+                <Property Name="flagAttiva" Type="Edm.Boolean" DefaultValue="false"/>
+                <Property Name="inizioAbilitazione" Type="Edm.Date"/>
+                <Property Name="scadenzaAbilitazione" Type="Edm.Date"/>
+            </EntityType>
+            <EntityType Name="AnagraficaAbilitazioniSet">
+                <Key>
+                    <PropertyRef Name="codice"/>
+                </Key>
+                <Property Name="codice" Type="Edm.String" MaxLength="20" Nullable="false"/>
+                <Property Name="categoria" Type="Edm.String" MaxLength="20"/>
+                <Property Name="descrizione" Type="Edm.String" MaxLength="100"/>
             </EntityType>
             <EntityType Name="AnagraficaSoa">
                 <Key>
@@ -986,6 +1074,15 @@
                 <Annotation Term="Core.Computed" Bool="true"/>
                 <Annotation Term="Core.Description" String="User's unique ID"/>
                 <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosTestataSet/datoreLavoro">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosTestataSet/medicocompetente">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosTestataSet/rls">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
         </Schema>
     </edmx:DataServices>

@@ -7,38 +7,16 @@ import dateUtils from "../utils/dateUtils";
 import xlsxUtils from "../utils/xlsxUtils";
 import Table from "sap/m/Table";
 import ColumnListItem from "sap/m/ColumnListItem";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
 
 const DEFAULT_MODEL = {
-  data: [] as object[],
   count: 0,
   sortCount: 0,
   filterCount: 0,
 };
-
-const MOCK_POS_DATA = [
-  {
-    posId: "POS-001",
-    contractCode: "1004/2025",
-    contractorCompany: "Impresa Rossi S.r.l.",
-    companyRole: "Appaltante",
-    status: "Approvato",
-    revision: "3",
-    draftDate: "2024-01-15",
-    validityStart: "2024-02-01",
-    validityEnd: "2025-01-31",
-  },
-  {
-    posId: "POS-002",
-    contractCode: "1004/2025",
-    contractorCompany: "Tecno Edil S.p.A.",
-    companyRole: "Subappaltatore",
-    status: "Da approvare",
-    revision: "1",
-    draftDate: "2024-03-10",
-    validityStart: "2024-04-01",
-    validityEnd: "2025-03-31",
-  },
-];
 
 const DEFAULT_CONTRACT = {
   contractCode: "",
@@ -61,121 +39,6 @@ const DEFAULT_CONTRACT = {
   technicalSubjectResponsibility: "",
   technicalSite: "",
   assetOwnerStructure: "",
-};
-
-// Mock: dati contratto indicizzati per contractCode
-const MOCK_CONTRACTS: Record<string, typeof DEFAULT_CONTRACT> = {
-  "CONTR-001": {
-    contractCode: "1004/2025_002/2025",
-    contractTitle: "Lavori di conservazione e risanamento delle opere d'arte",
-    contractObject:
-      "Lavori di conservazione e risanamento delle opere d'arte ai km. 4+846, 33+901, 35+199, 61+216 della linea Foligno-Terontola ",
-    contractType: "01- Contratto Applicativo ",
-    tenderType: "servizi",
-    nppCode: "1707",
-    nppDescription: "Opere d'arte",
-    cup: "J87F20000220001",
-    derivedCig: "8908585CE5",
-    status: "Prenotato",
-    closureDocument: "Certificato Regolare Esecuzione",
-    cellNumber: "",
-    sapPurchaseOrgCode: "IT01",
-    sapPurchaseOrgDesc: "",
-    sapPurchaseGroupCode: "FST",
-    sapPurchaseGroupDesc: "",
-    inventoryCategory: "",
-    technicalSubjectResponsibility: "",
-    technicalSite: "",
-    assetOwnerStructure: "",
-  },
-  "CONTR-002": {
-    contractCode: "CONTR-002",
-    contractTitle: "Realizzazione Opere Civili",
-    contractObject: "Costruzione edificio uffici",
-    contractType: "Concessione",
-    tenderType: "Procedura ristretta",
-    nppCode: "NPP-102",
-    nppDescription: "Costruzioni civili",
-    cup: "C23456789012345",
-    derivedCig: "CIG-002",
-    status: "toApprove",
-    closureDocument: "",
-    cellNumber: "CEL-002",
-    sapPurchaseOrgCode: "1000",
-    sapPurchaseOrgDesc: "Org. Acquisti Italia",
-    sapPurchaseGroupCode: "G02",
-    sapPurchaseGroupDesc: "Gruppo Infrastrutture",
-    inventoryCategory: "Edilizia",
-    technicalSubjectResponsibility: "anna.bianchi",
-    technicalSite: "Milano",
-    assetOwnerStructure: "Struttura B",
-  },
-  "CONTR-003": {
-    contractCode: "CONTR-003",
-    contractTitle: "Fornitura Apparecchiature Medicali",
-    contractObject: "Dispositivi diagnostica per immagini",
-    contractType: "Appalto",
-    tenderType: "Affidamento diretto",
-    nppCode: "NPP-103",
-    nppDescription: "Forniture sanitarie",
-    cup: "D34567890123456",
-    derivedCig: "CIG-003",
-    status: "draft",
-    closureDocument: "",
-    cellNumber: "CEL-003",
-    sapPurchaseOrgCode: "2000",
-    sapPurchaseOrgDesc: "Org. Acquisti Nord",
-    sapPurchaseGroupCode: "G03",
-    sapPurchaseGroupDesc: "Gruppo Sanitario",
-    inventoryCategory: "Medicale",
-    technicalSubjectResponsibility: "carlo.neri",
-    technicalSite: "Torino",
-    assetOwnerStructure: "Struttura C",
-  },
-  "CONTR-004": {
-    contractCode: "CONTR-004",
-    contractTitle: "Gestione Verde Pubblico",
-    contractObject: "Manutenzione parchi e giardini comunali",
-    contractType: "Appalto",
-    tenderType: "Procedura aperta",
-    nppCode: "NPP-104",
-    nppDescription: "Servizi ambientali",
-    cup: "E45678901234567",
-    derivedCig: "CIG-004",
-    status: "closed",
-    closureDocument: "DOC-2023-045",
-    cellNumber: "CEL-004",
-    sapPurchaseOrgCode: "1000",
-    sapPurchaseOrgDesc: "Org. Acquisti Italia",
-    sapPurchaseGroupCode: "G04",
-    sapPurchaseGroupDesc: "Gruppo Servizi",
-    inventoryCategory: "Verde",
-    technicalSubjectResponsibility: "sara.gialli",
-    technicalSite: "Napoli",
-    assetOwnerStructure: "Struttura D",
-  },
-  "CONTR-005": {
-    contractCode: "CONTR-005",
-    contractTitle: "Servizi Informatici Integrati",
-    contractObject: "Sviluppo e manutenzione software gestionale",
-    contractType: "Appalto",
-    tenderType: "Procedura negoziata",
-    nppCode: "NPP-105",
-    nppDescription: "Servizi IT",
-    cup: "F56789012345678",
-    derivedCig: "CIG-005",
-    status: "approved",
-    closureDocument: "",
-    cellNumber: "CEL-005",
-    sapPurchaseOrgCode: "3000",
-    sapPurchaseOrgDesc: "Org. Acquisti Sud",
-    sapPurchaseGroupCode: "G05",
-    sapPurchaseGroupDesc: "Gruppo Digitale",
-    inventoryCategory: "IT",
-    technicalSubjectResponsibility: "luca.blu",
-    technicalSite: "Bari",
-    assetOwnerStructure: "Struttura E",
-  },
 };
 
 /**
@@ -213,16 +76,39 @@ export default class Contract extends BaseController {
     const oArgs = oEvent.getParameter("arguments");
     this._sContractCode = decodeURIComponent(oArgs.contractCode as string);
 
-    // Carica testata contratto (fallback al primo mock se il codice non è presente)
-    const oContract =
-      MOCK_CONTRACTS[this._sContractCode] ??
-      MOCK_CONTRACTS[Object.keys(MOCK_CONTRACTS)[0]] ??
-      structuredClone(DEFAULT_CONTRACT);
-    this._oModelContract.setData(oContract);
-
     try {
       this.setBusy(true);
-      await this._loadData();
+
+      const oODataModel = this.getOwnerComponent()!.getModel() as ODataModel;
+      const oBinding = oODataModel.bindContext(
+        `/Contratti(codiceContratto='${encodeURIComponent(this._sContractCode)}')`,
+      );
+      const oData = (await oBinding.requestObject()) as Record<string, string>;
+
+      this._oModelContract.setData({
+        contractCode: oData.codiceContratto ?? "",
+        contractTitle: oData.titoloDelContratto ?? "",
+        contractObject: oData.oggettoDelContratto ?? "",
+        contractType: oData.tipoDiContratto ?? "",
+        tenderType: oData.tipologiaAppalto ?? "",
+        nppCode: oData.codiceNPP ?? "",
+        nppDescription: oData.descrizioneNPP ?? "",
+        cup: oData.CUP ?? "",
+        derivedCig: oData.CIGDerivato ?? "",
+        status: oData.stato ?? "",
+        closureDocument: oData.documentoDiChiusuraContratto ?? "",
+        cellNumber: oData.numCel ?? "",
+        sapPurchaseOrgCode: oData.codiceSAPOrganizzazioneAcquisti ?? "",
+        sapPurchaseOrgDesc: oData.descrizioneSAPOrganizzazioneAcquisti ?? "",
+        sapPurchaseGroupCode: oData.codiceSAPGruppoAcquisti ?? "",
+        sapPurchaseGroupDesc: oData.descrizioneSAPGruppoAcquisti ?? "",
+        inventoryCategory: oData.categoriaInventariale ?? "",
+        technicalSubjectResponsibility: oData.responsabilitaSoggettoTecnico ?? "",
+        technicalSite: oData.sedeTecnica ?? "",
+        assetOwnerStructure: oData.strutturaTitolareAsset ?? "",
+      });
+
+      this._loadPos();
     } catch (e) {
       entityUtils.handleError(e as Error);
     } finally {
@@ -252,7 +138,9 @@ export default class Contract extends BaseController {
 
   public async onDownload(): Promise<void> {
     const oTable = this.byId("tblContract") as Table;
-    const aData = this._oModelPos.getProperty("/data") as object[];
+    const oBinding = oTable.getBinding("items") as ODataListBinding;
+    const aContexts = await oBinding.requestContexts(0, Infinity);
+    const aData = aContexts.map((ctx) => ctx.getObject());
     const aColumns = xlsxUtils.getColumnsFromTable(this, oTable);
     await xlsxUtils.generateSpreadsheet(aColumns, aData, "ListaPOS.xlsx");
   }
@@ -266,22 +154,22 @@ export default class Contract extends BaseController {
 
   public onEdit(oEvent: any): void {
     const oItem = oEvent.getSource().getParent() as ColumnListItem;
-    const oContext = oItem.getBindingContext("Pos");
+    const oContext = oItem.getBindingContext();
     if (!oContext) return;
-    const oRow = oContext.getObject() as { posId: string };
+    const oRow = oContext.getObject() as { idPos: string };
     this.navTo("RoutePos", {
       contractCode: this._sContractCode,
-      posId: oRow.posId,
+      posId: oRow.idPos,
     });
   }
 
   public onDetail(oEvent: any): void {
-    const oContext = oEvent.getSource().getBindingContext("Pos");
+    const oContext = oEvent.getSource().getBindingContext();
     if (!oContext) return;
-    const oRow = oContext.getObject() as { posId: string };
+    const oRow = oContext.getObject() as { idPos: string };
     this.navTo("RoutePos", {
       contractCode: this._sContractCode,
-      posId: oRow.posId,
+      posId: oRow.idPos,
     });
   }
 
@@ -293,9 +181,10 @@ export default class Contract extends BaseController {
       return;
     }
     MessageBox.confirm(this.getText("msg_confirm_delete_pos"), {
-      onClose: async (sAction: string | null) => {
+      onClose: (sAction: string | null) => {
         if (sAction === MessageBox.Action.OK) {
-          await this._loadData();
+          const oTable = this.byId("tblContract") as Table;
+          (oTable.getBinding("items") as ODataListBinding).refresh();
         }
       },
     });
@@ -305,13 +194,21 @@ export default class Contract extends BaseController {
     this.navTo("RouteHome");
   }
 
-  private async _loadData(): Promise<void> {
-    let aFiltered = MOCK_POS_DATA.filter((row) => row.contractCode === this._sContractCode);
-    if (!aFiltered.length) {
-      const sFirstCode = MOCK_POS_DATA[0]?.contractCode;
-      aFiltered = MOCK_POS_DATA.filter((row) => row.contractCode === sFirstCode);
-    }
-    this._oModelPos.setProperty("/data", aFiltered);
-    this._oModelPos.setProperty("/count", aFiltered.length);
+  private _loadPos(): void {
+    const oTable = this.byId("tblContract") as Table;
+    const oInfo = oTable.getBindingInfo("items") as any;
+    oTable.bindItems({
+      path: "/PosTestataSet",
+      parameters: { $count: true },
+      filters: [new Filter("contratto", FilterOperator.EQ, this._sContractCode)],
+      template: oInfo?.template,
+      events: {
+        dataReceived: async () => {
+          const oBinding = oTable.getBinding("items") as ODataListBinding;
+          const iCount = await oBinding.getHeaderContext()!.requestProperty("$count");
+          this._oModelPos.setProperty("/count", iCount);
+        },
+      },
+    });
   }
 }

@@ -213,8 +213,9 @@
                     <ScrollContainer horizontal="true"
                         vertical="false"
                         width="100%">
+                        <!-- Metto items="{__init__>/data}" perchè la tabella ha biosogno di un template -->
                         <Table id="tblContract"
-                            items="{path: 'Pos>/data'}"
+                            items="{__init__>/data}"
                             mode="MultiSelect"
                             fixedLayout="true"
                             growing="true"
@@ -223,7 +224,7 @@
 
                             <columns>
 
-                                <Column app:p13nKey="posId"
+                                <Column app:p13nKey="idPos"
                                     width="8rem">
                                     <header>
                                         <Label text="{i18n>lbl_pos_id}"
@@ -231,7 +232,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="contractCode"
+                                <Column app:p13nKey="contratto"
                                     width="10rem">
                                     <header>
                                         <Label text="{i18n>lbl_contract_code}"
@@ -239,7 +240,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="contractorCompany"
+                                <Column app:p13nKey="impresaAppaltatrice"
                                     width="15rem">
                                     <header>
                                         <Label text="{i18n>lbl_contractor_company}"
@@ -247,7 +248,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="companyRole"
+                                <Column app:p13nKey="ruoloImpresa"
                                     width="10rem">
                                     <header>
                                         <Label text="{i18n>lbl_company_role}"
@@ -255,7 +256,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="revision"
+                                <Column app:p13nKey="revisione"
                                     width="6rem"
                                     visible="false">
                                     <header>
@@ -264,7 +265,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="draftDate"
+                                <Column app:p13nKey="dataRedazione"
                                     width="9rem">
                                     <header>
                                         <Label text="{i18n>lbl_draft_date}"
@@ -272,7 +273,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="validityStart"
+                                <Column app:p13nKey="inizioValidita"
                                     width="8rem">
                                     <header>
                                         <Label text="{i18n>lbl_validity_start}"
@@ -280,7 +281,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="validityEnd"
+                                <Column app:p13nKey="fineValidita"
                                     width="8rem">
                                     <header>
                                         <Label text="{i18n>lbl_validity_end}"
@@ -288,15 +289,8 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="status"
-                                    width="7rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_status}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
 
-                                <Column app:p13nKey="parentContractCode"
+                                <Column app:p13nKey="codiceContrattoSuperiore"
                                     width="12rem"
                                     visible="false">
                                     <header>
@@ -305,7 +299,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="client"
+                                <Column app:p13nKey="committente"
                                     width="10rem"
                                     visible="false">
                                     <header>
@@ -314,7 +308,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="employer"
+                                <Column app:p13nKey="datoreLavoro"
                                     width="12rem"
                                     visible="false">
                                     <header>
@@ -341,7 +335,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="worksDirector"
+                                <Column app:p13nKey="direttoreLavori"
                                     width="12rem"
                                     visible="false">
                                     <header>
@@ -350,7 +344,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="firstAidPersonnel"
+                                <Column app:p13nKey="addettiPrimoSoccorso"
                                     width="12rem"
                                     visible="false">
                                     <header>
@@ -359,7 +353,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="firePersonnel"
+                                <Column app:p13nKey="addettiPrimoAntincendio"
                                     width="12rem"
                                     visible="false">
                                     <header>
@@ -368,7 +362,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="receptionDate"
+                                <Column app:p13nKey="dataRicezioneCruscotto"
                                     width="10rem"
                                     visible="false">
                                     <header>
@@ -377,7 +371,7 @@
                                     </header>
                                 </Column>
 
-                                <Column app:p13nKey="link"
+                                <Column app:p13nKey="linkCde"
                                     width="12rem"
                                     visible="false">
                                     <header>
@@ -393,43 +387,41 @@
                                 <ColumnListItem press="onDetail"
                                     type="Navigation">
                                     <cells>
-                                        <Text text="{Pos>posId}"
+                                        <Text text="{idPos}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>contractCode}"
+                                        <Text text="{contratto}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>contractorCompany}"
+                                        <Text text="{impresaAppaltatrice}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>companyRole}"
+                                        <Text text="{ruoloImpresa}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>revision}"
+                                        <Text text="{revisione}"
                                             wrapping="false"/>
-                                        <Text text="{path: 'Pos>draftDate', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
+                                        <Text text="{path: 'dataRedazione', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
                                             wrapping="false"/>
-                                        <Text text="{path: 'Pos>validityStart', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
+                                        <Text text="{path: 'inizioValidita', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
                                             wrapping="false"/>
-                                        <Text text="{path: 'Pos>validityEnd', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
+                                        <Text text="{path: 'fineValidita', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>status}"
+                                        <Text text="{codiceContrattoSuperiore}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>parentContractCode}"
+                                        <Text text="{committente}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>client}"
+                                        <Text text="{datoreLavoro}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>employer}"
+                                        <Text text="{rspp}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>rspp}"
+                                        <Text text="{rls}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>rls}"
+                                        <Text text="{direttoreLavori}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>worksDirector}"
+                                        <Text text="{addettiPrimoSoccorso}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>firstAidPersonnel}"
+                                        <Text text="{addettiPrimoAntincendio}"
                                             wrapping="false"/>
-                                        <Text text="{Pos>firePersonnel}"
+                                        <Text text="{path: 'dataRicezioneCruscotto', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
                                             wrapping="false"/>
-                                        <Text text="{path: 'Pos>receptionDate', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
-                                            wrapping="false"/>
-                                        <Text text="{Pos>link}"
+                                        <Text text="{linkCde}"
                                             wrapping="false"/>
                                     </cells>
                                 </ColumnListItem>

@@ -7,108 +7,66 @@ import ColumnListItem from "sap/m/ColumnListItem";
 import entityUtils from "../utils/entityUtils";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
 import xlsxUtils from "../utils/xlsxUtils";
-import { createPosStatusModel } from "../model/models";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+
+function generateRandomId(): string {
+  return Math.random().toString(36).substring(2, 10).toUpperCase();
+}
 
 const DEFAULT_POS = {
-  posId: "",
-  contractCode: "",
-  contractorCompany: "",
-  companyRole: "",
-  parentContractCode: "",
-  client: "",
-  employer: "",
+  idPos: "",
+  contratto: "",
+  impresaAppaltatrice: "",
+  ruoloImpresa: "",
+  codiceContrattoSuperiore: "",
+  committente: "",
+  datoreLavoro: "",
   rspp: "",
   rls: "",
-  worksDirector: "",
-  firstAidPersonnel: "",
-  firePersonnel: "",
-  status: "",
-  revision: "",
-  draftDate: "",
-  receptionDate: "",
-  validityStart: "",
-  validityEnd: "",
-  link: "",
+  medicocompetente: "",
+  direttoreLavori: "",
+  direttoreCantiere: "",
+  capocantiere: "",
+  preposto: "",
+  addettiPrimoSoccorso: "",
+  addettiPrimoAntincendio: "",
+  revisione: "",
+  dataRedazione: "",
+  dataRicezioneCruscotto: "",
+  inizioValidita: "",
+  fineValidita: "",
+  linkCde: "",
   isEdit: false,
   formTitle: "",
-};
-
-const MOCK_POS: Record<string, typeof DEFAULT_POS> = {
-  "POS-001": {
-    posId: "POS-001",
-    contractCode: "1004/2025_002/2025",
-    contractorCompany: "Impresa Rossi S.r.l.",
-    companyRole: "Appaltante",
-    parentContractCode: "1004/2025",
-    client: "RFI S.p.A.",
-    employer: "Mario Rossi",
-    rspp: "Luca Bianchi",
-    rls: "Anna Verdi",
-    worksDirector: "Paolo Neri",
-    firstAidPersonnel: "Giorgio Esposito",
-    firePersonnel: "Carla Ferri",
-    status: "Approvato",
-    revision: "3",
-    draftDate: "2024-01-15",
-    receptionDate: "2024-01-20",
-    validityStart: "2024-02-01",
-    validityEnd: "2025-01-31",
-    link: "",
-    isEdit: true,
-    formTitle: "",
-  },
-  "POS-002": {
-    posId: "POS-002",
-    contractCode: "1004/2025_002/2025",
-    contractorCompany: "Tecno Edil S.p.A.",
-    companyRole: "Subappaltatore",
-    parentContractCode: "1004/2025",
-    client: "RFI S.p.A.",
-    employer: "Giulia Marini",
-    rspp: "Roberto Conti",
-    rls: "Silvia Greco",
-    worksDirector: "Federico Mancini",
-    firstAidPersonnel: "Teresa Bruno",
-    firePersonnel: "Davide Ricci",
-    status: "Da approvare",
-    revision: "1",
-    draftDate: "2024-03-10",
-    receptionDate: "2024-03-15",
-    validityStart: "2024-04-01",
-    validityEnd: "2025-03-31",
-    link: "",
-    isEdit: true,
-    formTitle: "",
-  },
 };
 
 const DEFAULT_STAFF = { data: [] as object[], count: 0, sortCount: 0, filterCount: 0 };
 
 const DEFAULT_STAFF_ROW = {
-  posId: "",
-  employeeId: "",
+  posTestata_idPos: "",
+  idDipendente: "",
   tmpId: "",
-  firstName: "",
-  lastName: "",
-  department: "",
-  role: "",
+  nome: "",
+  cognome: "",
+  reparto: "",
+  mansione: "",
 };
 
 type SkillItem = {
   skillId: string;
   label: string;
   category: "ferroviaria" | "decreto";
-  selected: boolean;
-  startDate: string | null;
-  endDate: string | null;
+  flagAttiva: boolean;
+  inizioAbilitazione: string | null;
+  scadenzaAbilitazione: string | null;
 };
 
 type SkillsModel = {
   isOpen: boolean;
   employeeId: string;
   tmpId: string;
-  firstName: string;
-  lastName: string;
+  nome: string;
+  cognome: string;
   items: SkillItem[];
 };
 
@@ -137,91 +95,91 @@ const SKILL_TYPES: { skillId: string; label: string; category: "ferroviaria" | "
   { skillId: "SK-11", label: "Amianto", category: "decreto" },
 ];
 
-const MOCK_EMPLOYEE_SKILLS: { employeeId: string; skillId: string; startDate: string; endDate: string }[] = [
-  { employeeId: "EMP-001", skillId: "SK-01", startDate: "2023-01-10", endDate: "2025-01-10" },
-  { employeeId: "EMP-001", skillId: "SK-02", startDate: "2023-03-15", endDate: "2025-03-15" },
-  { employeeId: "EMP-001", skillId: "SK-04", startDate: "2022-06-01", endDate: "2024-06-01" },
-  { employeeId: "EMP-002", skillId: "SK-01", startDate: "2024-02-20", endDate: "2026-02-20" },
-  { employeeId: "EMP-002", skillId: "SK-08", startDate: "2023-09-01", endDate: "2025-09-01" },
-  { employeeId: "EMP-003", skillId: "SK-06", startDate: "2023-05-10", endDate: "2025-05-10" },
-  { employeeId: "EMP-003", skillId: "SK-07", startDate: "2022-11-01", endDate: "2024-11-01" },
-  { employeeId: "EMP-003", skillId: "SK-09", startDate: "2023-07-15", endDate: "2025-07-15" },
-  { employeeId: "EMP-004", skillId: "SK-01", startDate: "2024-01-05", endDate: "2026-01-05" },
-  { employeeId: "EMP-004", skillId: "SK-03", startDate: "2023-08-20", endDate: "2025-08-20" },
-  { employeeId: "EMP-005", skillId: "SK-05", startDate: "2022-04-01", endDate: "2024-04-01" },
-  { employeeId: "EMP-005", skillId: "SK-11", startDate: "2023-10-10", endDate: "2025-10-10" },
-  { employeeId: "EMP-006", skillId: "SK-01", startDate: "2024-03-01", endDate: "2026-03-01" },
-  { employeeId: "EMP-006", skillId: "SK-02", startDate: "2023-12-15", endDate: "2025-12-15" },
-  { employeeId: "EMP-007", skillId: "SK-04", startDate: "2022-09-01", endDate: "2024-09-01" },
-  { employeeId: "EMP-007", skillId: "SK-06", startDate: "2023-02-10", endDate: "2025-02-10" },
-  { employeeId: "EMP-007", skillId: "SK-10", startDate: "2023-06-20", endDate: "2025-06-20" },
+const MOCK_EMPLOYEE_SKILLS: { idDipendente: string; skillId: string; inizioAbilitazione: string; scadenzaAbilitazione: string }[] = [
+  { idDipendente: "EMP-001", skillId: "SK-01", inizioAbilitazione: "2023-01-10", scadenzaAbilitazione: "2025-01-10" },
+  { idDipendente: "EMP-001", skillId: "SK-02", inizioAbilitazione: "2023-03-15", scadenzaAbilitazione: "2025-03-15" },
+  { idDipendente: "EMP-001", skillId: "SK-04", inizioAbilitazione: "2022-06-01", scadenzaAbilitazione: "2024-06-01" },
+  { idDipendente: "EMP-002", skillId: "SK-01", inizioAbilitazione: "2024-02-20", scadenzaAbilitazione: "2026-02-20" },
+  { idDipendente: "EMP-002", skillId: "SK-08", inizioAbilitazione: "2023-09-01", scadenzaAbilitazione: "2025-09-01" },
+  { idDipendente: "EMP-003", skillId: "SK-06", inizioAbilitazione: "2023-05-10", scadenzaAbilitazione: "2025-05-10" },
+  { idDipendente: "EMP-003", skillId: "SK-07", inizioAbilitazione: "2022-11-01", scadenzaAbilitazione: "2024-11-01" },
+  { idDipendente: "EMP-003", skillId: "SK-09", inizioAbilitazione: "2023-07-15", scadenzaAbilitazione: "2025-07-15" },
+  { idDipendente: "EMP-004", skillId: "SK-01", inizioAbilitazione: "2024-01-05", scadenzaAbilitazione: "2026-01-05" },
+  { idDipendente: "EMP-004", skillId: "SK-03", inizioAbilitazione: "2023-08-20", scadenzaAbilitazione: "2025-08-20" },
+  { idDipendente: "EMP-005", skillId: "SK-05", inizioAbilitazione: "2022-04-01", scadenzaAbilitazione: "2024-04-01" },
+  { idDipendente: "EMP-005", skillId: "SK-11", inizioAbilitazione: "2023-10-10", scadenzaAbilitazione: "2025-10-10" },
+  { idDipendente: "EMP-006", skillId: "SK-01", inizioAbilitazione: "2024-03-01", scadenzaAbilitazione: "2026-03-01" },
+  { idDipendente: "EMP-006", skillId: "SK-02", inizioAbilitazione: "2023-12-15", scadenzaAbilitazione: "2025-12-15" },
+  { idDipendente: "EMP-007", skillId: "SK-04", inizioAbilitazione: "2022-09-01", scadenzaAbilitazione: "2024-09-01" },
+  { idDipendente: "EMP-007", skillId: "SK-06", inizioAbilitazione: "2023-02-10", scadenzaAbilitazione: "2025-02-10" },
+  { idDipendente: "EMP-007", skillId: "SK-10", inizioAbilitazione: "2023-06-20", scadenzaAbilitazione: "2025-06-20" },
 ];
 
 const DEFAULT_SKILLS: SkillsModel = {
   isOpen: false,
   employeeId: "",
   tmpId: "",
-  firstName: "",
-  lastName: "",
+  nome: "",
+  cognome: "",
   items: [],
 };
 
 const MOCK_STAFF_DATA = [
   {
-    posId: "POS-001",
-    employeeId: "EMP-001",
-    firstName: "Mario",
-    lastName: "Rossi",
-    department: "Sicurezza",
-    role: "Responsabile",
+    posTestata_idPos: "POS-001",
+    idDipendente: "EMP-001",
+    nome: "Mario",
+    cognome: "Rossi",
+    reparto: "Sicurezza",
+    mansione: "Responsabile",
   },
   {
-    posId: "POS-001",
-    employeeId: "EMP-002",
-    firstName: "Anna",
-    lastName: "Bianchi",
-    department: "Operativo",
-    role: "Addetto",
+    posTestata_idPos: "POS-001",
+    idDipendente: "EMP-002",
+    nome: "Anna",
+    cognome: "Bianchi",
+    reparto: "Operativo",
+    mansione: "Addetto",
   },
   {
-    posId: "POS-002",
-    employeeId: "EMP-003",
-    firstName: "Carlo",
-    lastName: "Neri",
-    department: "Tecnico",
-    role: "Tecnico",
+    posTestata_idPos: "POS-002",
+    idDipendente: "EMP-003",
+    nome: "Carlo",
+    cognome: "Neri",
+    reparto: "Tecnico",
+    mansione: "Tecnico",
   },
   {
-    posId: "POS-002",
-    employeeId: "EMP-004",
-    firstName: "Sara",
-    lastName: "Gialli",
-    department: "Operativo",
-    role: "Addetto",
+    posTestata_idPos: "POS-002",
+    idDipendente: "EMP-004",
+    nome: "Sara",
+    cognome: "Gialli",
+    reparto: "Operativo",
+    mansione: "Addetto",
   },
   {
-    posId: "POS-003",
-    employeeId: "EMP-005",
-    firstName: "Luca",
-    lastName: "Blu",
-    department: "Sicurezza",
-    role: "RSPP",
+    posTestata_idPos: "POS-003",
+    idDipendente: "EMP-005",
+    nome: "Luca",
+    cognome: "Blu",
+    reparto: "Sicurezza",
+    mansione: "RSPP",
   },
   {
-    posId: "POS-004",
-    employeeId: "EMP-006",
-    firstName: "Elena",
-    lastName: "Verdi",
-    department: "Operativo",
-    role: "Addetto",
+    posTestata_idPos: "POS-004",
+    idDipendente: "EMP-006",
+    nome: "Elena",
+    cognome: "Verdi",
+    reparto: "Operativo",
+    mansione: "Addetto",
   },
   {
-    posId: "POS-005",
-    employeeId: "EMP-007",
-    firstName: "Marco",
-    lastName: "Ferrari",
-    department: "Tecnico",
-    role: "DL",
+    posTestata_idPos: "POS-005",
+    idDipendente: "EMP-007",
+    nome: "Marco",
+    cognome: "Ferrari",
+    reparto: "Tecnico",
+    mansione: "DL",
   },
 ];
 
@@ -243,7 +201,6 @@ export default class Pos extends BaseController {
     this._oModelSkills = new JSONModel(structuredClone(DEFAULT_SKILLS));
 
     this.setModel(this._oModelPOS, "POS");
-    this.setModel(createPosStatusModel(), "PosStatus");
     this.setModel(this._oModelStaff, "Staff");
     this.setModel(this._oModelSkills, "Skills");
 
@@ -298,8 +255,8 @@ export default class Pos extends BaseController {
 
     this._oModelPOS.setData({
       ...structuredClone(DEFAULT_POS),
-      contractCode: this._sContractCode,
-      posId: bIsEdit ? this._sPosId : "",
+      contratto: this._sContractCode,
+      idPos: bIsEdit ? this._sPosId : generateRandomId(),
       isEdit: bIsEdit,
       formTitle: bIsEdit ? this.getText("lbl_pos_form") + ": " + this._sPosId : this.getText("lbl_pos_form_create"),
     });
@@ -330,13 +287,50 @@ export default class Pos extends BaseController {
   }
 
   private async _executeSave(): Promise<void> {
+    const sPosId = (this._oModelPOS.getProperty("/idPos") as string) ?? "";
+    const bIsEdit = this._oModelPOS.getProperty("/isEdit") as boolean;
+    const sDatore = (this._oModelPOS.getProperty("/datoreLavoro") as string) ?? "";
+    const sMedico = (this._oModelPOS.getProperty("/medicocompetente") as string) ?? "";
+    const sRls = (this._oModelPOS.getProperty("/rls") as string) ?? "";
+
+    if (!sDatore.trim() || !sMedico.trim() || !sRls.trim()) {
+      MessageBox.error(this.getText("msg_mandatory_fields"));
+      return;
+    }
+
     try {
       this.setBusy(true);
 
-      if (this._oModelPOS.getProperty("/isEdit")) {
+      if (bIsEdit) {
         // Stub: await this.updateEntity("POS", oData);
       } else {
-        // Stub: await this.createEntity("POS", oData);
+        const oODataModel = this.getOwnerComponent()!.getModel() as ODataModel;
+        const oListBinding = oODataModel.bindList("/PosTestataSet");
+        const oContext = oListBinding.create({
+          idPos: sPosId,
+          contratto: this._oModelPOS.getProperty("/contratto"),
+          impresaAppaltatrice: this._oModelPOS.getProperty("/impresaAppaltatrice"),
+          ruoloImpresa: this._oModelPOS.getProperty("/ruoloImpresa"),
+          codiceContrattoSuperiore: this._oModelPOS.getProperty("/codiceContrattoSuperiore"),
+          committente: this._oModelPOS.getProperty("/committente"),
+          datoreLavoro: sDatore,
+          rspp: this._oModelPOS.getProperty("/rspp"),
+          rls: sRls,
+          medicocompetente: sMedico,
+          direttoreLavori: this._oModelPOS.getProperty("/direttoreLavori"),
+          direttoreCantiere: this._oModelPOS.getProperty("/direttoreCantiere"),
+          capocantiere: this._oModelPOS.getProperty("/capocantiere"),
+          preposto: this._oModelPOS.getProperty("/preposto"),
+          addettiPrimoSoccorso: this._oModelPOS.getProperty("/addettiPrimoSoccorso"),
+          addettiPrimoAntincendio: this._oModelPOS.getProperty("/addettiPrimoAntincendio"),
+          revisione: parseInt(this._oModelPOS.getProperty("/revisione") || "0", 10),
+          dataRedazione: this._oModelPOS.getProperty("/dataRedazione") || null,
+          dataRicezioneCruscotto: this._oModelPOS.getProperty("/dataRicezioneCruscotto") || null,
+          inizioValidita: this._oModelPOS.getProperty("/inizioValidita") || null,
+          fineValidita: this._oModelPOS.getProperty("/fineValidita") || null,
+          linkCde: this._oModelPOS.getProperty("/linkCde"),
+        });
+        await oContext.created();
       }
 
       MessageToast.show(this.getText("msg_save_success"));
@@ -392,8 +386,8 @@ export default class Pos extends BaseController {
     const oItem = oEvent.getSource().getParent() as ColumnListItem;
     const oContext = oItem.getBindingContext("Staff");
     if (!oContext) return;
-    const oRow = oContext.getObject() as { employeeId: string; tmpId: string; firstName: string; lastName: string };
-    const sKey = oRow.employeeId || oRow.tmpId;
+    const oRow = oContext.getObject() as { idDipendente: string; tmpId: string; nome: string; cognome: string };
+    const sKey = oRow.idDipendente || oRow.tmpId;
 
     // Salva abilitazioni correnti in cache prima di cambiare dipendente
     if (this._oModelSkills.getProperty("/isOpen")) {
@@ -415,24 +409,24 @@ export default class Pos extends BaseController {
         structuredClone(aCached)
       : SKILL_TYPES.map((type) => {
           const found = MOCK_EMPLOYEE_SKILLS.find(
-            (s) => s.employeeId === oRow.employeeId && s.skillId === type.skillId,
+            (s) => s.idDipendente === oRow.idDipendente && s.skillId === type.skillId,
           );
           return {
             skillId: type.skillId,
             label: type.label,
             category: type.category,
-            selected: !!found,
-            startDate: found?.startDate ?? null,
-            endDate: found?.endDate ?? null,
+            flagAttiva: !!found,
+            inizioAbilitazione: found?.inizioAbilitazione ?? null,
+            scadenzaAbilitazione: found?.scadenzaAbilitazione ?? null,
           };
         });
 
     this._oModelSkills.setData({
       isOpen: true,
-      employeeId: oRow.employeeId,
+      employeeId: oRow.idDipendente,
       tmpId: oRow.tmpId,
-      firstName: oRow.firstName,
-      lastName: oRow.lastName,
+      nome: oRow.nome,
+      cognome: oRow.cognome,
       items: aItems,
     });
   }
@@ -463,14 +457,36 @@ export default class Pos extends BaseController {
   // ── Data loading ──────────────────────────────────────────────────────────
 
   private async _loadPOS(): Promise<void> {
-    const oData = MOCK_POS[this._sPosId];
-    if (oData) {
-      this._oModelPOS.setData({
-        ...structuredClone(oData),
-        isEdit: true,
-        formTitle: this.getText("lbl_pos_form") + ": " + this._sPosId,
-      });
-    }
+    const oODataModel = this.getOwnerComponent()!.getModel() as ODataModel;
+    const oBinding = oODataModel.bindContext(`/PosTestataSet(idPos='${encodeURIComponent(this._sPosId)}')`);
+    const oData = (await oBinding.requestObject()) as Record<string, unknown>;
+    this._oModelPOS.setData({
+      idPos: oData.idPos ?? "",
+      contratto: oData.contratto ?? "",
+      impresaAppaltatrice: oData.impresaAppaltatrice ?? "",
+      ruoloImpresa: oData.ruoloImpresa ?? "",
+      codiceContrattoSuperiore: oData.codiceContrattoSuperiore ?? "",
+      committente: oData.committente ?? "",
+      datoreLavoro: oData.datoreLavoro ?? "",
+      rspp: oData.rspp ?? "",
+      rls: oData.rls ?? "",
+      medicocompetente: oData.medicocompetente ?? "",
+      direttoreLavori: oData.direttoreLavori ?? "",
+      direttoreCantiere: oData.direttoreCantiere ?? "",
+      capocantiere: oData.capocantiere ?? "",
+      preposto: oData.preposto ?? "",
+      addettiPrimoSoccorso: oData.addettiPrimoSoccorso ?? "",
+      addettiPrimoAntincendio: oData.addettiPrimoAntincendio ?? "",
+      status: "",
+      revisione: oData.revisione != null ? String(oData.revisione) : "",
+      dataRedazione: oData.dataRedazione ?? "",
+      dataRicezioneCruscotto: oData.dataRicezioneCruscotto ?? "",
+      inizioValidita: oData.inizioValidita ?? "",
+      fineValidita: oData.fineValidita ?? "",
+      linkCde: oData.linkCde ?? "",
+      isEdit: true,
+      formTitle: this.getText("lbl_pos_form") + ": " + this._sPosId,
+    });
   }
 
   private async _loadStaff(): Promise<void> {

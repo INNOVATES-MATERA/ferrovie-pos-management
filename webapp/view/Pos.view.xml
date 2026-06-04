@@ -15,12 +15,12 @@
                     <Title text="{i18n>lbl_pos_form}"/>
                 </f:heading>
                 <f:expandedContent>
-                    <Title text="{POS>/posId}"
+                    <Title text="{POS>/idPos}"
                         visible="{POS>/isEdit}"
                         level="H3"/>
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Title text="{POS>/posId}"
+                    <Title text="{POS>/idPos}"
                         visible="{POS>/isEdit}"
                         level="H3"/>
                 </f:snappedContent>
@@ -55,7 +55,7 @@
                                 <form:FormElement label="{i18n>lbl_pos_id}">
                                     <form:fields>
                                         <Input id="inpPosId"
-                                            value="{POS>/posId}"
+                                            value="{POS>/idPos}"
                                             editable="false"
                                             visible="{POS>/isEdit}"/>
                                     </form:fields>
@@ -63,44 +63,39 @@
                                 <form:FormElement label="{i18n>lbl_contract}">
                                     <form:fields>
                                         <Input id="inpContractCode"
-                                            value="{POS>/contractCode}"
+                                            value="{POS>/contratto}"
                                             editable="false"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_contractor_company}">
                                     <form:fields>
                                         <Input id="inpContractorCompany"
-                                            value="{POS>/contractorCompany}"/>
+                                            value="{POS>/impresaAppaltatrice}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_company_role}">
                                     <form:fields>
                                         <Input id="inpCompanyRole"
-                                            value="{POS>/companyRole}"/>
+                                            value="{POS>/ruoloImpresa}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_parent_contract_code}">
                                     <form:fields>
                                         <Input id="inpParentContractCode"
-                                            value="{POS>/parentContractCode}"/>
+                                            value="{POS>/codiceContrattoSuperiore}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_client}">
                                     <form:fields>
                                         <Input id="inpClient"
-                                            value="{POS>/client}"/>
+                                            value="{POS>/committente}"/>
                                     </form:fields>
                                 </form:FormElement>
-                            </form:formElements>
-                        </form:FormContainer>
-
-                        <!-- Container 2: Figure di sicurezza -->
-                        <form:FormContainer>
-                            <form:formElements>
                                 <form:FormElement label="{i18n>lbl_employer}">
                                     <form:fields>
                                         <Input id="inpEmployer"
-                                            value="{POS>/employer}"/>
+                                            value="{POS>/datoreLavoro}"
+                                            required="true"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_rspp}">
@@ -109,57 +104,78 @@
                                             value="{POS>/rspp}"/>
                                     </form:fields>
                                 </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+
+                        <!-- Container 2: Figure di sicurezza -->
+                        <form:FormContainer>
+                            <form:formElements>
                                 <form:FormElement label="{i18n>lbl_rls}">
                                     <form:fields>
                                         <Input id="inpRls"
-                                            value="{POS>/rls}"/>
+                                            value="{POS>/rls}"
+                                            required="true"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_medico_competente}">
+                                    <form:fields>
+                                        <Input id="inpMedicoCompetente"
+                                            value="{POS>/medicocompetente}"
+                                            required="true"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_works_director}">
                                     <form:fields>
                                         <Input id="inpWorksDirector"
-                                            value="{POS>/worksDirector}"/>
+                                            value="{POS>/direttoreLavori}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_works_director_site}">
+                                    <form:fields>
+                                        <Input id="inpWorksDirectorSite"
+                                            value="{POS>/direttoreCantiere}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_site_manager}">
+                                    <form:fields>
+                                        <Input id="inpSiteManager"
+                                            value="{POS>/capocantiere}"/>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>lbl_foreman}">
+                                    <form:fields>
+                                        <Input id="inpForeman"
+                                            value="{POS>/preposto}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_first_aid_personnel}">
                                     <form:fields>
                                         <Input id="inpFirstAidPersonnel"
-                                            value="{POS>/firstAidPersonnel}"/>
+                                            value="{POS>/addettiPrimoSoccorso}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_fire_personnel}">
                                     <form:fields>
                                         <Input id="inpFirePersonnel"
-                                            value="{POS>/firePersonnel}"/>
+                                            value="{POS>/addettiPrimoAntincendio}"/>
                                     </form:fields>
                                 </form:FormElement>
                             </form:formElements>
                         </form:FormContainer>
 
-                        <!-- Container 3: Stato e date -->
+                        <!-- Container 3: date -->
                         <form:FormContainer>
                             <form:formElements>
-                                <form:FormElement label="{i18n>lbl_status}">
-                                    <form:fields>
-                                        <Select id="selStatus"
-                                            selectedKey="{POS>/status}"
-                                            width="100%"
-                                            items="{PosStatus>/}">
-                                            <core:Item key="{PosStatus>key}"
-                                                text="{PosStatus>text}"/>
-                                        </Select>
-                                    </form:fields>
-                                </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_revision}">
                                     <form:fields>
                                         <Input id="inpRevision"
-                                            value="{POS>/revision}"/>
+                                            value="{POS>/revisione}"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_draft_date}">
                                     <form:fields>
                                         <DatePicker id="dpDraftDate"
-                                            value="{POS>/draftDate}"
+                                            value="{POS>/dataRedazione}"
                                             valueFormat="yyyy-MM-dd"
                                             displayFormat="dd/MM/yyyy"/>
                                     </form:fields>
@@ -167,7 +183,7 @@
                                 <form:FormElement label="{i18n>lbl_reception_date}">
                                     <form:fields>
                                         <DatePicker id="dpReceptionDate"
-                                            value="{POS>/receptionDate}"
+                                            value="{POS>/dataRicezioneCruscotto}"
                                             valueFormat="yyyy-MM-dd"
                                             displayFormat="dd/MM/yyyy"/>
                                     </form:fields>
@@ -175,7 +191,7 @@
                                 <form:FormElement label="{i18n>lbl_validity_start}">
                                     <form:fields>
                                         <DatePicker id="dpValidityStart"
-                                            value="{POS>/validityStart}"
+                                            value="{POS>/inizioValidita}"
                                             valueFormat="yyyy-MM-dd"
                                             displayFormat="dd/MM/yyyy"/>
                                     </form:fields>
@@ -183,7 +199,7 @@
                                 <form:FormElement label="{i18n>lbl_validity_end}">
                                     <form:fields>
                                         <DatePicker id="dpValidityEnd"
-                                            value="{POS>/validityEnd}"
+                                            value="{POS>/fineValidita}"
                                             valueFormat="yyyy-MM-dd"
                                             displayFormat="dd/MM/yyyy"/>
                                     </form:fields>
@@ -191,7 +207,7 @@
                                 <form:FormElement label="{i18n>lbl_link}">
                                     <form:fields>
                                         <Input id="inpLink"
-                                            value="{POS>/link}"/>
+                                            value="{POS>/linkCde}"/>
                                     </form:fields>
                                 </form:FormElement>
                             </form:formElements>
@@ -258,7 +274,7 @@
 
                                 <columns>
 
-                                    <Column app:p13nKey="employeeId"
+                                    <Column app:p13nKey="idDipendente"
                                         width="9rem">
                                         <header>
                                             <Label text="{i18n>lbl_employee_id}"
@@ -266,7 +282,7 @@
                                         </header>
                                     </Column>
 
-                                    <Column app:p13nKey="firstName"
+                                    <Column app:p13nKey="nome"
                                         width="10rem">
                                         <header>
                                             <Label text="{i18n>lbl_first_name}"
@@ -274,7 +290,7 @@
                                         </header>
                                     </Column>
 
-                                    <Column app:p13nKey="lastName"
+                                    <Column app:p13nKey="cognome"
                                         width="10rem">
                                         <header>
                                             <Label text="{i18n>lbl_last_name}"
@@ -282,7 +298,7 @@
                                         </header>
                                     </Column>
 
-                                    <Column app:p13nKey="department"
+                                    <Column app:p13nKey="reparto"
                                         width="12rem">
                                         <header>
                                             <Label text="{i18n>lbl_department}"
@@ -290,7 +306,7 @@
                                         </header>
                                     </Column>
 
-                                    <Column app:p13nKey="role"
+                                    <Column app:p13nKey="mansione"
                                         width="10rem">
                                         <header>
                                             <Label text="{i18n>lbl_role}"
@@ -310,12 +326,12 @@
                                 <items>
                                     <ColumnListItem>
                                         <cells>
-                                            <Text text="{Staff>employeeId}"
+                                            <Text text="{Staff>idDipendente}"
                                                 wrapping="false"/>
-                                            <Input value="{Staff>firstName}"/>
-                                            <Input value="{Staff>lastName}"/>
-                                            <Input value="{Staff>department}"/>
-                                            <Input value="{Staff>role}"/>
+                                            <Input value="{Staff>nome}"/>
+                                            <Input value="{Staff>cognome}"/>
+                                            <Input value="{Staff>reparto}"/>
+                                            <Input value="{Staff>mansione}"/>
                                             <Button icon="sap-icon://permission"
                                                 type="Transparent"
                                                 press="onOpenSkills"
@@ -331,7 +347,7 @@
 
                 <!-- Colonna detail: abilitazioni dipendente -->
                 <f:midColumnPages>
-                    <Page title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/firstName} + ' ' + ${Skills>/lastName} }"
+                    <Page title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/nome} + ' ' + ${Skills>/cognome} }"
                         showNavButton="true"
                         navButtonPress="onCloseSkills">
                         <content>

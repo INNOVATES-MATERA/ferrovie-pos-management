@@ -87,7 +87,8 @@
         "settings": {
           "operationMode": "Server",
           "earlyRequests": true,
-          "groupId": "$direct"
+          "groupId": "$direct",
+          "autoExpandSelect": true
         }
       }
     },
