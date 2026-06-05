@@ -4,9 +4,12 @@ import MessageToast from "sap/m/MessageToast";
 import MessageBox from "sap/m/MessageBox";
 import Table from "sap/m/Table";
 import ColumnListItem from "sap/m/ColumnListItem";
+import DatePicker from "sap/m/DatePicker";
+import Event from "sap/ui/base/Event";
 import entityUtils from "../utils/entityUtils";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
 import xlsxUtils from "../utils/xlsxUtils";
+import dateUtils from "../utils/dateUtils";
 
 function generateRandomId(): string {
   return Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -196,10 +199,25 @@ export default class Pos extends BaseController {
       return;
     }
 
+    const dpStart = this.byId("dpValidityStart") as DatePicker;
+    const dpEnd   = this.byId("dpValidityEnd")   as DatePicker;
+    if (dpStart.getValueState() === "Error" || dpEnd.getValueState() === "Error") {
+      MessageBox.error(this.getText("msg_error_save_date"));
+      return;
+    }
+
+    this._flushOpenSkillsToCache();
+
+    const aSkillItems = (this._oModelSkills.getProperty("/items") as SkillItem[]) || [];
+    for (const skill of aSkillItems) {
+      if (skill.flagAttiva && dateUtils.isDateAfter(skill.inizioAbilitazione, skill.scadenzaAbilitazione)) {
+        MessageBox.error(this.getText("msg_error_save_date"));
+        return;
+      }
+    }
+
     try {
       this.setBusy(true);
-
-      this._flushOpenSkillsToCache();
 
       const oPosPayload = {
         idPos: sPosId,
@@ -220,7 +238,9 @@ export default class Pos extends BaseController {
         addettiPrimoAntincendio: this._oModelPOS.getProperty("/addettiPrimoAntincendio"),
         revisione: parseInt(this._oModelPOS.getProperty("/revisione") || "0", 10),
         dataRedazione: this._oModelPOS.getProperty("/dataRedazione") || null,
-        dataRicezioneCruscotto: this._oModelPOS.getProperty("/dataRicezioneCruscotto") || null,
+        dataRicezioneCruscotto: this._oModelPOS.getProperty("/dataRicezioneCruscotto")
+          ? (this._oModelPOS.getProperty("/dataRicezioneCruscotto") as string) + "T00:00:00Z"
+          : null,
         inizioValidita: this._oModelPOS.getProperty("/inizioValidita") || null,
         fineValidita: this._oModelPOS.getProperty("/fineValidita") || null,
         linkCde: this._oModelPOS.getProperty("/linkCde"),
@@ -248,6 +268,37 @@ export default class Pos extends BaseController {
 
   public onBack(): void {
     this.navTo("RouteContract", { contractCode: this._sContractCode });
+  }
+
+  public onValidityDateChange(): void {
+    const sInizio = (this._oModelPOS.getProperty("/inizioValidita") as string) || "";
+    const sFine   = (this._oModelPOS.getProperty("/fineValidita")   as string) || "";
+    const bError  = dateUtils.isDateAfter(sInizio, sFine);
+    const sState  = bError ? "Error" : "None";
+    const sText   = bError ? this.getText("msg_error_validity_range") : "";
+
+    (this.byId("dpValidityStart") as DatePicker).setValueState(sState as any);
+    (this.byId("dpValidityStart") as DatePicker).setValueStateText(sText);
+    (this.byId("dpValidityEnd")   as DatePicker).setValueState(sState as any);
+    (this.byId("dpValidityEnd")   as DatePicker).setValueStateText(sText);
+  }
+
+  public onSkillDateChange(oEvent: Event): void {
+    const oSource    = oEvent.getSource() as DatePicker;
+    const oListItem  = oSource.getParent() as ColumnListItem;
+    const aCells     = oListItem.getCells();
+    const oPickerInizio = aCells[1] as DatePicker;
+    const oPickerFine   = aCells[2] as DatePicker;
+    const sInizio = oPickerInizio.getValue() || "";
+    const sFine   = oPickerFine.getValue()   || "";
+    const bError  = dateUtils.isDateAfter(sInizio, sFine);
+    const sState  = bError ? "Error" : "None";
+    const sText   = bError ? this.getText("msg_error_skill_range") : "";
+
+    oPickerInizio.setValueState(sState as any);
+    oPickerInizio.setValueStateText(sText);
+    oPickerFine.setValueState(sState as any);
+    oPickerFine.setValueStateText(sText);
   }
 
   // ── Staff management ──────────────────────────────────────────────────────
@@ -408,6 +459,7 @@ export default class Pos extends BaseController {
 
     this._oModelPOS.setData({
       ...oData,
+      dataRicezioneCruscotto: dateUtils.formatISOStringToYYYYMMDD(oData.dataRicezioneCruscotto as string | null),
       isEdit: true,
       formTitle: this.getText("lbl_pos_form") + ": " + this._sPosId,
     });

@@ -8,7 +8,8 @@
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
     xmlns:sap.ui.fl="sap.ui.fl">
 
-    <f:DynamicPage showFooter="true">
+    <f:DynamicPage showFooter="true"
+        fitContent="true">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
@@ -52,14 +53,6 @@
                         <!-- Container 1: Identificatori -->
                         <form:FormContainer>
                             <form:formElements>
-                                <form:FormElement label="{i18n>lbl_pos_id}">
-                                    <form:fields>
-                                        <Input id="inpPosId"
-                                            value="{POS>/idPos}"
-                                            editable="false"
-                                            visible="{POS>/isEdit}"/>
-                                    </form:fields>
-                                </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_contract}">
                                     <form:fields>
                                         <Input id="inpContractCode"
@@ -70,38 +63,44 @@
                                 <form:FormElement label="{i18n>lbl_contractor_company}">
                                     <form:fields>
                                         <Input id="inpContractorCompany"
-                                            value="{POS>/impresaAppaltatrice}"/>
+                                            value="{POS>/impresaAppaltatrice}"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_company_role}">
                                     <form:fields>
                                         <Input id="inpCompanyRole"
-                                            value="{POS>/ruoloImpresa}"/>
+                                            value="{POS>/ruoloImpresa}"
+                                            maxLength="50"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_parent_contract_code}">
                                     <form:fields>
                                         <Input id="inpParentContractCode"
-                                            value="{POS>/codiceContrattoSuperiore}"/>
+                                            value="{POS>/codiceContrattoSuperiore}"
+                                            maxLength="50"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_client}">
                                     <form:fields>
                                         <Input id="inpClient"
-                                            value="{POS>/committente}"/>
+                                            value="{POS>/committente}"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_employer}">
                                     <form:fields>
                                         <Input id="inpEmployer"
                                             value="{POS>/datoreLavoro}"
-                                            required="true"/>
+                                            required="true"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_rspp}">
                                     <form:fields>
                                         <Input id="inpRspp"
-                                            value="{POS>/rspp}"/>
+                                            value="{POS>/rspp}"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                             </form:formElements>
@@ -114,50 +113,51 @@
                                     <form:fields>
                                         <Input id="inpRls"
                                             value="{POS>/rls}"
-                                            required="true"/>
+                                            required="true"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_medico_competente}">
                                     <form:fields>
                                         <Input id="inpMedicoCompetente"
                                             value="{POS>/medicocompetente}"
-                                            required="true"/>
+                                            required="true"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_works_director}">
                                     <form:fields>
                                         <Input id="inpWorksDirector"
-                                            value="{POS>/direttoreLavori}"/>
+                                            value="{POS>/direttoreLavori}"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_works_director_site}">
                                     <form:fields>
                                         <Input id="inpWorksDirectorSite"
-                                            value="{POS>/direttoreCantiere}"/>
+                                            value="{POS>/direttoreCantiere}"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_site_manager}">
                                     <form:fields>
                                         <Input id="inpSiteManager"
-                                            value="{POS>/capocantiere}"/>
+                                            value="{POS>/capocantiere}"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_foreman}">
                                     <form:fields>
                                         <Input id="inpForeman"
-                                            value="{POS>/preposto}"/>
+                                            value="{POS>/preposto}"
+                                            maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_first_aid_personnel}">
                                     <form:fields>
                                         <Input id="inpFirstAidPersonnel"
-                                            value="{POS>/addettiPrimoSoccorso}"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_fire_personnel}">
-                                    <form:fields>
-                                        <Input id="inpFirePersonnel"
-                                            value="{POS>/addettiPrimoAntincendio}"/>
+                                            value="{POS>/addettiPrimoSoccorso}"
+                                            maxLength="255"/>
                                     </form:fields>
                                 </form:FormElement>
                             </form:formElements>
@@ -166,6 +166,13 @@
                         <!-- Container 3: date -->
                         <form:FormContainer>
                             <form:formElements>
+                                <form:FormElement label="{i18n>lbl_fire_personnel}">
+                                    <form:fields>
+                                        <Input id="inpFirePersonnel"
+                                            value="{POS>/addettiPrimoAntincendio}"
+                                            maxLength="255"/>
+                                    </form:fields>
+                                </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_revision}">
                                     <form:fields>
                                         <Input id="inpRevision"
@@ -193,7 +200,8 @@
                                         <DatePicker id="dpValidityStart"
                                             value="{POS>/inizioValidita}"
                                             valueFormat="yyyy-MM-dd"
-                                            displayFormat="dd/MM/yyyy"/>
+                                            displayFormat="dd/MM/yyyy"
+                                            change="onValidityDateChange"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_validity_end}">
@@ -201,13 +209,15 @@
                                         <DatePicker id="dpValidityEnd"
                                             value="{POS>/fineValidita}"
                                             valueFormat="yyyy-MM-dd"
-                                            displayFormat="dd/MM/yyyy"/>
+                                            displayFormat="dd/MM/yyyy"
+                                            change="onValidityDateChange"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_link}">
                                     <form:fields>
                                         <Input id="inpLink"
-                                            value="{POS>/linkCde}"/>
+                                            value="{POS>/linkCde}"
+                                            maxLength="1000"/>
                                     </form:fields>
                                 </form:FormElement>
                             </form:formElements>
@@ -225,125 +235,130 @@
 
                 <!-- Colonna master: tabella utenti -->
                 <f:beginColumnPages>
-                    <Panel>
-                        <OverflowToolbar style="Standard"
-                            class="pt-auto-10">
-                            <Title text="{i18n>lbl_employees} ({Staff>/count})"
-                                level="H2"/>
-                            <ToolbarSpacer/>
-                            <Button icon="sap-icon://add"
-                                text="{i18n>btn_add}"
-                                press="onAddStaff"/>
-                            <Button icon="sap-icon://delete"
-                                text="{i18n>btn_delete}"
-                                press="onDeleteStaff"/>
-                            <Button id="btnStaffReset"
-                                icon="sap-icon://refresh"
-                                press="onReset"
-                                tooltip="{i18n>btn_reset}"/>
-                            <Button icon="sap-icon://sort"
-                                press="onSettings"
-                                tooltip="{i18n>btn_sort}"
-                                app:panel="Sorter">
-                                <customData>
-                                    <BadgeCustomData value="{Staff>/sortCount}"/>
-                                </customData>
-                            </Button>
-                            <Button icon="sap-icon://filter"
-                                press="onSettings"
-                                app:panel="Filter">
-                                <customData>
-                                    <BadgeCustomData value="{Staff>/filterCount}"/>
-                                </customData>
-                            </Button>
-                            <Button icon="sap-icon://action-settings"
-                                press="onSettings"
-                                app:panel="Columns"/>
-                            <Button icon="sap-icon://download"
-                                press="onDownload"/>
-                        </OverflowToolbar>
+                    <Page showHeader="false"
+                        enableScrolling="true">
+                        <content>
+                            <Panel>
+                                <OverflowToolbar style="Standard"
+                                    class="pt-auto-10">
+                                    <Title text="{i18n>lbl_employees} ({Staff>/count})"
+                                        level="H2"/>
+                                    <ToolbarSpacer/>
+                                    <Button icon="sap-icon://add"
+                                        text="{i18n>btn_add}"
+                                        press="onAddStaff"/>
+                                    <Button icon="sap-icon://delete"
+                                        text="{i18n>btn_delete}"
+                                        press="onDeleteStaff"/>
+                                    <Button id="btnStaffReset"
+                                        icon="sap-icon://refresh"
+                                        press="onReset"
+                                        tooltip="{i18n>btn_reset}"/>
+                                    <Button icon="sap-icon://sort"
+                                        press="onSettings"
+                                        tooltip="{i18n>btn_sort}"
+                                        app:panel="Sorter">
+                                        <customData>
+                                            <BadgeCustomData value="{Staff>/sortCount}"/>
+                                        </customData>
+                                    </Button>
+                                    <Button icon="sap-icon://filter"
+                                        press="onSettings"
+                                        app:panel="Filter">
+                                        <customData>
+                                            <BadgeCustomData value="{Staff>/filterCount}"/>
+                                        </customData>
+                                    </Button>
+                                    <Button icon="sap-icon://action-settings"
+                                        press="onSettings"
+                                        app:panel="Columns"/>
+                                    <Button icon="sap-icon://download"
+                                        press="onDownload"/>
+                                </OverflowToolbar>
+                                <Table id="tblStaff"
+                                    items="{Staff>/data}"
+                                    mode="MultiSelect"
+                                    fixedLayout="true"
+                                    growing="true"
+                                    growingThreshold="5"
+                                    class="posTable">
 
-                        <ScrollContainer horizontal="true"
-                            vertical="false"
-                            width="100%">
-                            <Table id="tblStaff"
-                                items="{Staff>/data}"
-                                mode="MultiSelect"
-                                fixedLayout="true"
-                                class="posTable">
+                                    <columns>
 
-                                <columns>
+                                        <Column app:p13nKey="idDipendente"
+                                            width="9rem"
+                                            visible="false">
+                                            <header>
+                                                <Label text="{i18n>lbl_employee_id}"
+                                                    wrapping="false"/>
+                                            </header>
+                                        </Column>
 
-                                    <Column app:p13nKey="idDipendente"
-                                        width="9rem"
-                                        visible="false">
-                                        <header>
-                                            <Label text="{i18n>lbl_employee_id}"
-                                                wrapping="false"/>
-                                        </header>
-                                    </Column>
+                                        <Column app:p13nKey="nome"
+                                            width="10rem">
+                                            <header>
+                                                <Label text="{i18n>lbl_first_name}"
+                                                    wrapping="false"/>
+                                            </header>
+                                        </Column>
 
-                                    <Column app:p13nKey="nome"
-                                        width="10rem">
-                                        <header>
-                                            <Label text="{i18n>lbl_first_name}"
-                                                wrapping="false"/>
-                                        </header>
-                                    </Column>
+                                        <Column app:p13nKey="cognome"
+                                            width="10rem">
+                                            <header>
+                                                <Label text="{i18n>lbl_last_name}"
+                                                    wrapping="false"/>
+                                            </header>
+                                        </Column>
 
-                                    <Column app:p13nKey="cognome"
-                                        width="10rem">
-                                        <header>
-                                            <Label text="{i18n>lbl_last_name}"
-                                                wrapping="false"/>
-                                        </header>
-                                    </Column>
+                                        <Column app:p13nKey="reparto"
+                                            width="12rem">
+                                            <header>
+                                                <Label text="{i18n>lbl_department}"
+                                                    wrapping="false"/>
+                                            </header>
+                                        </Column>
 
-                                    <Column app:p13nKey="reparto"
-                                        width="12rem">
-                                        <header>
-                                            <Label text="{i18n>lbl_department}"
-                                                wrapping="false"/>
-                                        </header>
-                                    </Column>
+                                        <Column app:p13nKey="mansione"
+                                            width="10rem">
+                                            <header>
+                                                <Label text="{i18n>lbl_role}"
+                                                    wrapping="false"/>
+                                            </header>
+                                        </Column>
 
-                                    <Column app:p13nKey="mansione"
-                                        width="10rem">
-                                        <header>
-                                            <Label text="{i18n>lbl_role}"
-                                                wrapping="false"/>
-                                        </header>
-                                    </Column>
+                                        <Column width="3.5rem"
+                                            hAlign="Center">
+                                            <header>
+                                                <Label text=""/>
+                                            </header>
+                                        </Column>
 
-                                    <Column width="3.5rem"
-                                        hAlign="Center">
-                                        <header>
-                                            <Label text=""/>
-                                        </header>
-                                    </Column>
+                                    </columns>
 
-                                </columns>
-
-                                <items>
-                                    <ColumnListItem>
-                                        <cells>
-                                            <Text text="{Staff>idDipendente}"
-                                                wrapping="false"/>
-                                            <Input value="{Staff>nome}"/>
-                                            <Input value="{Staff>cognome}"/>
-                                            <Input value="{Staff>reparto}"/>
-                                            <Input value="{Staff>mansione}"/>
-                                            <Button icon="sap-icon://permission"
-                                                type="Transparent"
-                                                press="onOpenSkills"
-                                                tooltip="{i18n>btn_skills}"/>
-                                        </cells>
-                                    </ColumnListItem>
-                                </items>
-
-                            </Table>
-                        </ScrollContainer>
-                    </Panel>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{Staff>idDipendente}"
+                                                    wrapping="false"/>
+                                                <Input value="{Staff>nome}"
+                                                    maxLength="50"/>
+                                                <Input value="{Staff>cognome}"
+                                                    maxLength="50"/>
+                                                <Input value="{Staff>reparto}"
+                                                    maxLength="50"/>
+                                                <Input value="{Staff>mansione}"
+                                                    maxLength="50"/>
+                                                <Button icon="sap-icon://permission"
+                                                    type="Transparent"
+                                                    press="onOpenSkills"
+                                                    tooltip="{i18n>btn_skills}"/>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </Panel>
+                        </content>
+                    </Page>
                 </f:beginColumnPages>
 
                 <!-- Colonna detail: abilitazioni dipendente -->
@@ -393,12 +408,14 @@
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
                                                                 visible="{Skills>flagAttiva}"
-                                                                width="9rem"/>
+                                                                width="9rem"
+                                                                change="onSkillDateChange"/>
                                                             <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
                                                                 visible="{Skills>flagAttiva}"
-                                                                width="9rem"/>
+                                                                width="9rem"
+                                                                change="onSkillDateChange"/>
                                                         </cells>
                                                     </ColumnListItem>
                                                 </items>
@@ -440,12 +457,14 @@
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
                                                                 visible="{Skills>flagAttiva}"
-                                                                width="9rem"/>
+                                                                width="9rem"
+                                                                change="onSkillDateChange"/>
                                                             <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
                                                                 visible="{Skills>flagAttiva}"
-                                                                width="9rem"/>
+                                                                width="9rem"
+                                                                change="onSkillDateChange"/>
                                                         </cells>
                                                     </ColumnListItem>
                                                 </items>
@@ -480,6 +499,5 @@
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>
-
 
 </mvc:View>

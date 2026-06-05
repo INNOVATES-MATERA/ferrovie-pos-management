@@ -209,227 +209,222 @@
                         <Button icon="sap-icon://download"
                             press="onDownload"/>
                     </OverflowToolbar>
+                    <!-- Metto items="{__init__>/data}" perchè la tabella ha biosogno di un template -->
+                    <Table id="tblContract"
+                        items="{__init__>/data}"
+                        mode="MultiSelect"
+                        fixedLayout="true"
+                        growing="true"
+                        growingThreshold="10"
+                        class="posTable">
 
-                    <ScrollContainer horizontal="true"
-                        vertical="false"
-                        width="100%">
-                        <!-- Metto items="{__init__>/data}" perchè la tabella ha biosogno di un template -->
-                        <Table id="tblContract"
-                            items="{__init__>/data}"
-                            mode="MultiSelect"
-                            fixedLayout="true"
-                            growing="true"
-                            growingThreshold="10"
-                            class="posTable">
+                        <columns>
 
-                            <columns>
+                            <Column app:p13nKey="idPos"
+                                width="8rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_pos_id}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="idPos"
-                                    width="8rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_pos_id}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="contratto"
+                                width="10rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contract_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="contratto"
-                                    width="10rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_contract_code}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="impresaAppaltatrice"
+                                width="15rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contractor_company}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="impresaAppaltatrice"
-                                    width="15rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_contractor_company}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="ruoloImpresa"
+                                width="10rem">
+                                <header>
+                                    <Label text="{i18n>lbl_company_role}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="ruoloImpresa"
-                                    width="10rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_company_role}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="revisione"
+                                width="6rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_revision}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="revisione"
-                                    width="6rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_revision}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="dataRedazione"
+                                width="9rem">
+                                <header>
+                                    <Label text="{i18n>lbl_draft_date}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="dataRedazione"
-                                    width="9rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_draft_date}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="inizioValidita"
+                                width="8rem">
+                                <header>
+                                    <Label text="{i18n>lbl_validity_start}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="inizioValidita"
-                                    width="8rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_validity_start}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-
-                                <Column app:p13nKey="fineValidita"
-                                    width="8rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_validity_end}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="fineValidita"
+                                width="8rem">
+                                <header>
+                                    <Label text="{i18n>lbl_validity_end}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
 
-                                <Column app:p13nKey="codiceContrattoSuperiore"
-                                    width="12rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_parent_contract_code}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="codiceContrattoSuperiore"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_parent_contract_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="committente"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_client}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="committente"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_client}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="datoreLavoro"
-                                    width="12rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_employer}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="datoreLavoro"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_employer}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="rspp"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_rspp}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="rspp"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_rspp}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="rls"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_rls}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="rls"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_rls}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="direttoreLavori"
-                                    width="12rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_works_director}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="direttoreLavori"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_works_director}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="addettiPrimoSoccorso"
-                                    width="12rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_first_aid_personnel}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="addettiPrimoSoccorso"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_first_aid_personnel}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="addettiPrimoAntincendio"
-                                    width="12rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_fire_personnel}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="addettiPrimoAntincendio"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_fire_personnel}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="dataRicezioneCruscotto"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_reception_date}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="dataRicezioneCruscotto"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_reception_date}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                                <Column app:p13nKey="linkCde"
-                                    width="12rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_link}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                            <Column app:p13nKey="linkCde"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_link}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
 
-                            </columns>
+                        </columns>
 
-                            <items>
-                                <ColumnListItem press="onDetail"
-                                    type="Navigation">
-                                    <cells>
-                                        <Text text="{idPos}"
-                                            wrapping="false"/>
-                                        <Text text="{contratto}"
-                                            wrapping="false"/>
-                                        <Text text="{impresaAppaltatrice}"
-                                            wrapping="false"/>
-                                        <Text text="{ruoloImpresa}"
-                                            wrapping="false"/>
-                                        <Text text="{revisione}"
-                                            wrapping="false"/>
-                                        <Text text="{path: 'dataRedazione', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
-                                            wrapping="false"/>
-                                        <Text text="{path: 'inizioValidita', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
-                                            wrapping="false"/>
-                                        <Text text="{path: 'fineValidita', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
-                                            wrapping="false"/>
-                                        <Text text="{codiceContrattoSuperiore}"
-                                            wrapping="false"/>
-                                        <Text text="{committente}"
-                                            wrapping="false"/>
-                                        <Text text="{datoreLavoro}"
-                                            wrapping="false"/>
-                                        <Text text="{rspp}"
-                                            wrapping="false"/>
-                                        <Text text="{rls}"
-                                            wrapping="false"/>
-                                        <Text text="{direttoreLavori}"
-                                            wrapping="false"/>
-                                        <Text text="{addettiPrimoSoccorso}"
-                                            wrapping="false"/>
-                                        <Text text="{addettiPrimoAntincendio}"
-                                            wrapping="false"/>
-                                        <Text text="{path: 'dataRicezioneCruscotto', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"
-                                            wrapping="false"/>
-                                        <Text text="{linkCde}"
-                                            wrapping="false"/>
-                                    </cells>
-                                </ColumnListItem>
-                            </items>
+                        <items>
+                            <ColumnListItem press="onDetail"
+                                type="Navigation">
+                                <cells>
+                                    <Text text="{idPos}"
+                                        wrapping="false"/>
+                                    <Text text="{contratto}"
+                                        wrapping="false"/>
+                                    <Text text="{impresaAppaltatrice}"
+                                        wrapping="false"/>
+                                    <Text text="{ruoloImpresa}"
+                                        wrapping="false"/>
+                                    <Text text="{revisione}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'inizioValidita', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'fineValidita', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{codiceContrattoSuperiore}"
+                                        wrapping="false"/>
+                                    <Text text="{committente}"
+                                        wrapping="false"/>
+                                    <Text text="{datoreLavoro}"
+                                        wrapping="false"/>
+                                    <Text text="{rspp}"
+                                        wrapping="false"/>
+                                    <Text text="{rls}"
+                                        wrapping="false"/>
+                                    <Text text="{direttoreLavori}"
+                                        wrapping="false"/>
+                                    <Text text="{addettiPrimoSoccorso}"
+                                        wrapping="false"/>
+                                    <Text text="{addettiPrimoAntincendio}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'dataRicezioneCruscotto', type: 'sap.ui.model.odata.type.DateTimeOffset', formatOptions: {pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{linkCde}"
+                                        wrapping="false"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
 
-                        </Table>
-                    </ScrollContainer>
+                    </Table>
                 </Panel>
 
             </VBox>

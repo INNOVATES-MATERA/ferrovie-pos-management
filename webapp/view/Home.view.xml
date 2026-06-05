@@ -49,273 +49,270 @@
                             press="onDownload"/>
                     </OverflowToolbar>
 
-                    <ScrollContainer horizontal="true"
-                        vertical="false"
-                        width="100%">
-                        <Table id="tblPos"
-                            items="{path: '/Contratti', parameters: {$count: true}}"
-                            mode="None"
-                            fixedLayout="true"
-                            growing="true"
-                            growingThreshold="10"
-                            class="posTable">
 
-                            <columns>
+                    <Table id="tblPos"
+                        items="{path: '/Contratti', parameters: {$count: true}}"
+                        mode="None"
+                        fixedLayout="true"
+                        growing="true"
+                        growingThreshold="10"
+                        class="posTable">
 
-                                <Column app:p13nKey="codiceAtto"
-                                    width="7rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_act_code}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="codiceContratto"
-                                    width="12rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_contract_code}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="titoloDelContratto"
-                                    width="15rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_contract_title}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="oggettoDelContratto"
-                                    width="15rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_contract_object}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="tipoDiContratto"
-                                    width="12rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_contract_type}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="tipologiaAppalto"
-                                    width="10rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_tender_type}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="codiceNPP"
-                                    width="6rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_npp_code}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="descrizioneNPP"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_npp_description}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="CUP"
-                                    width="12rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_cup}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="CIGDerivato"
-                                    width="8rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_derived_cig}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="documentoDiChiusuraContratto"
-                                    width="14rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_closure_document}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="numCel"
-                                    width="8rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_cell_number}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="codiceSAPOrganizzazioneAcquisti"
-                                    width="12rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_sap_purchase_org_code}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="descrizioneSAPOrganizzazioneAcquisti"
-                                    width="15rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_sap_purchase_org_desc}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="codiceSAPGruppoAcquisti"
-                                    width="12rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_sap_purchase_group_code}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="stato"
-                                    width="7rem">
-                                    <header>
-                                        <Label text="{i18n>lbl_status}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="descrizioneSAPGruppoAcquisti"
-                                    width="15rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_sap_purchase_group_desc}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="responsabilitaSoggettoTecnico"
-                                    width="15rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_technical_subject_responsibility}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="categoriaInventariale"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_inventory_category}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="sedeTecnica"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_technical_site}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="strutturaTitolareAsset"
-                                    width="15rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_asset_owner_structure}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="createdAt"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_created_at}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="createdBy"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_created_by}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="modifiedAt"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_modified_at}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
-                                <Column app:p13nKey="modifiedBy"
-                                    width="10rem"
-                                    visible="false">
-                                    <header>
-                                        <Label text="{i18n>lbl_modified_by}"
-                                            wrapping="false"/>
-                                    </header>
-                                </Column>
+                        <columns>
 
-                            </columns>
+                            <Column app:p13nKey="codiceAtto"
+                                width="7rem">
+                                <header>
+                                    <Label text="{i18n>lbl_act_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="codiceContratto"
+                                width="12rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contract_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="titoloDelContratto"
+                                width="15rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contract_title}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="oggettoDelContratto"
+                                width="15rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contract_object}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="tipoDiContratto"
+                                width="12rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contract_type}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="tipologiaAppalto"
+                                width="10rem">
+                                <header>
+                                    <Label text="{i18n>lbl_tender_type}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="codiceNPP"
+                                width="6rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_npp_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="descrizioneNPP"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_npp_description}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="CUP"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_cup}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="CIGDerivato"
+                                width="8rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_derived_cig}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="documentoDiChiusuraContratto"
+                                width="14rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_closure_document}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="numCel"
+                                width="8rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_cell_number}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="codiceSAPOrganizzazioneAcquisti"
+                                width="12rem">
+                                <header>
+                                    <Label text="{i18n>lbl_sap_purchase_org_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="descrizioneSAPOrganizzazioneAcquisti"
+                                width="15rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_sap_purchase_org_desc}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="codiceSAPGruppoAcquisti"
+                                width="12rem">
+                                <header>
+                                    <Label text="{i18n>lbl_sap_purchase_group_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="stato"
+                                width="7rem">
+                                <header>
+                                    <Label text="{i18n>lbl_status}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="descrizioneSAPGruppoAcquisti"
+                                width="15rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_sap_purchase_group_desc}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="responsabilitaSoggettoTecnico"
+                                width="15rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_technical_subject_responsibility}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="categoriaInventariale"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_inventory_category}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="sedeTecnica"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_technical_site}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="strutturaTitolareAsset"
+                                width="15rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_asset_owner_structure}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="createdAt"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_created_at}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="createdBy"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_created_by}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="modifiedAt"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_modified_at}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="modifiedBy"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_modified_by}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <items>
-                                <ColumnListItem press="onDetail"
-                                    type="Navigation">
-                                    <cells>
-                                        <Text text="{codiceAtto}"
-                                            wrapping="false"/>
-                                        <Text text="{codiceContratto}"
-                                            wrapping="false"/>
-                                        <Text text="{titoloDelContratto}"
-                                            wrapping="false"/>
-                                        <Text text="{oggettoDelContratto}"
-                                            wrapping="false"/>
-                                        <Text text="{tipoDiContratto}"
-                                            wrapping="false"/>
-                                        <Text text="{tipologiaAppalto}"
-                                            wrapping="false"/>
-                                        <Text text="{codiceNPP}"
-                                            wrapping="false"/>
-                                        <Text text="{descrizioneNPP}"
-                                            wrapping="false"/>
-                                        <Text text="{CUP}"
-                                            wrapping="false"/>
-                                        <Text text="{CIGDerivato}"
-                                            wrapping="false"/>
-                                        <Text text="{documentoDiChiusuraContratto}"
-                                            wrapping="false"/>
-                                        <Text text="{numCel}"
-                                            wrapping="false"/>
-                                        <Text text="{codiceSAPOrganizzazioneAcquisti}"
-                                            wrapping="false"/>
-                                        <Text text="{descrizioneSAPOrganizzazioneAcquisti}"
-                                            wrapping="false"/>
-                                        <Text text="{codiceSAPGruppoAcquisti}"
-                                            wrapping="false"/>
-                                        <Text text="{stato}"
-                                            wrapping="false"/>
-                                        <Text text="{descrizioneSAPGruppoAcquisti}"
-                                            wrapping="false"/>
-                                        <Text text="{responsabilitaSoggettoTecnico}"
-                                            wrapping="false"/>
-                                        <Text text="{categoriaInventariale}"
-                                            wrapping="false"/>
-                                        <Text text="{sedeTecnica}"
-                                            wrapping="false"/>
-                                        <Text text="{strutturaTitolareAsset}"
-                                            wrapping="false"/>
-                                        <Text text="{path: 'createdAt', formatter: '.dateUtils.formatISOtoDDMMYYYY_HHMMSS'}"
-                                            wrapping="false"/>
-                                        <Text text="{createdBy}"
-                                            wrapping="false"/>
-                                        <Text text="{path: 'modifiedAt', formatter: '.dateUtils.formatISOtoDDMMYYYY_HHMMSS'}"
-                                            wrapping="false"/>
-                                        <Text text="{modifiedBy}"
-                                            wrapping="false"/>
-                                    </cells>
-                                </ColumnListItem>
-                            </items>
+                        </columns>
 
-                        </Table>
-                    </ScrollContainer>
+                        <items>
+                            <ColumnListItem press="onDetail"
+                                type="Navigation">
+                                <cells>
+                                    <Text text="{codiceAtto}"
+                                        wrapping="false"/>
+                                    <Text text="{codiceContratto}"
+                                        wrapping="false"/>
+                                    <Text text="{titoloDelContratto}"
+                                        wrapping="false"/>
+                                    <Text text="{oggettoDelContratto}"
+                                        wrapping="false"/>
+                                    <Text text="{tipoDiContratto}"
+                                        wrapping="false"/>
+                                    <Text text="{tipologiaAppalto}"
+                                        wrapping="false"/>
+                                    <Text text="{codiceNPP}"
+                                        wrapping="false"/>
+                                    <Text text="{descrizioneNPP}"
+                                        wrapping="false"/>
+                                    <Text text="{CUP}"
+                                        wrapping="false"/>
+                                    <Text text="{CIGDerivato}"
+                                        wrapping="false"/>
+                                    <Text text="{documentoDiChiusuraContratto}"
+                                        wrapping="false"/>
+                                    <Text text="{numCel}"
+                                        wrapping="false"/>
+                                    <Text text="{codiceSAPOrganizzazioneAcquisti}"
+                                        wrapping="false"/>
+                                    <Text text="{descrizioneSAPOrganizzazioneAcquisti}"
+                                        wrapping="false"/>
+                                    <Text text="{codiceSAPGruppoAcquisti}"
+                                        wrapping="false"/>
+                                    <Text text="{stato}"
+                                        wrapping="false"/>
+                                    <Text text="{descrizioneSAPGruppoAcquisti}"
+                                        wrapping="false"/>
+                                    <Text text="{responsabilitaSoggettoTecnico}"
+                                        wrapping="false"/>
+                                    <Text text="{categoriaInventariale}"
+                                        wrapping="false"/>
+                                    <Text text="{sedeTecnica}"
+                                        wrapping="false"/>
+                                    <Text text="{strutturaTitolareAsset}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'createdAt', formatter: '.dateUtils.formatISOtoDDMMYYYY_HHMMSS'}"
+                                        wrapping="false"/>
+                                    <Text text="{createdBy}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'modifiedAt', formatter: '.dateUtils.formatISOtoDDMMYYYY_HHMMSS'}"
+                                        wrapping="false"/>
+                                    <Text text="{modifiedBy}"
+                                        wrapping="false"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+
+                    </Table>
                 </Panel>
 
             </VBox>
