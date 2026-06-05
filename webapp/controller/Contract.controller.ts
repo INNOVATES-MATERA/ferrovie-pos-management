@@ -7,7 +7,6 @@ import dateUtils from "../utils/dateUtils";
 import xlsxUtils from "../utils/xlsxUtils";
 import Table from "sap/m/Table";
 import ColumnListItem from "sap/m/ColumnListItem";
-import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
@@ -79,11 +78,10 @@ export default class Contract extends BaseController {
     try {
       this.setBusy(true);
 
-      const oODataModel = this.getOwnerComponent()!.getModel() as ODataModel;
-      const oBinding = oODataModel.bindContext(
-        `/Contratti(codiceContratto='${encodeURIComponent(this._sContractCode)}')`,
+      const oData = await this.getEntity<Record<string, string>>(
+        "/Contratti",
+        { codiceContratto: this._sContractCode },
       );
-      const oData = (await oBinding.requestObject()) as Record<string, string>;
 
       this._oModelContract.setData({
         contractCode: oData.codiceContratto ?? "",
@@ -181,9 +179,19 @@ export default class Contract extends BaseController {
       return;
     }
     MessageBox.confirm(this.getText("msg_confirm_delete_pos"), {
-      onClose: (sAction: string | null) => {
+      onClose: async (sAction: string | null) => {
         if (sAction === MessageBox.Action.OK) {
-          const oTable = this.byId("tblContract") as Table;
+          const aIds = aSelected.map((item) => {
+            const oCtx = item.getBindingContext();
+            return (oCtx?.getObject() as { idPos: string }).idPos;
+          });
+          const bSuccess = await this.deleteEntitiesBatch(
+            "/PosTestataSet",
+            aIds.map((sId) => ({ idPos: sId }))
+          );
+          if (bSuccess) {
+            MessageBox.success(this.getText("msg_delete_success"));
+          }
           (oTable.getBinding("items") as ODataListBinding).refresh();
         }
       },

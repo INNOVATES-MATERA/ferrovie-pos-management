@@ -275,7 +275,8 @@
                                 <columns>
 
                                     <Column app:p13nKey="idDipendente"
-                                        width="9rem">
+                                        width="9rem"
+                                        visible="false">
                                         <header>
                                             <Label text="{i18n>lbl_employee_id}"
                                                 wrapping="false"/>
@@ -361,7 +362,7 @@
                                         <IconTabFilter text="{i18n>lbl_tab_ferroviaria}"
                                             key="ferroviaria">
                                             <Table id="tblFerroviaria"
-                                                items="{path: 'Skills>/items', filters: [{path: 'category', operator: 'EQ', value1: 'ferroviaria'}]}"
+                                                items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'ferroviaria'}]}"
                                                 mode="MultiSelect"
                                                 selectionChange="onSkillSelectionChange"
                                                 fixedLayout="false">
@@ -383,20 +384,20 @@
                                                     </Column>
                                                 </columns>
                                                 <items>
-                                                    <ColumnListItem selected="{Skills>selected}"
+                                                    <ColumnListItem selected="{Skills>flagAttiva}"
                                                         type="Inactive">
                                                         <cells>
-                                                            <Text text="{Skills>label}"
+                                                            <Text text="{Skills>descrizione}"
                                                                 wrapping="false"/>
-                                                            <DatePicker value="{Skills>startDate}"
+                                                            <DatePicker value="{Skills>inizioAbilitazione}"
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>selected}"
+                                                                visible="{Skills>flagAttiva}"
                                                                 width="9rem"/>
-                                                            <DatePicker value="{Skills>endDate}"
+                                                            <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>selected}"
+                                                                visible="{Skills>flagAttiva}"
                                                                 width="9rem"/>
                                                         </cells>
                                                     </ColumnListItem>
@@ -408,7 +409,7 @@
                                         <IconTabFilter text="{i18n>lbl_tab_decreto}"
                                             key="decreto">
                                             <Table id="tblDecreto"
-                                                items="{path: 'Skills>/items', filters: [{path: 'category', operator: 'EQ', value1: 'decreto'}]}"
+                                                items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'decreto'}]}"
                                                 mode="MultiSelect"
                                                 selectionChange="onSkillSelectionChange"
                                                 fixedLayout="false">
@@ -430,20 +431,20 @@
                                                     </Column>
                                                 </columns>
                                                 <items>
-                                                    <ColumnListItem selected="{Skills>selected}"
+                                                    <ColumnListItem selected="{Skills>flagAttiva}"
                                                         type="Inactive">
                                                         <cells>
-                                                            <Text text="{Skills>label}"
+                                                            <Text text="{Skills>descrizione}"
                                                                 wrapping="false"/>
-                                                            <DatePicker value="{Skills>startDate}"
+                                                            <DatePicker value="{Skills>inizioAbilitazione}"
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>selected}"
+                                                                visible="{Skills>flagAttiva}"
                                                                 width="9rem"/>
-                                                            <DatePicker value="{Skills>endDate}"
+                                                            <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                 valueFormat="yyyy-MM-dd"
                                                                 displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>selected}"
+                                                                visible="{Skills>flagAttiva}"
                                                                 width="9rem"/>
                                                         </cells>
                                                     </ColumnListItem>
