@@ -1,0 +1,48 @@
+:root {
+  /* ── Brand / Accent ── */
+  --sapBrandColor: #2563eb;
+  --sapHighlightColor: #2563eb;
+  --sapSelectedColor: #2563eb;
+  --sapActiveColor: #1d4ed8;
+
+  /* ── Tipografia ── */
+  --sapFontFamily: "Inter", "72", Arial, sans-serif;
+  --sapFontSize: 14px;
+  --sapFontLargeSize: 16px;
+  --sapFontSmallSize: 12px;
+
+  /* ── Border radius ── */
+  --sapButton_BorderCornerRadius: 8px;
+  --sapField_BorderCornerRadius: 8px;
+  --sapTile_BorderCornerRadius: 12px;
+  --sapPopover_BorderCornerRadius: 12px;
+  --sapDialog_BorderCornerRadius: 16px;
+
+  /* ── Superfici / Sfondi ── */
+  --sapBackgroundColor: #f1f5f9;
+  --sapShellColor: #1e293b;
+  --sapTile_Background: #ffffff;
+  --sapGroup_ContentBackground: #ffffff;
+  --sapList_Background: #ffffff;
+  --sapList_HeaderBackground: #f8fafc;
+  --sapList_SelectionBackgroundColor: #eff6ff;
+  --sapList_Hover_Background: #f1f5f9;
+
+  /* ── Pulsanti ── */
+  --sapButton_Background: var(--sapBrandColor);
+  --sapButton_BorderColor: var(--sapBrandColor);
+
+  /* ── Bordi / Separatori ── */
+  --sapField_BorderColor: #cbd5e1;
+  --sapField_Hover_BorderColor: var(--sapBrandColor);
+  --sapField_Focus_BorderColor: var(--sapBrandColor);
+  --sapGroup_TitleBorderColor: #e2e8f0;
+  --sapToolbar_SeparatorColor: #e2e8f0;
+
+  /* ── Testo ── */
+  --sapTextColor: #0f172a;
+  --sapContent_LabelColor: #475569;
+  --sapContent_DisabledTextColor: #94a3b8;
+
+  /* --sapBaseColor: #f8fafc; */
+}
