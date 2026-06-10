@@ -1,0 +1,36 @@
+:root {
+  --pos-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --pos-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --pos-transition: 0.15s ease;
+}
+
+.sapUiShellHead {
+  background: var(--sapShellColor) !important;
+}
+
+.sapMPanel,
+.sapMObjectHeader {
+  box-shadow: var(--pos-card-shadow);
+  transition: box-shadow var(--pos-transition);
+}
+
+.sapMPanel:hover {
+  box-shadow: var(--pos-card-shadow-hover);
+}
+
+.sapUiTable .sapUiTableCell,
+.sapMListTbl td {
+  border-bottom: 1px solid var(--sapList_BorderColor);
+}
+
+.sapMBtn:focus-visible,
+.sapMInputBase:focus-visible {
+  outline: 2px solid var(--sapBrandColor);
+  outline-offset: 2px;
+}
+
+/* Checkbox: mantieni bordi quadrati ignorando il border-radius globale dei campi */
+.sapMCb .sapMCbBg,
+.sapMCb .sapMCbMark {
+  border-radius: 0 !important;
+}

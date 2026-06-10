@@ -1,0 +1,48 @@
+/* Stili relativi alle tabelle (es. .posTable) */
+
+.tablePanelContent .sapMPanelContent {
+  padding: 0 !important;
+}
+
+.posTable .sapMText {
+  max-width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: break-spaces;
+}
+
+.posTable .sapMListTblNavCol {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  background-color: var(--sapList_Background, #fff);
+}
+
+.posTable .sapMTableTHead .sapMListTblNavCol {
+  background-color: var(--sapList_HeaderBackground, #f7f7f7);
+}
+
+.posTable .sapMLIBHoverable:hover .sapMListTblNavCol,
+.posTable tr.sapMLIBHover .sapMListTblNavCol {
+  background-color: var(--sapList_Hover_Background, #fafafa);
+}
+
+.posTable tr.sapMLIBSelected .sapMListTblNavCol {
+  background-color: var(--sapList_SelectionBackgroundColor, #e5f0fa);
+}
+
+/* La colonna nav è sticky/opaca (z-index: 3) e copre l'outline di focus che il tema
+   disegna sul <tr> tramite .sapMLIBFocusable:focus. Lo replichiamo sulla cella nav,
+   con stesso colore/stile/offset, così il bordo prosegue anche attorno al chevron. */
+.posTable tr.sapMLIBFocusable:focus .sapMListTblNavCol {
+  /* Solo top + bottom + destro: il lato sinistro confina con le altre celle e
+     un bordo lì creerebbe una linea verticale spuria in mezzo alla riga. */
+  box-shadow:
+    inset 0 var(--sapContent_FocusWidth) 0 0 var(--sapContent_FocusColor),
+    inset 0 calc(-1 * var(--sapContent_FocusWidth)) 0 0 var(--sapContent_FocusColor),
+    inset calc(-1 * var(--sapContent_FocusWidth)) 0 0 0 var(--sapContent_FocusColor);
+}
+
+.posTable tr.sapMLIBActive .sapMListTblNavCol {
+  background-color: var(--sapList_Active_Background, #0854a0);
+}

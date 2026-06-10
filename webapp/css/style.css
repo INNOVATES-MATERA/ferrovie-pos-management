@@ -1,4 +1,26 @@
+@import "./tokens.css";
+@import "./components.css";
+@import "./table.css";
+
 /* Enter your custom styles here */
+
+/* Sposta il badge dei pulsanti in alto a destra */
+.sapMBadge .sapMBadgeIndicator {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  bottom: auto !important;
+  left: auto !important;
+}
+
+.skillsPanel {
+  margin: 0 !important;
+  padding: 8px !important;
+}
+
+.skillDatesRow {
+  padding-left: 1rem;
+}
 
 /* XL (schermi grandi) */
 @media (min-width: 1200px) {
@@ -8,8 +30,7 @@
 }
 
 /* L (medi-grandi) */
-@media (min-width: 992px) and (max-width: 1199px),
-(min-width: 768px) and (max-width: 991px) {
+@media (min-width: 992px) and (max-width: 1199px), (min-width: 768px) and (max-width: 991px) {
   .vertical-layout-responsive {
     width: calc(50% - 8px);
   }
@@ -26,6 +47,11 @@
   padding: 0% !important;
 }
 
+.pt-auto-10 {
+  padding-top: 10px !important;
+  height: auto !important;
+}
+
 .w-100 {
   width: 100% !important;
 }
@@ -33,4 +59,8 @@
 .m-label-hbox {
   margin-top: 1px;
   margin-right: 4px;
+}
+
+.sapFFCL > .sapFFCLColumnActive.sapFFCLColumnFirstActive {
+  width: 60% !important;
 }

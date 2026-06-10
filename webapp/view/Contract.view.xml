@@ -1,12 +1,10 @@
 <mvc:View controllerName="posmanagement.controller.Contract"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:t="sap.ui.table"
     xmlns:f="sap.f"
     xmlns:l="sap.ui.layout"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
-    xmlns:sap.ui.fl="sap.ui.fl"
-    xmlns:rowmodes="sap.ui.table.rowmodes">
+    xmlns:sap.ui.fl="sap.ui.fl">
 
     <f:DynamicPage showFooter="true">
         <f:title>
@@ -15,10 +13,12 @@
                     <Title text="{i18n>lbl_contract}"/>
                 </f:heading>
                 <f:expandedContent>
-                    <Text text="{Contract>/contractCode} - {Contract>/contractTitle}"/>
+                    <Title text="{Contract>/contractCode} - {Contract>/contractTitle}"
+                        level="H3"/>
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Text text="{Contract>/contractCode} - {Contract>/contractTitle}"/>
+                    <Title text="{Contract>/contractCode} - {Contract>/contractTitle}"
+                        level="H3"/>
                 </f:snappedContent>
             </f:DynamicPageTitle>
         </f:title>
@@ -171,41 +171,13 @@
         <f:content>
             <VBox>
 
-                <!-- FILTRI -->
-                <Panel>
-                    <l:Grid>
-                        <VBox>
-                            <Label text="{i18n>lbl_search_pos}"/>
-                            <SearchField id="sfContract"
-                                change="onFiltersChange"
-                                value="{Pos>/filters/qFilter}"
-                                placeholder="{i18n>plh_search}"/>
-                            <layoutData>
-                                <l:GridData span="XL4 L5 M6 S12"/>
-                            </layoutData>
-                        </VBox>
-
-                        <HBox justifyContent="End">
-                            <VBox class="sapUiTinyMarginEnd">
-                                <Label text=""/>
-                                <Button text="{i18n>btn_reset}"
-                                    icon="sap-icon://refresh"
-                                    press="onReset"/>
-                            </VBox>
-                            <layoutData>
-                                <l:GridData span="XL2 L3 M6 S12"
-                                    indent="XL6 L4 M6"/>
-                            </layoutData>
-                        </HBox>
-                    </l:Grid>
-                </Panel>
-
-                <!-- TABELLA -->
-                <Panel class="sapUiTinyMarginTop">
+                <!-- TABELLA POS -->
+                <Panel class="sapUiTinyMarginTop tablePanelContent">
+                    <headerToolbar>
                     <OverflowToolbar style="Standard"
-                        class="p-0">
-                        <Label text="{i18n>lbl_extracted_records}: {Pos>/count}"
-                            design="Bold"/>
+                        class="pt-auto-10">
+                        <Title text="{i18n>lbl_pos_table} ({Pos>/count})"
+                            level="H2"/>
                         <ToolbarSpacer/>
                         <Button icon="sap-icon://create"
                             text="{i18n>btn_create}"
@@ -213,107 +185,248 @@
                         <Button icon="sap-icon://delete"
                             text="{i18n>btn_delete}"
                             press="onDelete"/>
+                        <Button id="btnContractReset"
+                            icon="sap-icon://refresh"
+                            press="onReset"
+                            tooltip="{i18n>btn_reset}"/>
                         <Button icon="sap-icon://sort"
                             press="onSettings"
-                            app:panel="Sorter"/>
+                            tooltip="{i18n>btn_sort}"
+                            app:panel="Sorter">
+                            <customData>
+                                <BadgeCustomData value="{Pos>/sortCount}"/>
+                            </customData>
+                        </Button>
                         <Button icon="sap-icon://filter"
                             press="onSettings"
-                            app:panel="Filter"/>
+                            app:panel="Filter">
+                            <customData>
+                                <BadgeCustomData value="{Pos>/filterCount}"/>
+                            </customData>
+                        </Button>
                         <Button icon="sap-icon://action-settings"
                             press="onSettings"
                             app:panel="Columns"/>
                         <Button icon="sap-icon://download"
                             press="onDownload"/>
                     </OverflowToolbar>
+                    </headerToolbar>
+                    <!-- Metto items="{__init__>/data}" perchè la tabella ha biosogno di un template -->
+                    <Table id="tblContract"
+                        items="{__init__>/data}"
+                        mode="MultiSelect"
+                        fixedLayout="true"
+                        growing="true"
+                        growingThreshold="10"
+                        class="posTable">
 
-                    <t:Table id="tblContract"
-                        rows="{Pos>/data}"
-                        selectionMode="Single"
-                        selectionBehavior="RowOnly"
-                        sap.ui.fl:flexibility="sap/m/flexibility/EngineFlex">
-                        <t:rowMode>
-                            <rowmodes:Fixed rowCount="15"/>
-                        </t:rowMode>
+                        <columns>
 
-                        <t:columns>
+                            <Column app:p13nKey="idPos"
+                                width="8rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_pos_id}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <t:Column app:p13nKey="posId" app:i18nKey="lbl_pos_id">
-                                <Label text="{i18n>lbl_pos_id}"/>
-                                <t:template>
-                                    <Text text="{Pos>posId}"/>
-                                </t:template>
-                            </t:Column>
+                            <Column app:p13nKey="contratto"
+                                width="10rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contract_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <t:Column app:p13nKey="contractCode" app:i18nKey="lbl_contract_code">
-                                <Label text="{i18n>lbl_contract_code}"/>
-                                <t:template>
-                                    <Text text="{Pos>contractCode}"/>
-                                </t:template>
-                            </t:Column>
+                            <Column app:p13nKey="impresaAppaltatrice"
+                                width="15rem">
+                                <header>
+                                    <Label text="{i18n>lbl_contractor_company}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <t:Column app:p13nKey="contractorCompany" app:i18nKey="lbl_contractor_company">
-                                <Label text="{i18n>lbl_contractor_company}"/>
-                                <t:template>
-                                    <Text text="{Pos>contractorCompany}"/>
-                                </t:template>
-                            </t:Column>
+                            <Column app:p13nKey="ruoloImpresa"
+                                width="10rem">
+                                <header>
+                                    <Label text="{i18n>lbl_company_role}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <t:Column app:p13nKey="companyRole" app:i18nKey="lbl_company_role">
-                                <Label text="{i18n>lbl_company_role}"/>
-                                <t:template>
-                                    <Text text="{Pos>companyRole}"/>
-                                </t:template>
-                            </t:Column>
+                            <Column app:p13nKey="revisione"
+                                width="6rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_revision}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <t:Column app:p13nKey="status" app:i18nKey="lbl_status">
-                                <Label text="{i18n>lbl_status}"/>
-                                <t:template>
-                                    <Text text="{Pos>status}"/>
-                                </t:template>
-                            </t:Column>
+                            <Column app:p13nKey="dataRedazione"
+                                width="9rem">
+                                <header>
+                                    <Label text="{i18n>lbl_draft_date}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <t:Column app:p13nKey="revision" app:i18nKey="lbl_revision">
-                                <Label text="{i18n>lbl_revision}"/>
-                                <t:template>
-                                    <Text text="{Pos>revision}"/>
-                                </t:template>
-                            </t:Column>
+                            <Column app:p13nKey="inizioValidita"
+                                width="8rem">
+                                <header>
+                                    <Label text="{i18n>lbl_validity_start}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
-                            <t:Column app:p13nKey="draftDate" app:i18nKey="lbl_draft_date">
-                                <Label text="{i18n>lbl_draft_date}"/>
-                                <t:template>
-                                    <Text text="{path: 'Pos>draftDate', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"/>
-                                </t:template>
-                            </t:Column>
-
-                            <t:Column app:p13nKey="validityStart" app:i18nKey="lbl_validity_start">
-                                <Label text="{i18n>lbl_validity_start}"/>
-                                <t:template>
-                                    <Text text="{path: 'Pos>validityStart', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"/>
-                                </t:template>
-                            </t:Column>
-
-                            <t:Column app:p13nKey="validityEnd" app:i18nKey="lbl_validity_end">
-                                <Label text="{i18n>lbl_validity_end}"/>
-                                <t:template>
-                                    <Text text="{path: 'Pos>validityEnd', formatter: '.dateUtils.formatYYYYMMDDtoDDMMYYYY'}"/>
-                                </t:template>
-                            </t:Column>
-
-                            <!-- ACTION: edit -->
-                            <t:Column hAlign="Center" width="3.5rem">
-                                <Label text=""/>
-                                <t:template>
-                                    <Button icon="sap-icon://edit"
-                                        type="Transparent"
-                                        press="onEdit"
-                                        tooltip="{i18n>btn_edit}"/>
-                                </t:template>
-                            </t:Column>
+                            <Column app:p13nKey="fineValidita"
+                                width="8rem">
+                                <header>
+                                    <Label text="{i18n>lbl_validity_end}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
 
 
-                        </t:columns>
-                    </t:Table>
+                            <Column app:p13nKey="codiceContrattoSuperiore"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_parent_contract_code}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="committente"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_client}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="datoreLavoro"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_employer}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="rspp"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_rspp}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="rls"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_rls}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="direttoreLavori"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_works_director}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="addettiPrimoSoccorso"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_first_aid_personnel}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="addettiPrimoAntincendio"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_fire_personnel}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="dataRicezioneCruscotto"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_reception_date}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="linkCde"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_link}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+
+                        </columns>
+
+                        <items>
+                            <ColumnListItem press="onDetail"
+                                type="Navigation">
+                                <cells>
+                                    <Text text="{idPos}"
+                                        wrapping="false"/>
+                                    <Text text="{contratto}"
+                                        wrapping="false"/>
+                                    <Text text="{impresaAppaltatrice}"
+                                        wrapping="false"/>
+                                    <Text text="{ruoloImpresa}"
+                                        wrapping="false"/>
+                                    <Text text="{revisione}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'inizioValidita', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'fineValidita', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{codiceContrattoSuperiore}"
+                                        wrapping="false"/>
+                                    <Text text="{committente}"
+                                        wrapping="false"/>
+                                    <Text text="{datoreLavoro}"
+                                        wrapping="false"/>
+                                    <Text text="{rspp}"
+                                        wrapping="false"/>
+                                    <Text text="{rls}"
+                                        wrapping="false"/>
+                                    <Text text="{direttoreLavori}"
+                                        wrapping="false"/>
+                                    <Text text="{addettiPrimoSoccorso}"
+                                        wrapping="false"/>
+                                    <Text text="{addettiPrimoAntincendio}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'dataRicezioneCruscotto', type: 'sap.ui.model.odata.type.DateTimeOffset', formatOptions: {pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text text="{linkCde}"
+                                        wrapping="false"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+
+                    </Table>
                 </Panel>
 
             </VBox>

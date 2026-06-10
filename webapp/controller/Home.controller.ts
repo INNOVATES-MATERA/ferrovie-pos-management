@@ -1,108 +1,76 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
-import tableSettingsUtils from "../utils/tableSettingsUtils";
-import entityUtils from "../utils/entityUtils";
 import dateUtils from "../utils/dateUtils";
 import xlsxUtils from "../utils/xlsxUtils";
-import Table from "sap/ui/table/Table";
+import p13nDialogUtils from "../utils/p13nDialogUtils";
+import Table from "sap/m/Table";
 
 const DEFAULT_MODEL = {
-    count: 0,
-    filters: { qFilter: "" },
+  count: 0,
+  sortCount: 0,
+  filterCount: 0,
 };
 
 /**
  * @namespace posmanagement.controller
  */
 export default class Home extends BaseController {
-    public dateUtils = dateUtils;
-    private _oModelPos!: JSONModel;
+  public dateUtils = dateUtils;
+  private _oModelPos!: JSONModel;
 
-    public onInit(): void {
-        this._oModelPos = new JSONModel(structuredClone(DEFAULT_MODEL));
-        this.setModel(this._oModelPos, "Pos");
+  public onInit(): void {
+    this._oModelPos = new JSONModel(structuredClone(DEFAULT_MODEL));
+    this.setModel(this._oModelPos, "Pos");
 
-        this.getRouter()
-            .getRoute("RouteHome")!
-            .attachPatternMatched(this._onRouteMatched, this);
+    this.getRouter().getRoute("RouteHome")!.attachPatternMatched(this._onRouteMatched, this);
+  }
+
+  public onAfterRendering(): void {
+    const oTable = this.byId("tblPos") as Table;
+    if (oTable) {
+      p13nDialogUtils.register(oTable, (s, f) => {
+        this._oModelPos.setProperty("/sortCount", s);
+        this._oModelPos.setProperty("/filterCount", f);
+      });
     }
+  }
 
-    public onAfterRendering(): void {
-        const oTable = this.byId("tblPos") as Table;
-        if (oTable) {
-            tableSettingsUtils.registerForP13n(oTable);
-        }
-    }
+  private async _onRouteMatched(): Promise<void> {
+    const oTable = this.byId("tblPos") as Table;
+    const oBinding = oTable.getBinding("items") as ODataListBinding;
+    oBinding.attachEventOnce("dataReceived", async () => {
+      const iCount = await oBinding.getHeaderContext()!.requestProperty("$count");
+      this._oModelPos.setProperty("/count", iCount);
+    });
+  }
 
-    private async _onRouteMatched(): Promise<void> {
-        try {
-            this.setBusy(true);
-            await this._applyFilters();
-        } catch (e) {
-            entityUtils.handleError(e as Error);
-        } finally {
-            this.setBusy(false);
-        }
-    }
+  public async onReset(): Promise<void> {
+    const oTable = this.byId("tblPos") as Table;
+    await p13nDialogUtils.reset(oTable);
+    this._oModelPos.setProperty("/sortCount", 0);
+    this._oModelPos.setProperty("/filterCount", 0);
+  }
 
-    public async onReset(): Promise<void> {
-        try {
-            this.setBusy(true);
-            this._oModelPos.setProperty("/filters/qFilter", "");
-            const oTable = this.byId("tblPos") as Table;
-            await tableSettingsUtils.resetTable(oTable);
-            await this._applyFilters();
-        } catch (e) {
-            entityUtils.handleError(e as Error);
-        } finally {
-            this.setBusy(false);
-        }
-    }
+  public onSettings(oEvent: any): void {
+    const oTable = this.byId("tblPos") as Table;
+    const sPanel = oEvent.getSource().data("panel") as "Columns" | "Sorter" | "Filter";
+    p13nDialogUtils.open(oTable, sPanel, oEvent.getSource());
+  }
 
-    public async onFiltersChange(): Promise<void> {
-        try {
-            this.setBusy(true);
-            await this._applyFilters();
-        } catch (e) {
-            entityUtils.handleError(e as Error);
-        } finally {
-            this.setBusy(false);
-        }
-    }
+  public async onDownload(): Promise<void> {
+    const oTable = this.byId("tblPos") as Table;
+    const oBinding = oTable.getBinding("items") as ODataListBinding;
+    const aContexts = await oBinding.requestContexts(0, Infinity);
+    const aData = aContexts.map((ctx) => ctx.getObject());
+    const aColumns = xlsxUtils.getColumnsFromTable(this, oTable);
+    await xlsxUtils.generateSpreadsheet(aColumns, aData, "GestionePOS.xlsx");
+  }
 
-    public onSettings(oEvent: any): void {
-        const oTable = this.byId("tblPos") as Table;
-        const sPanel = oEvent.getSource().data("panel") as string;
-        tableSettingsUtils.open(oTable, sPanel, oEvent.getSource());
-    }
-
-    public async onDownload(): Promise<void> {
-        const oTable = this.byId("tblPos") as Table;
-        const oBinding = oTable.getBinding("rows") as ODataListBinding;
-        const aContexts = await oBinding.requestContexts(0, Infinity);
-        const aData = aContexts.map((ctx) => ctx.getObject());
-        const aColumns = xlsxUtils.getColumnsFromTable(this, oTable);
-        await xlsxUtils.generateSpreadsheet(aColumns, aData, "GestionePOS.xlsx");
-    }
-
-    public onDetail(oEvent: any): void {
-        const oContext = oEvent.getSource().getParent().getBindingContext();
-        if (!oContext) return;
-        const oRow = oContext.getObject() as { codiceContratto: string };
-        this.navTo("RouteContract", { contractCode: oRow.codiceContratto });
-    }
-
-    private async _applyFilters(): Promise<void> {
-        const qFilter = (this._oModelPos.getProperty("/filters/qFilter") as string ?? "");
-        const aODataFields = ["codiceContratto", "titoloDelContratto", "oggettoDelContratto", "codiceNPP", "CUP", "CIGDerivato"];
-        const aFilters = entityUtils.setFilters({ qFilter }, aODataFields);
-        const oTable = this.byId("tblPos") as Table;
-        const oBinding = oTable.getBinding("rows") as ODataListBinding;
-        oBinding.filter(aFilters);
-        oBinding.attachEventOnce("dataReceived", () => {
-            this._oModelPos.setProperty("/count", oBinding.getLength());
-        });
-    }
-
+  public onDetail(oEvent: any): void {
+    const oContext = oEvent.getSource().getBindingContext();
+    if (!oContext) return;
+    const oRow = oContext.getObject() as { codiceContratto: string };
+    this.navTo("RouteContract", { contractCode: oRow.codiceContratto });
+  }
 }
