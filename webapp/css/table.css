@@ -1,0 +1,36 @@
+/* Stili relativi alle tabelle (es. .posTable) */
+
+.tablePanelContent .sapMPanelContent {
+  padding: 0 !important;
+}
+
+.posTable .sapMText {
+  max-width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: break-spaces;
+}
+
+.posTable .sapMListTblNavCol {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  background-color: var(--sapList_Background, #fff);
+}
+
+.posTable .sapMTableTHead .sapMListTblNavCol {
+  background-color: var(--sapList_HeaderBackground, #f7f7f7);
+}
+
+.posTable .sapMLIBHoverable:hover .sapMListTblNavCol,
+.posTable tr.sapMLIBHover .sapMListTblNavCol {
+  background-color: var(--sapList_Hover_Background, #fafafa);
+}
+
+.posTable tr.sapMLIBSelected .sapMListTblNavCol {
+  background-color: var(--sapList_SelectionBackgroundColor, #e5f0fa);
+}
+
+.posTable tr.sapMLIBActive .sapMListTblNavCol {
+  background-color: var(--sapList_Active_Background, #0854a0);
+}

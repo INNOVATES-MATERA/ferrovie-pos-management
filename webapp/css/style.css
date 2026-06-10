@@ -1,5 +1,6 @@
 @import "./tokens.css";
 @import "./components.css";
+@import "./table.css";
 
 /* Enter your custom styles here */
 
@@ -58,28 +59,6 @@
 .m-label-hbox {
   margin-top: 1px;
   margin-right: 4px;
-}
-
-.tablePanelContent .sapMPanelContent {
-  padding: 0 !important;
-}
-
-.posTable .sapMText {
-  max-width: 15rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: break-spaces;
-}
-
-.posTable .sapMListTblNavCol {
-  position: sticky;
-  right: 0;
-  z-index: 3;
-  background-color: var(--sapList_Background, #fff);
-}
-
-.posTable .sapMTableTHead .sapMListTblNavCol {
-  background-color: var(--sapList_HeaderBackground, #f7f7f7);
 }
 
 .sapFFCL > .sapFFCLColumnActive.sapFFCLColumnFirstActive {
