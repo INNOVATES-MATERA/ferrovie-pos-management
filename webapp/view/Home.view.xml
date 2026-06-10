@@ -18,38 +18,38 @@
 
                 <!-- TABELLA -->
                 <Panel class="sapUiTinyMarginTop">
-                    <OverflowToolbar style="Standard"
-                        class="pt-auto-10">
-                        <Title text="{i18n>lbl_contracts} ({Pos>/count})"
-                            level="H2"/>
-                        <ToolbarSpacer/>
-                        <Button id="btnReset"
-                            icon="sap-icon://refresh"
-                            press="onReset"
-                            tooltip="{i18n>btn_reset}"/>
-                        <Button icon="sap-icon://sort"
-                            press="onSettings"
-                            tooltip="{i18n>btn_sort}"
-                            app:panel="Sorter">
-                            <customData>
-                                <BadgeCustomData value="{Pos>/sortCount}"/>
-                            </customData>
-                        </Button>
-                        <Button icon="sap-icon://filter"
-                            press="onSettings"
-                            app:panel="Filter">
-                            <customData>
-                                <BadgeCustomData value="{Pos>/filterCount}"/>
-                            </customData>
-                        </Button>
-                        <Button icon="sap-icon://action-settings"
-                            press="onSettings"
-                            app:panel="Columns"/>
-                        <Button icon="sap-icon://download"
-                            press="onDownload"/>
-                    </OverflowToolbar>
-
-
+                    <headerToolbar>
+                        <OverflowToolbar style="Standard"
+                            class="pt-auto-10">
+                            <Title text="{i18n>lbl_contracts} ({Pos>/count})"
+                                level="H2"/>
+                            <ToolbarSpacer/>
+                            <Button id="btnReset"
+                                icon="sap-icon://refresh"
+                                press="onReset"
+                                tooltip="{i18n>btn_reset}"/>
+                            <Button icon="sap-icon://sort"
+                                press="onSettings"
+                                tooltip="{i18n>btn_sort}"
+                                app:panel="Sorter">
+                                <customData>
+                                    <BadgeCustomData value="{Pos>/sortCount}"/>
+                                </customData>
+                            </Button>
+                            <Button icon="sap-icon://filter"
+                                press="onSettings"
+                                app:panel="Filter">
+                                <customData>
+                                    <BadgeCustomData value="{Pos>/filterCount}"/>
+                                </customData>
+                            </Button>
+                            <Button icon="sap-icon://action-settings"
+                                press="onSettings"
+                                app:panel="Columns"/>
+                            <Button icon="sap-icon://download"
+                                press="onDownload"/>
+                        </OverflowToolbar>
+                    </headerToolbar>
                     <Table id="tblPos"
                         items="{path: '/Contratti', parameters: {$count: true}}"
                         mode="None"

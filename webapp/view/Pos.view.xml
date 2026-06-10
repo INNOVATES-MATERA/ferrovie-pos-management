@@ -239,6 +239,7 @@
                         enableScrolling="true">
                         <content>
                             <Panel>
+                                <headerToolbar>
                                 <OverflowToolbar style="Standard"
                                     class="pt-auto-10">
                                     <Title text="{i18n>lbl_employees} ({Staff>/count})"
@@ -275,6 +276,7 @@
                                     <Button icon="sap-icon://download"
                                         press="onDownload"/>
                                 </OverflowToolbar>
+                                </headerToolbar>
                                 <Table id="tblStaff"
                                     items="{Staff>/data}"
                                     mode="MultiSelect"
@@ -376,6 +378,15 @@
                                         <!-- Tab 1: Abilitazioni Ferroviarie -->
                                         <IconTabFilter text="{i18n>lbl_tab_ferroviaria}"
                                             key="ferroviaria">
+                                            <Panel>
+                                                <headerToolbar>
+                                                    <OverflowToolbar style="Standard"
+                                                        class="pt-auto-10">
+                                                        <Title text="{i18n>lbl_tab_ferroviaria}"
+                                                            level="H2"/>
+                                                        <ToolbarSpacer/>
+                                                    </OverflowToolbar>
+                                                </headerToolbar>
                                             <Table id="tblFerroviaria"
                                                 items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'ferroviaria'}]}"
                                                 mode="MultiSelect"
@@ -420,11 +431,21 @@
                                                     </ColumnListItem>
                                                 </items>
                                             </Table>
+                                            </Panel>
                                         </IconTabFilter>
 
                                         <!-- Tab 2: Decreto 81/2008 -->
                                         <IconTabFilter text="{i18n>lbl_tab_decreto}"
                                             key="decreto">
+                                            <Panel>
+                                                <headerToolbar>
+                                                    <OverflowToolbar style="Standard"
+                                                        class="pt-auto-10">
+                                                        <Title text="{i18n>lbl_tab_decreto}"
+                                                            level="H2"/>
+                                                        <ToolbarSpacer/>
+                                                    </OverflowToolbar>
+                                                </headerToolbar>
                                             <Table id="tblDecreto"
                                                 items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'decreto'}]}"
                                                 mode="MultiSelect"
@@ -469,6 +490,7 @@
                                                     </ColumnListItem>
                                                 </items>
                                             </Table>
+                                            </Panel>
                                         </IconTabFilter>
 
                                     </items>

@@ -173,6 +173,7 @@
 
                 <!-- TABELLA POS -->
                 <Panel class="sapUiTinyMarginTop">
+                    <headerToolbar>
                     <OverflowToolbar style="Standard"
                         class="pt-auto-10">
                         <Title text="{i18n>lbl_pos_table} ({Pos>/count})"
@@ -209,6 +210,7 @@
                         <Button icon="sap-icon://download"
                             press="onDownload"/>
                     </OverflowToolbar>
+                    </headerToolbar>
                     <!-- Metto items="{__init__>/data}" perchè la tabella ha biosogno di un template -->
                     <Table id="tblContract"
                         items="{__init__>/data}"
