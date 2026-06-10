@@ -172,7 +172,7 @@
             <VBox>
 
                 <!-- TABELLA POS -->
-                <Panel class="sapUiTinyMarginTop">
+                <Panel class="sapUiTinyMarginTop tablePanelContent">
                     <headerToolbar>
                     <OverflowToolbar style="Standard"
                         class="pt-auto-10">

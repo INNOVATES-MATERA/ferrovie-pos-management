@@ -238,7 +238,7 @@
                     <Page showHeader="false"
                         enableScrolling="true">
                         <content>
-                            <Panel>
+                            <Panel class="tablePanelContent">
                                 <headerToolbar>
                                 <OverflowToolbar style="Standard"
                                     class="pt-auto-10">
@@ -378,7 +378,7 @@
                                         <!-- Tab 1: Abilitazioni Ferroviarie -->
                                         <IconTabFilter text="{i18n>lbl_tab_ferroviaria}"
                                             key="ferroviaria">
-                                            <Panel>
+                                            <Panel class="tablePanelContent">
                                                 <headerToolbar>
                                                     <OverflowToolbar style="Standard"
                                                         class="pt-auto-10">
@@ -437,7 +437,7 @@
                                         <!-- Tab 2: Decreto 81/2008 -->
                                         <IconTabFilter text="{i18n>lbl_tab_decreto}"
                                             key="decreto">
-                                            <Panel>
+                                            <Panel class="tablePanelContent">
                                                 <headerToolbar>
                                                     <OverflowToolbar style="Standard"
                                                         class="pt-auto-10">

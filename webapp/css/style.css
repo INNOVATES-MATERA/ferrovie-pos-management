@@ -60,6 +60,10 @@
   margin-right: 4px;
 }
 
+.tablePanelContent .sapMPanelContent {
+  padding: 0 !important;
+}
+
 .posTable .sapMText {
   max-width: 15rem;
   overflow: hidden;
@@ -67,11 +71,15 @@
   white-space: break-spaces;
 }
 
-.posTable .sapMListTblNavCol,
-.posTable .sapMListTblNavCell {
+.posTable .sapMListTblNavCol {
   position: sticky;
   right: 0;
   z-index: 3;
+  background-color: var(--sapList_Background, #fff);
+}
+
+.posTable .sapMTableTHead .sapMListTblNavCol {
+  background-color: var(--sapList_HeaderBackground, #f7f7f7);
 }
 
 .sapFFCL > .sapFFCLColumnActive.sapFFCLColumnFirstActive {
