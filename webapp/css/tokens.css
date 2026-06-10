@@ -2,8 +2,6 @@
   /* ── Brand / Accent ── */
   --sapBrandColor: #2563eb;
   --sapHighlightColor: #2563eb;
-  --sapSelectedColor: #2563eb;
-  --sapActiveColor: #1d4ed8;
 
   /* ── Tipografia ── */
   --sapFontFamily: "Inter", "72", Arial, sans-serif;
@@ -28,10 +26,6 @@
   --sapList_SelectionBackgroundColor: #eff6ff;
   --sapList_Hover_Background: #f1f5f9;
 
-  /* ── Pulsanti ── */
-  --sapButton_Background: var(--sapBrandColor);
-  --sapButton_BorderColor: var(--sapBrandColor);
-
   /* ── Bordi / Separatori ── */
   --sapField_BorderColor: #cbd5e1;
   --sapField_Hover_BorderColor: var(--sapBrandColor);
@@ -43,6 +37,4 @@
   --sapTextColor: #0f172a;
   --sapContent_LabelColor: #475569;
   --sapContent_DisabledTextColor: #94a3b8;
-
-  /* --sapBaseColor: #f8fafc; */
 }
