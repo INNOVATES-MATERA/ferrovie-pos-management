@@ -515,9 +515,6 @@
                     type="Emphasized"
                     icon="sap-icon://save"
                     press="onSave"/>
-                <Button id="btnCancel"
-                    text="{i18n>btn_cancel}"
-                    press="onCancel"/>
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>

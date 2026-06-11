@@ -1,6 +1,5 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import MessageToast from "sap/m/MessageToast";
 import MessageBox from "sap/m/MessageBox";
 import Table from "sap/m/Table";
 import ColumnListItem from "sap/m/ColumnListItem";
@@ -245,15 +244,10 @@ export default class Pos extends BaseController {
         await this.createEntity("/PosTestataSet", oPosPayload);
       }
 
-      MessageToast.show(this.getText("msg_save_success"));
-      this.navTo("RouteContract", { contractCode: this._sContractCode });
+      MessageBox.success(this.getText("msg_save_success"));
     } catch (e) {
       entityUtils.handleError(e as Error);
     }
-  }
-
-  public onCancel(): void {
-    this.navTo("RouteContract", { contractCode: this._sContractCode });
   }
 
   public onBack(): void {
