@@ -40,14 +40,6 @@ export default abstract class BaseController extends Controller {
         this.getRouter().navTo(sName, oEncoded, undefined, bReplace);
     }
 
-    public setBusy(bBusy: boolean): void {
-        const oComponent = this.getOwnerComponent()!;
-        const oRootControl = (oComponent as any).getRootControl?.() ?? (oComponent as any).getAggregation?.("rootControl");
-        if (oRootControl) {
-            (oRootControl as any).setBusy(bBusy);
-        }
-    }
-
     public getText(sKey: string): string {
         const oModel = this.getOwnerComponent()!.getModel("i18n") as ResourceModel;
         const oBundle = oModel.getResourceBundle() as ResourceBundle;

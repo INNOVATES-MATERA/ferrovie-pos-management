@@ -76,8 +76,6 @@ export default class Contract extends BaseController {
     this._sContractCode = decodeURIComponent(oArgs.contractCode as string);
 
     try {
-      this.setBusy(true);
-
       const oData = await this.getEntity<Record<string, string>>(
         "/Contratti",
         { codiceContratto: this._sContractCode },
@@ -109,22 +107,17 @@ export default class Contract extends BaseController {
       this._loadPos();
     } catch (e) {
       entityUtils.handleError(e as Error);
-    } finally {
-      this.setBusy(false);
     }
   }
 
   public async onReset(): Promise<void> {
     try {
-      this.setBusy(true);
       const oTable = this.byId("tblContract") as Table;
       await p13nDialogUtils.reset(oTable);
       this._oModelPos.setProperty("/sortCount", 0);
       this._oModelPos.setProperty("/filterCount", 0);
     } catch (e) {
       entityUtils.handleError(e as Error);
-    } finally {
-      this.setBusy(false);
     }
   }
 

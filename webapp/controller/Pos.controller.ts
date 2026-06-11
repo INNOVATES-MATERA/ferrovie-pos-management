@@ -120,15 +120,12 @@ export default class Pos extends BaseController {
 
   public async onReset(): Promise<void> {
     try {
-      this.setBusy(true);
       const oTable = this.byId("tblStaff") as Table;
       await p13nDialogUtils.reset(oTable);
       this._oModelStaff.setProperty("/sortCount", 0);
       this._oModelStaff.setProperty("/filterCount", 0);
     } catch (e) {
       entityUtils.handleError(e as Error);
-    } finally {
-      this.setBusy(false);
     }
   }
 
@@ -164,15 +161,12 @@ export default class Pos extends BaseController {
     this._oModelStaff.setData(structuredClone(DEFAULT_STAFF));
 
     try {
-      this.setBusy(true);
       await this._loadSkillTypes();
       if (bIsEdit) {
         await this._loadPOSWithPersonale();
       }
     } catch (e) {
       entityUtils.handleError(e as Error);
-    } finally {
-      this.setBusy(false);
     }
   }
 
@@ -217,8 +211,6 @@ export default class Pos extends BaseController {
     }
 
     try {
-      this.setBusy(true);
-
       const oPosPayload = {
         idPos: sPosId,
         contratto: this._oModelPOS.getProperty("/contratto"),
@@ -257,8 +249,6 @@ export default class Pos extends BaseController {
       this.navTo("RouteContract", { contractCode: this._sContractCode });
     } catch (e) {
       entityUtils.handleError(e as Error);
-    } finally {
-      this.setBusy(false);
     }
   }
 
