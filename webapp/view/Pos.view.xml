@@ -74,20 +74,6 @@
                                             maxLength="50"/>
                                     </form:fields>
                                 </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_parent_contract_code}">
-                                    <form:fields>
-                                        <Input id="inpParentContractCode"
-                                            value="{POS>/codiceContrattoSuperiore}"
-                                            maxLength="50"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_client}">
-                                    <form:fields>
-                                        <Input id="inpClient"
-                                            value="{POS>/committente}"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_employer}">
                                     <form:fields>
                                         <Input id="inpEmployer"
@@ -125,13 +111,6 @@
                                             maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_works_director}">
-                                    <form:fields>
-                                        <Input id="inpWorksDirector"
-                                            value="{POS>/direttoreLavori}"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_works_director_site}">
                                     <form:fields>
                                         <Input id="inpWorksDirectorSite"
@@ -146,33 +125,12 @@
                                             maxLength="100"/>
                                     </form:fields>
                                 </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_foreman}">
-                                    <form:fields>
-                                        <Input id="inpForeman"
-                                            value="{POS>/preposto}"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_first_aid_personnel}">
-                                    <form:fields>
-                                        <Input id="inpFirstAidPersonnel"
-                                            value="{POS>/addettiPrimoSoccorso}"
-                                            maxLength="255"/>
-                                    </form:fields>
-                                </form:FormElement>
                             </form:formElements>
                         </form:FormContainer>
 
                         <!-- Container 3: date -->
                         <form:FormContainer>
                             <form:formElements>
-                                <form:FormElement label="{i18n>lbl_fire_personnel}">
-                                    <form:fields>
-                                        <Input id="inpFirePersonnel"
-                                            value="{POS>/addettiPrimoAntincendio}"
-                                            maxLength="255"/>
-                                    </form:fields>
-                                </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_revision}">
                                     <form:fields>
                                         <Input id="inpRevision"
@@ -193,24 +151,6 @@
                                             value="{POS>/dataRicezioneCruscotto}"
                                             valueFormat="yyyy-MM-dd"
                                             displayFormat="dd/MM/yyyy"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_validity_start}">
-                                    <form:fields>
-                                        <DatePicker id="dpValidityStart"
-                                            value="{POS>/inizioValidita}"
-                                            valueFormat="yyyy-MM-dd"
-                                            displayFormat="dd/MM/yyyy"
-                                            change="onValidityDateChange"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_validity_end}">
-                                    <form:fields>
-                                        <DatePicker id="dpValidityEnd"
-                                            value="{POS>/fineValidita}"
-                                            valueFormat="yyyy-MM-dd"
-                                            displayFormat="dd/MM/yyyy"
-                                            change="onValidityDateChange"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_link}">
