@@ -7,11 +7,11 @@ import Column from "sap/m/Column";
 import Label from "sap/m/Label";
 import Text from "sap/m/Text";
 import TableSelectDialog from "sap/m/TableSelectDialog";
-import DatePicker from "sap/m/DatePicker";
-import Event from "sap/ui/base/Event";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
+import DatePicker from "sap/m/DatePicker";
+import Event from "sap/ui/base/Event";
 import entityUtils from "../utils/entityUtils";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
 import xlsxUtils from "../utils/xlsxUtils";
@@ -248,11 +248,15 @@ export default class Pos extends BaseController {
 
       if (bIsEdit) {
         await this.updateEntity("/PosTestataSet", { idPos: sPosId }, oPosPayload);
+        MessageBox.success(this.getText("msg_save_success"));
       } else {
         await this.createEntity("/PosTestataSet", oPosPayload);
+        MessageBox.success(this.getText("msg_save_success"), {
+          onClose: () => {
+            this.getRouter().navTo("RoutePosList");
+          },
+        });
       }
-
-      MessageBox.success(this.getText("msg_save_success"));
     } catch (e) {
       entityUtils.handleError(e as Error);
     }
@@ -302,8 +306,11 @@ export default class Pos extends BaseController {
     }
     const oFilter = new Filter({
       filters: [
-        new Filter("codiceContratto", FilterOperator.Contains, sValue),
-        new Filter("titoloDelContratto", FilterOperator.Contains, sValue),
+        new Filter({ path: "codiceAtto", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+        new Filter({ path: "codiceContratto", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+        new Filter({ path: "titoloDelContratto", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+        new Filter({ path: "codiceSAPOrganizzazioneAcquisti", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+        new Filter({ path: "codiceSAPGruppoAcquisti", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
       ],
       and: false,
     });

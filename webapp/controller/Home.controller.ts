@@ -1,5 +1,6 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
+import Table from "sap/m/Table";
 import dateUtils from "../utils/dateUtils";
 import entityUtils from "../utils/entityUtils";
 
@@ -23,6 +24,7 @@ export default class Home extends BaseController {
   }
 
   private async _onRouteMatched(): Promise<void> {
+    (this.byId("tblLatestPos") as Table).getBinding("items")?.refresh();
     try {
       const [oPos, oContracts] = await Promise.all([
         this.getEntitySet<{ contratto: string }>("/PosTestataSet"),

@@ -47,11 +47,6 @@
   padding: 0% !important;
 }
 
-.pt-auto-10 {
-  padding-top: 10px !important;
-  height: auto !important;
-}
-
 .w-100 {
   width: 100% !important;
 }
@@ -61,6 +56,6 @@
   margin-right: 4px;
 }
 
-.sapFFCL > .sapFFCLColumnActive.sapFFCLColumnFirstActive {
+/* .sapFFCL > .sapFFCLColumnActive.sapFFCLColumnFirstActive {
   width: 60% !important;
-}
+} */

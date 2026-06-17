@@ -10,6 +10,12 @@
                 <f:heading>
                     <Title text="{i18n>lbl_pos_management}"/>
                 </f:heading>
+                <f:actions>
+                    <Button text="{i18n>btn_new_pos}"
+                        type="Emphasized"
+                        icon="sap-icon://add"
+                        press="onNewPos"/>
+                </f:actions>
             </f:DynamicPageTitle>
         </f:title>
 
@@ -19,43 +25,38 @@
                 <!-- TABELLA POS -->
                 <Panel class="sapUiTinyMarginTop tablePanelContent">
                     <headerToolbar>
-                    <OverflowToolbar style="Standard"
-                        class="pt-auto-10">
-                        <Title text="{i18n>lbl_pos_table} ({Pos>/count})"
-                            level="H2"/>
-                        <ToolbarSpacer/>
-                        <Button icon="sap-icon://add"
-                            text="{i18n>btn_new_pos}"
-                            type="Emphasized"
-                            press="onNewPos"/>
-                        <Button icon="sap-icon://delete"
-                            text="{i18n>btn_delete}"
-                            press="onDelete"/>
-                        <Button id="btnPosListReset"
-                            icon="sap-icon://refresh"
-                            press="onReset"
-                            tooltip="{i18n>btn_reset}"/>
-                        <Button icon="sap-icon://sort"
-                            press="onSettings"
-                            tooltip="{i18n>btn_sort}"
-                            app:panel="Sorter">
-                            <customData>
-                                <BadgeCustomData value="{Pos>/sortCount}"/>
-                            </customData>
-                        </Button>
-                        <Button icon="sap-icon://filter"
-                            press="onSettings"
-                            app:panel="Filter">
-                            <customData>
-                                <BadgeCustomData value="{Pos>/filterCount}"/>
-                            </customData>
-                        </Button>
-                        <Button icon="sap-icon://action-settings"
-                            press="onSettings"
-                            app:panel="Columns"/>
-                        <Button icon="sap-icon://download"
-                            press="onDownload"/>
-                    </OverflowToolbar>
+                        <OverflowToolbar style="Standard">
+                            <Title text="{i18n>lbl_pos_table} ({Pos>/count})"
+                                level="H2"/>
+                            <ToolbarSpacer/>
+                            <Button icon="sap-icon://delete"
+                                text="{i18n>btn_delete}"
+                                press="onDelete"/>
+                            <Button id="btnPosListReset"
+                                icon="sap-icon://refresh"
+                                press="onReset"
+                                tooltip="{i18n>btn_reset}"/>
+                            <Button icon="sap-icon://sort"
+                                press="onSettings"
+                                tooltip="{i18n>btn_sort}"
+                                app:panel="Sorter">
+                                <customData>
+                                    <BadgeCustomData value="{Pos>/sortCount}"/>
+                                </customData>
+                            </Button>
+                            <Button icon="sap-icon://filter"
+                                press="onSettings"
+                                app:panel="Filter">
+                                <customData>
+                                    <BadgeCustomData value="{Pos>/filterCount}"/>
+                                </customData>
+                            </Button>
+                            <Button icon="sap-icon://action-settings"
+                                press="onSettings"
+                                app:panel="Columns"/>
+                            <Button icon="sap-icon://download"
+                                press="onDownload"/>
+                        </OverflowToolbar>
                     </headerToolbar>
                     <Table id="tblPos"
                         items="{path: '/PosTestataSet', parameters: {$count: true}}"
@@ -100,58 +101,6 @@
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="revisione"
-                                width="6rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lbl_revision}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="dataRedazione"
-                                width="9rem">
-                                <header>
-                                    <Label text="{i18n>lbl_draft_date}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="inizioValidita"
-                                width="8rem">
-                                <header>
-                                    <Label text="{i18n>lbl_validity_start}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="fineValidita"
-                                width="8rem">
-                                <header>
-                                    <Label text="{i18n>lbl_validity_end}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-
-                            <Column app:p13nKey="codiceContrattoSuperiore"
-                                width="12rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lbl_parent_contract_code}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="committente"
-                                width="10rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lbl_client}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
                             <Column app:p13nKey="datoreLavoro"
                                 width="12rem"
                                 visible="false">
@@ -179,29 +128,46 @@
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="direttoreLavori"
+                            <Column app:p13nKey="medicocompetente"
                                 width="12rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_works_director}"
+                                    <Label text="{i18n>lbl_medico_competente}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="addettiPrimoSoccorso"
+                            <Column app:p13nKey="direttoreCantiere"
                                 width="12rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_first_aid_personnel}"
+                                    <Label text="{i18n>lbl_works_director_site}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="addettiPrimoAntincendio"
-                                width="12rem"
+                            <Column app:p13nKey="capocantiere"
+                                width="10rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_fire_personnel}"
+                                    <Label text="{i18n>lbl_site_manager}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="revisione"
+                                width="6rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lbl_revision}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="dataRedazione"
+                                width="9rem">
+                                <header>
+                                    <Label text="{i18n>lbl_draft_date}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -239,29 +205,21 @@
                                         wrapping="false"/>
                                     <Text text="{ruoloImpresa}"
                                         wrapping="false"/>
-                                    <Text text="{revisione}"
-                                        wrapping="false"/>
-                                    <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
-                                        wrapping="false"/>
-                                    <Text text="{path: 'inizioValidita', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
-                                        wrapping="false"/>
-                                    <Text text="{path: 'fineValidita', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
-                                        wrapping="false"/>
-                                    <Text text="{codiceContrattoSuperiore}"
-                                        wrapping="false"/>
-                                    <Text text="{committente}"
-                                        wrapping="false"/>
                                     <Text text="{datoreLavoro}"
                                         wrapping="false"/>
                                     <Text text="{rspp}"
                                         wrapping="false"/>
                                     <Text text="{rls}"
                                         wrapping="false"/>
-                                    <Text text="{direttoreLavori}"
+                                    <Text text="{medicocompetente}"
                                         wrapping="false"/>
-                                    <Text text="{addettiPrimoSoccorso}"
+                                    <Text text="{direttoreCantiere}"
                                         wrapping="false"/>
-                                    <Text text="{addettiPrimoAntincendio}"
+                                    <Text text="{capocantiere}"
+                                        wrapping="false"/>
+                                    <Text text="{revisione}"
+                                        wrapping="false"/>
+                                    <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
                                         wrapping="false"/>
                                     <Text text="{path: 'dataRicezioneCruscotto', type: 'sap.ui.model.odata.type.DateTimeOffset', formatOptions: {pattern: 'dd/MM/yyyy'}}"
                                         wrapping="false"/>

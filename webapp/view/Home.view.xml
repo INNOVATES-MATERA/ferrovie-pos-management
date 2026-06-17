@@ -45,30 +45,22 @@
                 <!-- ULTIMI POS AGGIORNATI -->
                 <Panel class="sapUiTinyMarginTop tablePanelContent">
                     <headerToolbar>
-                        <OverflowToolbar style="Standard"
-                            class="pt-auto-10">
+                        <OverflowToolbar style="Standard">
                             <Title text="{i18n>lbl_latest_pos}"
                                 level="H2"/>
                             <ToolbarSpacer/>
                         </OverflowToolbar>
                     </headerToolbar>
                     <Table id="tblLatestPos"
-                        items="{path: '/PosTestataSet', parameters: {$count: true, $orderby: 'dataRicezioneCruscotto desc'}, length: 5}"
+                        items="{path: '/PosTestataSet', parameters: {$count: true, $orderby: 'createdAt desc', $select: 'idPos,contratto,impresaAppaltatrice,ruoloImpresa,dataRedazione,createdAt'}, length: 5}"
                         mode="None"
                         fixedLayout="true"
                         growing="false"
                         class="posTable">
 
                         <columns>
-                            <Column app:p13nKey="idPos"
-                                width="10rem">
-                                <header>
-                                    <Label text="{i18n>lbl_pos_id}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
                             <Column app:p13nKey="contratto"
-                                width="12rem">
+                                width="10rem">
                                 <header>
                                     <Label text="{i18n>lbl_contract_code}"
                                         wrapping="false"/>
@@ -81,35 +73,43 @@
                                         wrapping="false"/>
                                 </header>
                             </Column>
-                            <Column app:p13nKey="dataRedazione"
+                            <Column app:p13nKey="ruoloImpresa"
                                 width="10rem">
+                                <header>
+                                    <Label text="{i18n>lbl_company_role}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="dataRedazione"
+                                width="9rem">
                                 <header>
                                     <Label text="{i18n>lbl_draft_date}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
-                            <Column width="6rem"
-                                hAlign="End">
+                            <Column app:p13nKey="createdAt"
+                                width="10rem">
                                 <header>
-                                    <Label text="{i18n>col_actions}"
+                                    <Label text="{i18n>lbl_created_at}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
                         </columns>
 
                         <items>
-                            <ColumnListItem>
+                            <ColumnListItem press="onOpenPos"
+                                type="Navigation">
                                 <cells>
-                                    <Text text="{idPos}"
-                                        wrapping="false"/>
                                     <Text text="{contratto}"
                                         wrapping="false"/>
                                     <Text text="{impresaAppaltatrice}"
                                         wrapping="false"/>
+                                    <Text text="{ruoloImpresa}"
+                                        wrapping="false"/>
                                     <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
                                         wrapping="false"/>
-                                    <Button text="{i18n>btn_open}"
-                                        press="onOpenPos"/>
+                                    <Text text="{path: 'createdAt', formatter: '.dateUtils.formatDateTimeOffsetToDDMMYYYY'}"
+                                        wrapping="false"/>
                                 </cells>
                             </ColumnListItem>
                         </items>

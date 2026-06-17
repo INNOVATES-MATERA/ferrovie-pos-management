@@ -34,415 +34,414 @@
 
                 <!-- FORM POS (ex testata) -->
                 <Panel class="tablePanelContent">
-                <form:Form id="frmPosEdit"
-                    editable="true">
-                    <form:layout>
-                        <form:ResponsiveGridLayout labelSpanXL="4"
-                            labelSpanL="4"
-                            labelSpanM="4"
-                            labelSpanS="12"
-                            adjustLabelSpan="false"
-                            emptySpanXL="0"
-                            emptySpanL="0"
-                            emptySpanM="0"
-                            emptySpanS="0"
-                            columnsXL="3"
-                            columnsL="2"
-                            columnsM="1"
-                            singleContainerFullSize="false"/>
-                    </form:layout>
-                    <form:formContainers>
+                    <form:Form id="frmPosEdit"
+                        editable="true">
+                        <form:layout>
+                            <form:ResponsiveGridLayout labelSpanXL="4"
+                                labelSpanL="4"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="3"
+                                columnsL="2"
+                                columnsM="1"
+                                singleContainerFullSize="false"/>
+                        </form:layout>
+                        <form:formContainers>
 
-                        <!-- Container 1: Identificatori -->
-                        <form:FormContainer>
-                            <form:formElements>
-                                <form:FormElement label="{i18n>lbl_contract}">
-                                    <form:fields>
-                                        <Input id="inpContractCode"
-                                            value="{POS>/contratto}"
-                                            editable="{= !${POS>/isEdit} }"
-                                            showValueHelp="{= !${POS>/isEdit} }"
-                                            valueHelpRequest="onContractValueHelp"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_contractor_company}">
-                                    <form:fields>
-                                        <Input id="inpContractorCompany"
-                                            value="{POS>/impresaAppaltatrice}"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_company_role}">
-                                    <form:fields>
-                                        <Input id="inpCompanyRole"
-                                            value="{POS>/ruoloImpresa}"
-                                            maxLength="50"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_employer}">
-                                    <form:fields>
-                                        <Input id="inpEmployer"
-                                            value="{POS>/datoreLavoro}"
-                                            required="true"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_rspp}">
-                                    <form:fields>
-                                        <Input id="inpRspp"
-                                            value="{POS>/rspp}"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                            </form:formElements>
-                        </form:FormContainer>
+                            <!-- Container 1: Identificatori -->
+                            <form:FormContainer>
+                                <form:formElements>
+                                    <form:FormElement label="{i18n>lbl_contract}">
+                                        <form:fields>
+                                            <Input id="inpContractCode"
+                                                value="{POS>/contratto}"
+                                                editable="{= !${POS>/isEdit} }"
+                                                showValueHelp="{= !${POS>/isEdit} }"
+                                                valueHelpRequest="onContractValueHelp"
+                                                valueHelpOnly="true" />
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_contractor_company}">
+                                        <form:fields>
+                                            <Input id="inpContractorCompany"
+                                                value="{POS>/impresaAppaltatrice}"
+                                                maxLength="100"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_company_role}">
+                                        <form:fields>
+                                            <Input id="inpCompanyRole"
+                                                value="{POS>/ruoloImpresa}"
+                                                maxLength="50"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_employer}">
+                                        <form:fields>
+                                            <Input id="inpEmployer"
+                                                value="{POS>/datoreLavoro}"
+                                                required="true"
+                                                maxLength="100"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_rspp}">
+                                        <form:fields>
+                                            <Input id="inpRspp"
+                                                value="{POS>/rspp}"
+                                                maxLength="100"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                </form:formElements>
+                            </form:FormContainer>
 
-                        <!-- Container 2: Figure di sicurezza -->
-                        <form:FormContainer>
-                            <form:formElements>
-                                <form:FormElement label="{i18n>lbl_rls}">
-                                    <form:fields>
-                                        <Input id="inpRls"
-                                            value="{POS>/rls}"
-                                            required="true"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_medico_competente}">
-                                    <form:fields>
-                                        <Input id="inpMedicoCompetente"
-                                            value="{POS>/medicocompetente}"
-                                            required="true"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_works_director_site}">
-                                    <form:fields>
-                                        <Input id="inpWorksDirectorSite"
-                                            value="{POS>/direttoreCantiere}"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_site_manager}">
-                                    <form:fields>
-                                        <Input id="inpSiteManager"
-                                            value="{POS>/capocantiere}"
-                                            maxLength="100"/>
-                                    </form:fields>
-                                </form:FormElement>
-                            </form:formElements>
-                        </form:FormContainer>
+                            <!-- Container 2: Figure di sicurezza -->
+                            <form:FormContainer>
+                                <form:formElements>
+                                    <form:FormElement label="{i18n>lbl_rls}">
+                                        <form:fields>
+                                            <Input id="inpRls"
+                                                value="{POS>/rls}"
+                                                required="true"
+                                                maxLength="100"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_medico_competente}">
+                                        <form:fields>
+                                            <Input id="inpMedicoCompetente"
+                                                value="{POS>/medicocompetente}"
+                                                required="true"
+                                                maxLength="100"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_works_director_site}">
+                                        <form:fields>
+                                            <Input id="inpWorksDirectorSite"
+                                                value="{POS>/direttoreCantiere}"
+                                                maxLength="100"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_site_manager}">
+                                        <form:fields>
+                                            <Input id="inpSiteManager"
+                                                value="{POS>/capocantiere}"
+                                                maxLength="100"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                </form:formElements>
+                            </form:FormContainer>
 
-                        <!-- Container 3: date -->
-                        <form:FormContainer>
-                            <form:formElements>
-                                <form:FormElement label="{i18n>lbl_revision}">
-                                    <form:fields>
-                                        <Input id="inpRevision"
-                                            value="{POS>/revisione}"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_draft_date}">
-                                    <form:fields>
-                                        <DatePicker id="dpDraftDate"
-                                            value="{POS>/dataRedazione}"
-                                            valueFormat="yyyy-MM-dd"
-                                            displayFormat="dd/MM/yyyy"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_reception_date}">
-                                    <form:fields>
-                                        <DatePicker id="dpReceptionDate"
-                                            value="{POS>/dataRicezioneCruscotto}"
-                                            valueFormat="yyyy-MM-dd"
-                                            displayFormat="dd/MM/yyyy"/>
-                                    </form:fields>
-                                </form:FormElement>
-                                <form:FormElement label="{i18n>lbl_link}">
-                                    <form:fields>
-                                        <Input id="inpLink"
-                                            value="{POS>/linkCde}"
-                                            maxLength="1000"/>
-                                    </form:fields>
-                                </form:FormElement>
-                            </form:formElements>
-                        </form:FormContainer>
+                            <!-- Container 3: date -->
+                            <form:FormContainer>
+                                <form:formElements>
+                                    <form:FormElement label="{i18n>lbl_revision}">
+                                        <form:fields>
+                                            <Input id="inpRevision"
+                                                value="{POS>/revisione}"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_draft_date}">
+                                        <form:fields>
+                                            <DatePicker id="dpDraftDate"
+                                                value="{POS>/dataRedazione}"
+                                                valueFormat="yyyy-MM-dd"
+                                                displayFormat="dd/MM/yyyy"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_reception_date}">
+                                        <form:fields>
+                                            <DatePicker id="dpReceptionDate"
+                                                value="{POS>/dataRicezioneCruscotto}"
+                                                valueFormat="yyyy-MM-dd"
+                                                displayFormat="dd/MM/yyyy"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lbl_link}">
+                                        <form:fields>
+                                            <Input id="inpLink"
+                                                value="{POS>/linkCde}"
+                                                maxLength="1000"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                </form:formElements>
+                            </form:FormContainer>
 
-                    </form:formContainers>
-                </form:Form>
+                        </form:formContainers>
+                    </form:Form>
                 </Panel>
 
                 <!-- tabella utenti + colonna abilitazioni -->
                 <f:FlexibleColumnLayout id="fclStaff"
+                    class="fclStaff"
                     layout="{= ${Skills>/isOpen} ? 'TwoColumnsBeginExpanded' : 'OneColumn' }">
 
-                <!-- Colonna master: tabella utenti -->
-                <f:beginColumnPages>
-                    <Page showHeader="false"
-                        enableScrolling="true">
-                        <content>
-                            <Panel class="tablePanelContent">
-                                <headerToolbar>
-                                <OverflowToolbar style="Standard"
-                                    class="pt-auto-10">
-                                    <Title text="{i18n>lbl_employees} ({Staff>/count})"
-                                        level="H2"/>
-                                    <ToolbarSpacer/>
-                                    <Button icon="sap-icon://add"
-                                        text="{i18n>btn_add}"
-                                        press="onAddStaff"/>
-                                    <Button icon="sap-icon://delete"
-                                        text="{i18n>btn_delete}"
-                                        press="onDeleteStaff"/>
-                                    <Button id="btnStaffReset"
-                                        icon="sap-icon://refresh"
-                                        press="onReset"
-                                        tooltip="{i18n>btn_reset}"/>
-                                    <Button icon="sap-icon://sort"
-                                        press="onSettings"
-                                        tooltip="{i18n>btn_sort}"
-                                        app:panel="Sorter">
-                                        <customData>
-                                            <BadgeCustomData value="{Staff>/sortCount}"/>
-                                        </customData>
-                                    </Button>
-                                    <Button icon="sap-icon://filter"
-                                        press="onSettings"
-                                        app:panel="Filter">
-                                        <customData>
-                                            <BadgeCustomData value="{Staff>/filterCount}"/>
-                                        </customData>
-                                    </Button>
-                                    <Button icon="sap-icon://action-settings"
-                                        press="onSettings"
-                                        app:panel="Columns"/>
-                                    <Button icon="sap-icon://download"
-                                        press="onDownload"/>
-                                </OverflowToolbar>
-                                </headerToolbar>
-                                <Table id="tblStaff"
-                                    items="{Staff>/data}"
-                                    mode="MultiSelect"
-                                    fixedLayout="true"
-                                    growing="true"
-                                    growingThreshold="5"
-                                    class="posTable">
+                    <!-- Colonna master: tabella utenti -->
+                    <f:beginColumnPages>
+                        <Page showHeader="false"
+                            enableScrolling="true">
+                            <content>
+                                <Panel class="tablePanelContent">
+                                    <headerToolbar>
+                                        <OverflowToolbar style="Standard">
+                                            <Title text="{i18n>lbl_employees} ({Staff>/count})"
+                                                level="H2"/>
+                                            <ToolbarSpacer/>
+                                            <Button icon="sap-icon://add"
+                                                text="{i18n>btn_add}"
+                                                press="onAddStaff"/>
+                                            <Button icon="sap-icon://delete"
+                                                text="{i18n>btn_delete}"
+                                                press="onDeleteStaff"/>
+                                            <Button id="btnStaffReset"
+                                                icon="sap-icon://refresh"
+                                                press="onReset"
+                                                tooltip="{i18n>btn_reset}"/>
+                                            <Button icon="sap-icon://sort"
+                                                press="onSettings"
+                                                tooltip="{i18n>btn_sort}"
+                                                app:panel="Sorter">
+                                                <customData>
+                                                    <BadgeCustomData value="{Staff>/sortCount}"/>
+                                                </customData>
+                                            </Button>
+                                            <Button icon="sap-icon://filter"
+                                                press="onSettings"
+                                                app:panel="Filter">
+                                                <customData>
+                                                    <BadgeCustomData value="{Staff>/filterCount}"/>
+                                                </customData>
+                                            </Button>
+                                            <Button icon="sap-icon://action-settings"
+                                                press="onSettings"
+                                                app:panel="Columns"/>
+                                            <Button icon="sap-icon://download"
+                                                press="onDownload"/>
+                                        </OverflowToolbar>
+                                    </headerToolbar>
+                                    <Table id="tblStaff"
+                                        items="{Staff>/data}"
+                                        mode="MultiSelect"
+                                        fixedLayout="true"
+                                        growing="true"
+                                        growingThreshold="5"
+                                        class="posTable">
 
-                                    <columns>
+                                        <columns>
 
-                                        <Column app:p13nKey="idDipendente"
-                                            width="9rem"
-                                            visible="false">
-                                            <header>
-                                                <Label text="{i18n>lbl_employee_id}"
-                                                    wrapping="false"/>
-                                            </header>
-                                        </Column>
+                                            <Column app:p13nKey="idDipendente"
+                                                width="9rem"
+                                                visible="false">
+                                                <header>
+                                                    <Label text="{i18n>lbl_employee_id}"
+                                                        wrapping="false"/>
+                                                </header>
+                                            </Column>
 
-                                        <Column app:p13nKey="nome"
-                                            width="10rem">
-                                            <header>
-                                                <Label text="{i18n>lbl_first_name}"
-                                                    wrapping="false"/>
-                                            </header>
-                                        </Column>
+                                            <Column app:p13nKey="nome"
+                                                width="10rem">
+                                                <header>
+                                                    <Label text="{i18n>lbl_first_name}"
+                                                        wrapping="false"/>
+                                                </header>
+                                            </Column>
 
-                                        <Column app:p13nKey="cognome"
-                                            width="10rem">
-                                            <header>
-                                                <Label text="{i18n>lbl_last_name}"
-                                                    wrapping="false"/>
-                                            </header>
-                                        </Column>
+                                            <Column app:p13nKey="cognome"
+                                                width="10rem">
+                                                <header>
+                                                    <Label text="{i18n>lbl_last_name}"
+                                                        wrapping="false"/>
+                                                </header>
+                                            </Column>
 
-                                        <Column app:p13nKey="reparto"
-                                            width="12rem">
-                                            <header>
-                                                <Label text="{i18n>lbl_department}"
-                                                    wrapping="false"/>
-                                            </header>
-                                        </Column>
+                                            <Column app:p13nKey="reparto"
+                                                width="12rem">
+                                                <header>
+                                                    <Label text="{i18n>lbl_department}"
+                                                        wrapping="false"/>
+                                                </header>
+                                            </Column>
 
-                                        <Column app:p13nKey="mansione"
-                                            width="10rem">
-                                            <header>
-                                                <Label text="{i18n>lbl_role}"
-                                                    wrapping="false"/>
-                                            </header>
-                                        </Column>
+                                            <Column app:p13nKey="mansione"
+                                                width="10rem">
+                                                <header>
+                                                    <Label text="{i18n>lbl_role}"
+                                                        wrapping="false"/>
+                                                </header>
+                                            </Column>
 
-                                        <Column width="3.5rem"
-                                            hAlign="Center">
-                                            <header>
-                                                <Label text=""/>
-                                            </header>
-                                        </Column>
+                                            <Column width="3.5rem"
+                                                hAlign="Center">
+                                                <header>
+                                                    <Label text=""/>
+                                                </header>
+                                            </Column>
 
-                                    </columns>
+                                        </columns>
 
-                                    <items>
-                                        <ColumnListItem>
-                                            <cells>
-                                                <Text text="{Staff>idDipendente}"
-                                                    wrapping="false"/>
-                                                <Input value="{Staff>nome}"
-                                                    maxLength="50"/>
-                                                <Input value="{Staff>cognome}"
-                                                    maxLength="50"/>
-                                                <Input value="{Staff>reparto}"
-                                                    maxLength="50"/>
-                                                <Input value="{Staff>mansione}"
-                                                    maxLength="50"/>
-                                                <Button icon="sap-icon://permission"
-                                                    type="Transparent"
-                                                    press="onOpenSkills"
-                                                    tooltip="{i18n>btn_skills}"/>
-                                            </cells>
-                                        </ColumnListItem>
-                                    </items>
-                                </Table>
-                            </Panel>
-                        </content>
-                    </Page>
-                </f:beginColumnPages>
+                                        <items>
+                                            <ColumnListItem>
+                                                <cells>
+                                                    <Text text="{Staff>idDipendente}"
+                                                        wrapping="false"/>
+                                                    <Input value="{Staff>nome}"
+                                                        maxLength="50"/>
+                                                    <Input value="{Staff>cognome}"
+                                                        maxLength="50"/>
+                                                    <Input value="{Staff>reparto}"
+                                                        maxLength="50"/>
+                                                    <Input value="{Staff>mansione}"
+                                                        maxLength="50"/>
+                                                    <Button icon="sap-icon://permission"
+                                                        type="Transparent"
+                                                        press="onOpenSkills"
+                                                        tooltip="{i18n>btn_skills}"/>
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </Panel>
+                            </content>
+                        </Page>
+                    </f:beginColumnPages>
 
-                <!-- Colonna detail: abilitazioni dipendente -->
-                <f:midColumnPages>
-                    <Page title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/nome} + ' ' + ${Skills>/cognome} }"
-                        showNavButton="true"
-                        navButtonPress="onCloseSkills">
-                        <content>
-                            <VBox class="skillsPanel">
+                    <!-- Colonna detail: abilitazioni dipendente -->
+                    <f:midColumnPages>
+                        <Page title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/nome} + ' ' + ${Skills>/cognome} }"
+                            showNavButton="true"
+                            navButtonPress="onCloseSkills">
+                            <content>
+                                <VBox class="skillsPanel">
 
-                                <IconTabBar id="tabSkills"
-                                    expanded="true">
-                                    <items>
+                                    <IconTabBar id="tabSkills"
+                                        expanded="true">
+                                        <items>
 
-                                        <!-- Tab 1: Abilitazioni Ferroviarie -->
-                                        <IconTabFilter text="{i18n>lbl_tab_ferroviaria}"
-                                            key="ferroviaria">
-                                            <Panel class="tablePanelContent">
-                                                <headerToolbar>
-                                                    <OverflowToolbar style="Standard"
-                                                        class="pt-auto-10">
-                                                        <Title text="{i18n>lbl_tab_ferroviaria}"
-                                                            level="H2"/>
-                                                        <ToolbarSpacer/>
-                                                    </OverflowToolbar>
-                                                </headerToolbar>
-                                            <Table id="tblFerroviaria"
-                                                items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'ferroviaria'}]}"
-                                                mode="MultiSelect"
-                                                selectionChange="onSkillSelectionChange"
-                                                fixedLayout="false">
-                                                <columns>
-                                                    <Column>
-                                                        <header>
-                                                            <Label text="{i18n>lbl_skills}"/>
-                                                        </header>
-                                                    </Column>
-                                                    <Column width="10rem">
-                                                        <header>
-                                                            <Label text="{i18n>lbl_skill_start}"/>
-                                                        </header>
-                                                    </Column>
-                                                    <Column width="10rem">
-                                                        <header>
-                                                            <Label text="{i18n>lbl_skill_end}"/>
-                                                        </header>
-                                                    </Column>
-                                                </columns>
-                                                <items>
-                                                    <ColumnListItem selected="{Skills>flagAttiva}"
-                                                        type="Inactive">
-                                                        <cells>
-                                                            <Text text="{Skills>descrizione}"
-                                                                wrapping="false"/>
-                                                            <DatePicker value="{Skills>inizioAbilitazione}"
-                                                                valueFormat="yyyy-MM-dd"
-                                                                displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>flagAttiva}"
-                                                                width="9rem"
-                                                                change="onSkillDateChange"/>
-                                                            <DatePicker value="{Skills>scadenzaAbilitazione}"
-                                                                valueFormat="yyyy-MM-dd"
-                                                                displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>flagAttiva}"
-                                                                width="9rem"
-                                                                change="onSkillDateChange"/>
-                                                        </cells>
-                                                    </ColumnListItem>
-                                                </items>
-                                            </Table>
-                                            </Panel>
-                                        </IconTabFilter>
+                                            <!-- Tab 1: Abilitazioni Ferroviarie -->
+                                            <IconTabFilter text="{i18n>lbl_tab_ferroviaria}"
+                                                key="ferroviaria">
+                                                <Panel class="tablePanelContent">
+                                                    <headerToolbar>
+                                                        <OverflowToolbar style="Standard">
+                                                            <Title text="{i18n>lbl_tab_ferroviaria}"
+                                                                level="H2"/>
+                                                            <ToolbarSpacer/>
+                                                        </OverflowToolbar>
+                                                    </headerToolbar>
+                                                    <Table id="tblFerroviaria"
+                                                        items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'ferroviaria'}]}"
+                                                        mode="MultiSelect"
+                                                        selectionChange="onSkillSelectionChange"
+                                                        fixedLayout="false">
+                                                        <columns>
+                                                            <Column>
+                                                                <header>
+                                                                    <Label text="{i18n>lbl_skills}"/>
+                                                                </header>
+                                                            </Column>
+                                                            <Column width="10rem">
+                                                                <header>
+                                                                    <Label text="{i18n>lbl_skill_start}"/>
+                                                                </header>
+                                                            </Column>
+                                                            <Column width="10rem">
+                                                                <header>
+                                                                    <Label text="{i18n>lbl_skill_end}"/>
+                                                                </header>
+                                                            </Column>
+                                                        </columns>
+                                                        <items>
+                                                            <ColumnListItem selected="{Skills>flagAttiva}"
+                                                                type="Inactive">
+                                                                <cells>
+                                                                    <Text text="{Skills>descrizione}"
+                                                                        wrapping="false"/>
+                                                                    <DatePicker value="{Skills>inizioAbilitazione}"
+                                                                        valueFormat="yyyy-MM-dd"
+                                                                        displayFormat="dd/MM/yyyy"
+                                                                        visible="{Skills>flagAttiva}"
+                                                                        width="9rem"
+                                                                        change="onSkillDateChange"/>
+                                                                    <DatePicker value="{Skills>scadenzaAbilitazione}"
+                                                                        valueFormat="yyyy-MM-dd"
+                                                                        displayFormat="dd/MM/yyyy"
+                                                                        visible="{Skills>flagAttiva}"
+                                                                        width="9rem"
+                                                                        change="onSkillDateChange"/>
+                                                                </cells>
+                                                            </ColumnListItem>
+                                                        </items>
+                                                    </Table>
+                                                </Panel>
+                                            </IconTabFilter>
 
-                                        <!-- Tab 2: Decreto 81/2008 -->
-                                        <IconTabFilter text="{i18n>lbl_tab_decreto}"
-                                            key="decreto">
-                                            <Panel class="tablePanelContent">
-                                                <headerToolbar>
-                                                    <OverflowToolbar style="Standard"
-                                                        class="pt-auto-10">
-                                                        <Title text="{i18n>lbl_tab_decreto}"
-                                                            level="H2"/>
-                                                        <ToolbarSpacer/>
-                                                    </OverflowToolbar>
-                                                </headerToolbar>
-                                            <Table id="tblDecreto"
-                                                items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'decreto'}]}"
-                                                mode="MultiSelect"
-                                                selectionChange="onSkillSelectionChange"
-                                                fixedLayout="false">
-                                                <columns>
-                                                    <Column>
-                                                        <header>
-                                                            <Label text="{i18n>lbl_skills}"/>
-                                                        </header>
-                                                    </Column>
-                                                    <Column width="10rem">
-                                                        <header>
-                                                            <Label text="{i18n>lbl_skill_start}"/>
-                                                        </header>
-                                                    </Column>
-                                                    <Column width="10rem">
-                                                        <header>
-                                                            <Label text="{i18n>lbl_skill_end}"/>
-                                                        </header>
-                                                    </Column>
-                                                </columns>
-                                                <items>
-                                                    <ColumnListItem selected="{Skills>flagAttiva}"
-                                                        type="Inactive">
-                                                        <cells>
-                                                            <Text text="{Skills>descrizione}"
-                                                                wrapping="false"/>
-                                                            <DatePicker value="{Skills>inizioAbilitazione}"
-                                                                valueFormat="yyyy-MM-dd"
-                                                                displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>flagAttiva}"
-                                                                width="9rem"
-                                                                change="onSkillDateChange"/>
-                                                            <DatePicker value="{Skills>scadenzaAbilitazione}"
-                                                                valueFormat="yyyy-MM-dd"
-                                                                displayFormat="dd/MM/yyyy"
-                                                                visible="{Skills>flagAttiva}"
-                                                                width="9rem"
-                                                                change="onSkillDateChange"/>
-                                                        </cells>
-                                                    </ColumnListItem>
-                                                </items>
-                                            </Table>
-                                            </Panel>
-                                        </IconTabFilter>
+                                            <!-- Tab 2: Decreto 81/2008 -->
+                                            <IconTabFilter text="{i18n>lbl_tab_decreto}"
+                                                key="decreto">
+                                                <Panel class="tablePanelContent">
+                                                    <headerToolbar>
+                                                        <OverflowToolbar style="Standard">
+                                                            <Title text="{i18n>lbl_tab_decreto}"
+                                                                level="H2"/>
+                                                            <ToolbarSpacer/>
+                                                        </OverflowToolbar>
+                                                    </headerToolbar>
+                                                    <Table id="tblDecreto"
+                                                        items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'decreto'}]}"
+                                                        mode="MultiSelect"
+                                                        selectionChange="onSkillSelectionChange"
+                                                        fixedLayout="false">
+                                                        <columns>
+                                                            <Column>
+                                                                <header>
+                                                                    <Label text="{i18n>lbl_skills}"/>
+                                                                </header>
+                                                            </Column>
+                                                            <Column width="10rem">
+                                                                <header>
+                                                                    <Label text="{i18n>lbl_skill_start}"/>
+                                                                </header>
+                                                            </Column>
+                                                            <Column width="10rem">
+                                                                <header>
+                                                                    <Label text="{i18n>lbl_skill_end}"/>
+                                                                </header>
+                                                            </Column>
+                                                        </columns>
+                                                        <items>
+                                                            <ColumnListItem selected="{Skills>flagAttiva}"
+                                                                type="Inactive">
+                                                                <cells>
+                                                                    <Text text="{Skills>descrizione}"
+                                                                        wrapping="false"/>
+                                                                    <DatePicker value="{Skills>inizioAbilitazione}"
+                                                                        valueFormat="yyyy-MM-dd"
+                                                                        displayFormat="dd/MM/yyyy"
+                                                                        visible="{Skills>flagAttiva}"
+                                                                        width="9rem"
+                                                                        change="onSkillDateChange"/>
+                                                                    <DatePicker value="{Skills>scadenzaAbilitazione}"
+                                                                        valueFormat="yyyy-MM-dd"
+                                                                        displayFormat="dd/MM/yyyy"
+                                                                        visible="{Skills>flagAttiva}"
+                                                                        width="9rem"
+                                                                        change="onSkillDateChange"/>
+                                                                </cells>
+                                                            </ColumnListItem>
+                                                        </items>
+                                                    </Table>
+                                                </Panel>
+                                            </IconTabFilter>
 
-                                    </items>
-                                </IconTabBar>
+                                        </items>
+                                    </IconTabBar>
 
-                            </VBox>
-                        </content>
-                    </Page>
-                </f:midColumnPages>
+                                </VBox>
+                            </content>
+                        </Page>
+                    </f:midColumnPages>
 
                 </f:FlexibleColumnLayout>
 
@@ -451,6 +450,11 @@
 
         <f:footer>
             <OverflowToolbar>
+                <Button text="{i18n>btn_back}"
+                    icon="sap-icon://nav-back"
+                    press="onBack"
+                    type="Transparent"
+                    visible="{POS>/isEdit}"/>
                 <ToolbarSpacer/>
                 <Button id="btnSave"
                     text="{i18n>btn_save}"

@@ -1,5 +1,13 @@
 /* Stili relativi alle tabelle (es. .posTable) */
 
+/* L'FCL della tabella personale è dentro un VBox (non DynamicPage content),
+   quindi non riceve un'altezza dal genitore e collasserebbe a ~0 nascondendo
+   la tabella. Gli diamo un'altezza esplicita. */
+.fclStaff {
+  height: 40rem;
+  margin-top: 1.5rem;
+}
+
 .tablePanelContent .sapMPanelContent {
   padding: 0 !important;
 }
