@@ -207,13 +207,6 @@ export default class Pos extends BaseController {
       return;
     }
 
-    const dpStart = this.byId("dpValidityStart") as DatePicker;
-    const dpEnd   = this.byId("dpValidityEnd")   as DatePicker;
-    if (dpStart.getValueState() === "Error" || dpEnd.getValueState() === "Error") {
-      MessageBox.error(this.getText("msg_error_save_date"));
-      return;
-    }
-
     this._flushOpenSkillsToCache();
 
     const aSkillItems = (this._oModelSkills.getProperty("/items") as SkillItem[]) || [];
@@ -322,19 +315,6 @@ export default class Pos extends BaseController {
     if (!oItem) return;
     const oRow = oItem.getBindingContext()!.getObject() as { codiceContratto: string };
     this._oModelPOS.setProperty("/contratto", oRow.codiceContratto);
-  }
-
-  public onValidityDateChange(): void {
-    const sInizio = (this._oModelPOS.getProperty("/inizioValidita") as string) || "";
-    const sFine   = (this._oModelPOS.getProperty("/fineValidita")   as string) || "";
-    const bError  = dateUtils.isDateAfter(sInizio, sFine);
-    const sState  = bError ? "Error" : "None";
-    const sText   = bError ? this.getText("msg_error_validity_range") : "";
-
-    (this.byId("dpValidityStart") as DatePicker).setValueState(sState as any);
-    (this.byId("dpValidityStart") as DatePicker).setValueStateText(sText);
-    (this.byId("dpValidityEnd")   as DatePicker).setValueState(sState as any);
-    (this.byId("dpValidityEnd")   as DatePicker).setValueStateText(sText);
   }
 
   public onSkillDateChange(oEvent: Event): void {
