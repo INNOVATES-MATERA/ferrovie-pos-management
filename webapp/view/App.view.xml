@@ -1,7 +1,37 @@
 <mvc:View controllerName="posmanagement.controller.App"
     displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
     xmlns="sap.m">
-    <App id="app">
-    </App>
+    <tnt:ToolPage id="toolPage">
+        <tnt:header>
+            <tnt:ToolHeader>
+                <Button id="btnMenuToggle"
+                    icon="sap-icon://menu2"
+                    type="Transparent"
+                    press="onMenuToggle"
+                    tooltip="{i18n>btn_toggle_menu}"/>
+            </tnt:ToolHeader>
+        </tnt:header>
+        <tnt:sideContent>
+            <tnt:SideNavigation id="sideNavigation"
+                selectedKey="home"
+                itemSelect="onNav">
+                <tnt:NavigationList>
+                    <tnt:NavigationListItem text="{i18n>menu_home}"
+                        icon="sap-icon://home"
+                        key="home"/>
+                    <tnt:NavigationListItem text="{i18n>menu_pos_list}"
+                        icon="sap-icon://building"
+                        key="posList"/>
+                    <tnt:NavigationListItem text="{i18n>menu_new_pos}"
+                        icon="sap-icon://add"
+                        key="newPos"/>
+                </tnt:NavigationList>
+            </tnt:SideNavigation>
+        </tnt:sideContent>
+        <tnt:mainContents>
+            <App id="app"/>
+        </tnt:mainContents>
+    </tnt:ToolPage>
 </mvc:View>

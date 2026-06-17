@@ -28,9 +28,12 @@
             </f:DynamicPageTitle>
         </f:title>
 
-        <!-- HEADER PINNABLE: dati testata POS -->
-        <f:header>
-            <f:DynamicPageHeader pinnable="true">
+        <!-- CONTENT: form POS + tabella utenti + colonna abilitazioni -->
+        <f:content>
+            <VBox>
+
+                <!-- FORM POS (ex testata) -->
+                <Panel class="tablePanelContent">
                 <form:Form id="frmPosEdit"
                     editable="true">
                     <form:layout>
@@ -57,7 +60,9 @@
                                     <form:fields>
                                         <Input id="inpContractCode"
                                             value="{POS>/contratto}"
-                                            editable="false"/>
+                                            editable="{= !${POS>/isEdit} }"
+                                            showValueHelp="{= !${POS>/isEdit} }"
+                                            valueHelpRequest="onContractValueHelp"/>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>lbl_contractor_company}">
@@ -225,13 +230,11 @@
 
                     </form:formContainers>
                 </form:Form>
-            </f:DynamicPageHeader>
-        </f:header>
+                </Panel>
 
-        <!-- CONTENT: tabella utenti + colonna abilitazioni -->
-        <f:content>
-            <f:FlexibleColumnLayout id="fclStaff"
-                layout="{= ${Skills>/isOpen} ? 'TwoColumnsBeginExpanded' : 'OneColumn' }">
+                <!-- tabella utenti + colonna abilitazioni -->
+                <f:FlexibleColumnLayout id="fclStaff"
+                    layout="{= ${Skills>/isOpen} ? 'TwoColumnsBeginExpanded' : 'OneColumn' }">
 
                 <!-- Colonna master: tabella utenti -->
                 <f:beginColumnPages>
@@ -501,14 +504,13 @@
                     </Page>
                 </f:midColumnPages>
 
-            </f:FlexibleColumnLayout>
+                </f:FlexibleColumnLayout>
+
+            </VBox>
         </f:content>
 
         <f:footer>
             <OverflowToolbar>
-                <Button text="{i18n>btn_back}"
-                    type="Back"
-                    press="onBack"/>
                 <ToolbarSpacer/>
                 <Button id="btnSave"
                     text="{i18n>btn_save}"

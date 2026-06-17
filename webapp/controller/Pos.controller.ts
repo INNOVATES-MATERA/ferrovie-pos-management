@@ -3,8 +3,15 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import MessageBox from "sap/m/MessageBox";
 import Table from "sap/m/Table";
 import ColumnListItem from "sap/m/ColumnListItem";
+import Column from "sap/m/Column";
+import Label from "sap/m/Label";
+import Text from "sap/m/Text";
+import TableSelectDialog from "sap/m/TableSelectDialog";
 import DatePicker from "sap/m/DatePicker";
 import Event from "sap/ui/base/Event";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
+import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import entityUtils from "../utils/entityUtils";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
 import xlsxUtils from "../utils/xlsxUtils";
@@ -90,6 +97,7 @@ export default class Pos extends BaseController {
   private _sContractCode!: string;
   private _sPosId!: string;
   private _bP13nRegistered = false;
+  private _oContractDialog?: TableSelectDialog;
   private _oSkillsCache = new Map<string, SkillItem[]>();
   private _aSkillTypes: { codice: string; categoria: string; descrizione: string }[] = [];
 
@@ -103,6 +111,7 @@ export default class Pos extends BaseController {
     this.setModel(this._oModelSkills, "Skills");
 
     this.getRouter().getRoute("RoutePos")!.attachPatternMatched(this._onRouteMatched, this);
+    this.getRouter().getRoute("RoutePosNew")!.attachPatternMatched(this._onRouteMatched, this);
   }
 
   public onAfterRendering(): void {
@@ -143,8 +152,8 @@ export default class Pos extends BaseController {
 
   private async _onRouteMatched(oEvent: any): Promise<void> {
     const oArgs = oEvent.getParameter("arguments");
-    this._sContractCode = decodeURIComponent(oArgs.contractCode as string);
-    this._sPosId = decodeURIComponent(oArgs.posId as string);
+    this._sContractCode = oArgs.contractCode ? decodeURIComponent(oArgs.contractCode as string) : "";
+    this._sPosId = oArgs.posId ? decodeURIComponent(oArgs.posId as string) : "new";
 
     const bIsEdit = this._sPosId !== "new";
 
@@ -186,6 +195,12 @@ export default class Pos extends BaseController {
     const sDatore = (this._oModelPOS.getProperty("/datoreLavoro") as string) ?? "";
     const sMedico = (this._oModelPOS.getProperty("/medicocompetente") as string) ?? "";
     const sRls = (this._oModelPOS.getProperty("/rls") as string) ?? "";
+    const sContratto = (this._oModelPOS.getProperty("/contratto") as string) ?? "";
+
+    if (!sContratto.trim()) {
+      MessageBox.error(this.getText("msg_contract_required"));
+      return;
+    }
 
     if (!sDatore.trim() || !sMedico.trim() || !sRls.trim()) {
       MessageBox.error(this.getText("msg_mandatory_fields"));
@@ -251,7 +266,62 @@ export default class Pos extends BaseController {
   }
 
   public onBack(): void {
-    this.navTo("RouteContract", { contractCode: this._sContractCode });
+    this.getRouter().navTo("RoutePosList");
+  }
+
+  public onContractValueHelp(): void {
+    if (!this._oContractDialog) {
+      this._oContractDialog = new TableSelectDialog({
+        title: this.getText("lbl_select_contract"),
+        search: (oEvt: any) => this._filterContractDialog(oEvt.getParameter("value") as string),
+        liveChange: (oEvt: any) => this._filterContractDialog(oEvt.getParameter("value") as string),
+        confirm: (oEvt: any) => this._onContractSelected(oEvt),
+        columns: [
+          new Column({ header: new Label({ text: this.getText("lbl_act_code") }) }),
+          new Column({ header: new Label({ text: this.getText("lbl_contract_code") }) }),
+          new Column({ header: new Label({ text: this.getText("lbl_contract_title") }) }),
+          new Column({ header: new Label({ text: this.getText("lbl_sap_purchase_org_code") }) }),
+          new Column({ header: new Label({ text: this.getText("lbl_sap_purchase_group_code") }) }),
+        ],
+      });
+      this._oContractDialog.bindAggregation("items", {
+        path: "/Contratti",
+        template: new ColumnListItem({
+          cells: [
+            new Text({ text: "{codiceAtto}", wrapping: false }),
+            new Text({ text: "{codiceContratto}", wrapping: false }),
+            new Text({ text: "{titoloDelContratto}", wrapping: false }),
+            new Text({ text: "{codiceSAPOrganizzazioneAcquisti}", wrapping: false }),
+            new Text({ text: "{codiceSAPGruppoAcquisti}", wrapping: false }),
+          ],
+        }),
+      });
+      this.getView()!.addDependent(this._oContractDialog);
+    }
+    this._oContractDialog.open("");
+  }
+
+  private _filterContractDialog(sValue: string): void {
+    const oBinding = this._oContractDialog!.getBinding("items") as ODataListBinding;
+    if (!sValue) {
+      oBinding.filter([]);
+      return;
+    }
+    const oFilter = new Filter({
+      filters: [
+        new Filter("codiceContratto", FilterOperator.Contains, sValue),
+        new Filter("titoloDelContratto", FilterOperator.Contains, sValue),
+      ],
+      and: false,
+    });
+    oBinding.filter([oFilter]);
+  }
+
+  private _onContractSelected(oEvent: any): void {
+    const oItem = oEvent.getParameter("selectedItem");
+    if (!oItem) return;
+    const oRow = oItem.getBindingContext()!.getObject() as { codiceContratto: string };
+    this._oModelPOS.setProperty("/contratto", oRow.codiceContratto);
   }
 
   public onValidityDateChange(): void {

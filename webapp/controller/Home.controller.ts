@@ -1,15 +1,11 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import dateUtils from "../utils/dateUtils";
-import xlsxUtils from "../utils/xlsxUtils";
-import p13nDialogUtils from "../utils/p13nDialogUtils";
-import Table from "sap/m/Table";
+import entityUtils from "../utils/entityUtils";
 
-const DEFAULT_MODEL = {
-  count: 0,
-  sortCount: 0,
-  filterCount: 0,
+const DEFAULT_DASHBOARD = {
+  posInserted: 0,
+  posToInsert: 0,
 };
 
 /**
@@ -17,60 +13,45 @@ const DEFAULT_MODEL = {
  */
 export default class Home extends BaseController {
   public dateUtils = dateUtils;
-  private _oModelPos!: JSONModel;
+  private _oModelDashboard!: JSONModel;
 
   public onInit(): void {
-    this._oModelPos = new JSONModel(structuredClone(DEFAULT_MODEL));
-    this.setModel(this._oModelPos, "Pos");
+    this._oModelDashboard = new JSONModel(structuredClone(DEFAULT_DASHBOARD));
+    this.setModel(this._oModelDashboard, "Dashboard");
 
     this.getRouter().getRoute("RouteHome")!.attachPatternMatched(this._onRouteMatched, this);
   }
 
-  public onAfterRendering(): void {
-    const oTable = this.byId("tblPos") as Table;
-    if (oTable) {
-      p13nDialogUtils.register(oTable, (s, f) => {
-        this._oModelPos.setProperty("/sortCount", s);
-        this._oModelPos.setProperty("/filterCount", f);
-      });
+  private async _onRouteMatched(): Promise<void> {
+    try {
+      const [oPos, oContracts] = await Promise.all([
+        this.getEntitySet<{ contratto: string }>("/PosTestataSet"),
+        this.getEntitySet<{ codiceContratto: string }>("/Contratti"),
+      ]);
+
+      const aContractsWithPos = new Set(oPos.data.map((p) => p.contratto));
+      const iToInsert = oContracts.data.filter(
+        (c) => !aContractsWithPos.has(c.codiceContratto)
+      ).length;
+
+      this._oModelDashboard.setProperty("/posInserted", oPos.count);
+      this._oModelDashboard.setProperty("/posToInsert", iToInsert);
+    } catch (e) {
+      entityUtils.handleError(e as Error);
     }
   }
 
-  private async _onRouteMatched(): Promise<void> {
-    const oTable = this.byId("tblPos") as Table;
-    const oBinding = oTable.getBinding("items") as ODataListBinding;
-    oBinding.attachEventOnce("dataReceived", async () => {
-      const iCount = await oBinding.getHeaderContext()!.requestProperty("$count");
-      this._oModelPos.setProperty("/count", iCount);
-    });
+  public onNewPos(): void {
+    this.getRouter().navTo("RoutePosNew");
   }
 
-  public async onReset(): Promise<void> {
-    const oTable = this.byId("tblPos") as Table;
-    await p13nDialogUtils.reset(oTable);
-    this._oModelPos.setProperty("/sortCount", 0);
-    this._oModelPos.setProperty("/filterCount", 0);
-  }
-
-  public onSettings(oEvent: any): void {
-    const oTable = this.byId("tblPos") as Table;
-    const sPanel = oEvent.getSource().data("panel") as "Columns" | "Sorter" | "Filter";
-    p13nDialogUtils.open(oTable, sPanel, oEvent.getSource());
-  }
-
-  public async onDownload(): Promise<void> {
-    const oTable = this.byId("tblPos") as Table;
-    const oBinding = oTable.getBinding("items") as ODataListBinding;
-    const aContexts = await oBinding.requestContexts(0, Infinity);
-    const aData = aContexts.map((ctx) => ctx.getObject());
-    const aColumns = xlsxUtils.getColumnsFromTable(this, oTable);
-    await xlsxUtils.generateSpreadsheet(aColumns, aData, "GestionePOS.xlsx");
-  }
-
-  public onDetail(oEvent: any): void {
+  public onOpenPos(oEvent: any): void {
     const oContext = oEvent.getSource().getBindingContext();
     if (!oContext) return;
-    const oRow = oContext.getObject() as { codiceContratto: string };
-    this.navTo("RouteContract", { contractCode: oRow.codiceContratto });
+    const oRow = oContext.getObject() as { idPos: string; contratto: string };
+    this.navTo("RoutePos", {
+      contractCode: oRow.contratto,
+      posId: oRow.idPos,
+    });
   }
 }

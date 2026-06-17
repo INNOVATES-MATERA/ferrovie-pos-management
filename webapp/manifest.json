@@ -67,7 +67,8 @@
         "sap.ui.table": {},
         "sap.ui.layout": {},
         "sap.ui.export": {},
-        "sap.ui.comp": {}
+        "sap.ui.comp": {},
+        "sap.tnt": {}
       }
     },
     "contentDensities": {
@@ -120,10 +121,17 @@
           ]
         },
         {
-          "name": "RouteContract",
-          "pattern": "contract/{contractCode}/pos",
+          "name": "RoutePosNew",
+          "pattern": "pos/new",
           "target": [
-            "TargetContract"
+            "TargetPos"
+          ]
+        },
+        {
+          "name": "RoutePosList",
+          "pattern": "pos",
+          "target": [
+            "TargetPosList"
           ]
         },
         {
@@ -139,9 +147,9 @@
           "id": "Home",
           "name": "Home"
         },
-        "TargetContract": {
-          "id": "Contract",
-          "name": "Contract"
+        "TargetPosList": {
+          "id": "PosList",
+          "name": "PosList"
         },
         "TargetPos": {
           "id": "Pos",
