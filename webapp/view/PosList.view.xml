@@ -1,6 +1,7 @@
 <mvc:View controllerName="posmanagement.controller.PosList"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:f="sap.f"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 
@@ -213,8 +214,11 @@
                                         wrapping="false"/>
                                     <Text text="{ruoloImpresa}"
                                         wrapping="false"/>
-                                    <Text text="{statoPos}"
-                                        wrapping="false"/>
+                                    <ObjectStatus text="{statoPos}" class="posStatusBadge">
+                                        <customData>
+                                            <core:CustomData key="stato" value="{statoPos}" writeToDom="true"/>
+                                        </customData>
+                                    </ObjectStatus>
                                     <Text text="{datoreLavoro}"
                                         wrapping="false"/>
                                     <Text text="{rspp}"

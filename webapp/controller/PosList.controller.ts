@@ -19,6 +19,7 @@ const DEFAULT_MODEL = {
  */
 export default class PosList extends BaseController {
   public dateUtils = dateUtils;
+
   private _oModelPos!: JSONModel;
   private _bP13nRegistered = false;
 

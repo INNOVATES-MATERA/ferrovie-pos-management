@@ -244,7 +244,11 @@ export default class Pos extends BaseController {
 
       if (bIsEdit) {
         await this.updateEntity("/PosTestataSet", { idPos: sPosId }, oPosPayload);
-        MessageBox.success(this.getText("msg_save_success"));
+        MessageBox.success(this.getText("msg_save_success"), {
+          onClose: () => {
+            this.getRouter().navTo("RoutePosList");
+          },
+        });
       } else {
         await this.createEntity("/PosTestataSet", oPosPayload);
         MessageBox.success(this.getText("msg_save_success"), {

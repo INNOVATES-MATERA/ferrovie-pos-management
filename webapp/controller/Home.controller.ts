@@ -14,6 +14,7 @@ const DEFAULT_DASHBOARD = {
  */
 export default class Home extends BaseController {
   public dateUtils = dateUtils;
+
   private _oModelDashboard!: JSONModel;
 
   public onInit(): void {
