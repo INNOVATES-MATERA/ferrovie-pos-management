@@ -278,6 +278,7 @@
                                                 width="12rem">
                                                 <header>
                                                     <Label text="{i18n>lbl_department}"
+                                                        required="true"
                                                         wrapping="false"/>
                                                 </header>
                                             </Column>
@@ -309,7 +310,8 @@
                                                     <Input value="{Staff>cognome}"
                                                         maxLength="50"/>
                                                     <Input value="{Staff>reparto}"
-                                                        maxLength="50"/>
+                                                        maxLength="50"
+                                                        required="true"/>
                                                     <Input value="{Staff>mansione}"
                                                         maxLength="50"/>
                                                     <Button icon="sap-icon://permission"

@@ -1,12 +1,16 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Table from "sap/m/Table";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
 import dateUtils from "../utils/dateUtils";
 import entityUtils from "../utils/entityUtils";
 
 const DEFAULT_DASHBOARD = {
   posInserted: 0,
   posToInsert: 0,
+  posScaduti: 0,
+  posSuperati: 0,
 };
 
 /**
@@ -27,9 +31,11 @@ export default class Home extends BaseController {
   private async _onRouteMatched(): Promise<void> {
     (this.byId("tblLatestPos") as Table).getBinding("items")?.refresh();
     try {
-      const [oPos, oContracts] = await Promise.all([
+      const [oPos, oContracts, oScaduti, oSuperati] = await Promise.all([
         this.getEntitySet<{ contratto: string }>("/PosTestataSet"),
         this.getEntitySet<{ codiceContratto: string }>("/Contratti"),
+        this.getEntitySet("/PosTestataSet", { filters: [new Filter("statoPos", FilterOperator.EQ, "Scaduto")], top: 0 }),
+        this.getEntitySet("/PosTestataSet", { filters: [new Filter("statoPos", FilterOperator.EQ, "Superato")], top: 0 }),
       ]);
 
       const aContractsWithPos = new Set(oPos.data.map((p) => p.contratto));
@@ -39,6 +45,8 @@ export default class Home extends BaseController {
 
       this._oModelDashboard.setProperty("/posInserted", oPos.count);
       this._oModelDashboard.setProperty("/posToInsert", iToInsert);
+      this._oModelDashboard.setProperty("/posScaduti", oScaduti.count);
+      this._oModelDashboard.setProperty("/posSuperati", oSuperati.count);
     } catch (e) {
       entityUtils.handleError(e as Error);
     }

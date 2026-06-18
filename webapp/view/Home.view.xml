@@ -41,6 +41,20 @@
                                 number="{Dashboard>/posToInsert}"/>
                         </f:header>
                     </f:Card>
+                    <f:Card class="sapUiTinyMargin pos-stat-card"
+                        width="20rem">
+                        <f:header>
+                            <card:NumericHeader title="{i18n>card_pos_scaduti}"
+                                number="{Dashboard>/posScaduti}"/>
+                        </f:header>
+                    </f:Card>
+                    <f:Card class="sapUiTinyMargin pos-stat-card"
+                        width="20rem">
+                        <f:header>
+                            <card:NumericHeader title="{i18n>card_pos_superati}"
+                                number="{Dashboard>/posSuperati}"/>
+                        </f:header>
+                    </f:Card>
                 </HBox>
 
                 <!-- ULTIMI POS AGGIORNATI -->

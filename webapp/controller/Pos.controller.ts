@@ -207,6 +207,12 @@ export default class Pos extends BaseController {
       return;
     }
 
+    const aStaff = this._oModelStaff.getProperty("/data") as { reparto: string }[];
+    if (aStaff.some((p) => !p.reparto?.trim())) {
+      MessageBox.error(this.getText("msg_reparto_required"));
+      return;
+    }
+
     this._flushOpenSkillsToCache();
 
     const aSkillItems = (this._oModelSkills.getProperty("/items") as SkillItem[]) || [];
