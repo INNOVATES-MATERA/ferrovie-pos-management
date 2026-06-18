@@ -70,7 +70,10 @@
                                         <form:fields>
                                             <Input id="inpContractorCompany"
                                                 value="{POS>/impresaAppaltatrice}"
-                                                maxLength="100"/>
+                                                showValueHelp="true"
+                                                valueHelpRequest="onImpresaValueHelp"
+                                                editable="{= !!${POS>/contratto} }"
+                                                valueHelpOnly="true" />
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_company_role}">
@@ -78,7 +81,8 @@
                                             <Select id="selCompanyRole"
                                                 selectedKey="{POS>/ruoloImpresa}"
                                                 items="{path: 'CompanyRole>/', templateShareable: false}">
-                                                <core:Item key="{CompanyRole>key}" text="{CompanyRole>text}"/>
+                                                <core:Item key="{CompanyRole>key}"
+                                                    text="{CompanyRole>text}"/>
                                             </Select>
                                         </form:fields>
                                     </form:FormElement>
@@ -144,7 +148,8 @@
                                             <Select id="selStatoPos"
                                                 selectedKey="{POS>/statoPos}"
                                                 items="{path: 'PosStatus>/', templateShareable: false}">
-                                                <core:Item key="{PosStatus>key}" text="{PosStatus>text}"/>
+                                                <core:Item key="{PosStatus>key}"
+                                                    text="{PosStatus>text}"/>
                                             </Select>
                                         </form:fields>
                                     </form:FormElement>

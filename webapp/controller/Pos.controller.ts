@@ -95,6 +95,7 @@ export default class Pos extends BaseController {
   private _sPosId!: string;
   private _bP13nRegistered = false;
   private _oContractDialog?: TableSelectDialog;
+  private _oImpresaDialog?: TableSelectDialog;
   private _oSkillsCache = new Map<string, SkillItem[]>();
   private _aSkillTypes: { codice: string; categoria: string; descrizione: string }[] = [];
 
@@ -316,7 +317,99 @@ export default class Pos extends BaseController {
     const oItem = oEvent.getParameter("selectedItem");
     if (!oItem) return;
     const oRow = oItem.getBindingContext()!.getObject() as { codiceContratto: string };
+    const sOldContratto = this._oModelPOS.getProperty("/contratto") as string;
+    if (sOldContratto !== oRow.codiceContratto) {
+      this._oModelPOS.setProperty("/impresaAppaltatrice", "");
+    }
     this._oModelPOS.setProperty("/contratto", oRow.codiceContratto);
+  }
+
+  public async onImpresaValueHelp(): Promise<void> {
+    const sContratto = this._oModelPOS.getProperty("/contratto") as string;
+    if (!sContratto) return;
+
+    const [oRtiResult, oSubResult] = await Promise.all([
+      this.getEntitySet<{ RagioneSociale: string; PartitaIVA: string; CodiceFiscale: string }>(
+        "/ComposizioniRTI_RTP",
+        { filters: [new Filter("ContrattoID", FilterOperator.EQ, sContratto)] }
+      ),
+      this.getEntitySet<{ impresaSubappaltatrice: string; partitaIvaCf: string }>(
+        "/Subappalti",
+        { filters: [new Filter("contratto", FilterOperator.EQ, sContratto)] }
+      ),
+    ]);
+
+    const aRtiNorm = oRtiResult.data.map((r) => ({
+      ragioneSociale: r.RagioneSociale ?? "",
+      partitaIva: r.PartitaIVA ?? "",
+      cf: r.CodiceFiscale ?? "",
+    }));
+    const aSubNorm = oSubResult.data.map((s) => ({
+      ragioneSociale: s.impresaSubappaltatrice ?? "",
+      partitaIva: s.partitaIvaCf ?? "",
+      cf: s.partitaIvaCf ?? "",
+    }));
+
+    const mSeen = new Set<string>();
+    const aAll = [...aRtiNorm, ...aSubNorm].filter((item) => {
+      if (!item.ragioneSociale || mSeen.has(item.ragioneSociale)) return false;
+      mSeen.add(item.ragioneSociale);
+      return true;
+    });
+
+    if (!this._oImpresaDialog) {
+      this._oImpresaDialog = new TableSelectDialog({
+        title: this.getText("lbl_select_impresa"),
+        search: (oEvt: any) => this._filterImpresaDialog(oEvt.getParameter("value") as string),
+        liveChange: (oEvt: any) => this._filterImpresaDialog(oEvt.getParameter("value") as string),
+        confirm: (oEvt: any) => this._onImpresaSelected(oEvt),
+        columns: [
+          new Column({ header: new Label({ text: this.getText("lbl_ragione_sociale") }) }),
+          new Column({ header: new Label({ text: this.getText("lbl_partita_iva") }) }),
+          new Column({ header: new Label({ text: this.getText("lbl_codice_fiscale") }) }),
+        ],
+      });
+      this._oImpresaDialog.setModel(new JSONModel({ items: [] }), "ImpresaList");
+      this.getView()!.addDependent(this._oImpresaDialog);
+    }
+
+    (this._oImpresaDialog.getModel("ImpresaList") as JSONModel).setProperty("/items", aAll);
+    this._oImpresaDialog.bindAggregation("items", {
+      path: "ImpresaList>/items",
+      template: new ColumnListItem({
+        cells: [
+          new Text({ text: "{ImpresaList>ragioneSociale}", wrapping: false }),
+          new Text({ text: "{ImpresaList>partitaIva}", wrapping: false }),
+          new Text({ text: "{ImpresaList>cf}", wrapping: false }),
+        ],
+      }),
+    });
+    this._oImpresaDialog.open("");
+  }
+
+  private _filterImpresaDialog(sValue: string): void {
+    const oBinding = this._oImpresaDialog!.getBinding("items") as ODataListBinding;
+    if (!sValue) {
+      oBinding.filter([]);
+      return;
+    }
+    oBinding.filter([
+      new Filter({
+        filters: [
+          new Filter({ path: "ragioneSociale", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+          new Filter({ path: "partitaIva", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+          new Filter({ path: "cf", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+        ],
+        and: false,
+      }),
+    ]);
+  }
+
+  private _onImpresaSelected(oEvent: any): void {
+    const oItem = oEvent.getParameter("selectedItem");
+    if (!oItem) return;
+    const oRow = oItem.getBindingContext("ImpresaList")!.getObject() as { ragioneSociale: string };
+    this._oModelPOS.setProperty("/impresaAppaltatrice", oRow.ragioneSociale);
   }
 
   public onSkillDateChange(oEvent: Event): void {
