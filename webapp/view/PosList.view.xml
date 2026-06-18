@@ -101,6 +101,14 @@
                                 </header>
                             </Column>
 
+                            <Column app:p13nKey="statoPos"
+                                width="8rem">
+                                <header>
+                                    <Label text="{i18n>lbl_pos_status}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
                             <Column app:p13nKey="datoreLavoro"
                                 width="12rem"
                                 visible="false">
@@ -146,7 +154,7 @@
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="capocantiere"
+                            <Column app:p13nKey="direttoreTecnico"
                                 width="10rem"
                                 visible="false">
                                 <header>
@@ -205,6 +213,8 @@
                                         wrapping="false"/>
                                     <Text text="{ruoloImpresa}"
                                         wrapping="false"/>
+                                    <Text text="{statoPos}"
+                                        wrapping="false"/>
                                     <Text text="{datoreLavoro}"
                                         wrapping="false"/>
                                     <Text text="{rspp}"
@@ -215,7 +225,7 @@
                                         wrapping="false"/>
                                     <Text text="{direttoreCantiere}"
                                         wrapping="false"/>
-                                    <Text text="{capocantiere}"
+                                    <Text text="{direttoreTecnico}"
                                         wrapping="false"/>
                                     <Text text="{revisione}"
                                         wrapping="false"/>

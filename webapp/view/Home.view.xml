@@ -52,7 +52,7 @@
                         </OverflowToolbar>
                     </headerToolbar>
                     <Table id="tblLatestPos"
-                        items="{path: '/PosTestataSet', parameters: {$count: true, $orderby: 'createdAt desc', $select: 'idPos,contratto,impresaAppaltatrice,ruoloImpresa,dataRedazione,createdAt'}, length: 5}"
+                        items="{path: '/PosTestataSet', parameters: {$count: true, $orderby: 'createdAt desc', $select: 'idPos,contratto,impresaAppaltatrice,ruoloImpresa,statoPos,dataRedazione,createdAt'}, length: 5}"
                         mode="None"
                         fixedLayout="true"
                         growing="false"
@@ -77,6 +77,13 @@
                                 width="10rem">
                                 <header>
                                     <Label text="{i18n>lbl_company_role}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+                            <Column app:p13nKey="statoPos"
+                                width="8rem">
+                                <header>
+                                    <Label text="{i18n>lbl_pos_status}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -105,6 +112,8 @@
                                     <Text text="{impresaAppaltatrice}"
                                         wrapping="false"/>
                                     <Text text="{ruoloImpresa}"
+                                        wrapping="false"/>
+                                    <Text text="{statoPos}"
                                         wrapping="false"/>
                                     <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
                                         wrapping="false"/>

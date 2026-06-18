@@ -9,9 +9,15 @@ export function createDeviceModel () {
 
 export function createPosStatusModel(): JSONModel {
     return new JSONModel([
-        { key: "draft",      text: "In bozza" },
-        { key: "toApprove",  text: "Da approvare" },
-        { key: "approved",   text: "Approvato" },
-        { key: "closed",     text: "Chiuso" },
+        { key: "Valido",    text: "Valido" },
+        { key: "Superato",  text: "Superato" },
+        { key: "Scaduto",   text: "Scaduto" },
+    ]);
+}
+
+export function createCompanyRoleModel(): JSONModel {
+    return new JSONModel([
+        { key: "Appaltatrice",    text: "Appaltatrice" },
+        { key: "Subappaltatrice", text: "Subappaltatrice" },
     ]);
 }

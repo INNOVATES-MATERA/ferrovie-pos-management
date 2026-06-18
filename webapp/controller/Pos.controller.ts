@@ -1,5 +1,6 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
+import { createPosStatusModel, createCompanyRoleModel } from "../model/models";
 import MessageBox from "sap/m/MessageBox";
 import Table from "sap/m/Table";
 import ColumnListItem from "sap/m/ColumnListItem";
@@ -27,17 +28,13 @@ const DEFAULT_POS = {
   impresaAppaltatrice: "",
   ruoloImpresa: "",
   codiceContrattoSuperiore: "",
-  committente: "",
+  statoPos: "",
   datoreLavoro: "",
   rspp: "",
   rls: "",
   medicocompetente: "",
-  direttoreLavori: "",
   direttoreCantiere: "",
-  capocantiere: "",
-  preposto: "",
-  addettiPrimoSoccorso: "",
-  addettiPrimoAntincendio: "",
+  direttoreTecnico: "",
   revisione: "",
   dataRedazione: "",
   dataRicezioneCruscotto: "",
@@ -109,6 +106,8 @@ export default class Pos extends BaseController {
     this.setModel(this._oModelPOS, "POS");
     this.setModel(this._oModelStaff, "Staff");
     this.setModel(this._oModelSkills, "Skills");
+    this.setModel(createPosStatusModel(), "PosStatus");
+    this.setModel(createCompanyRoleModel(), "CompanyRole");
 
     this.getRouter().getRoute("RoutePos")!.attachPatternMatched(this._onRouteMatched, this);
     this.getRouter().getRoute("RoutePosNew")!.attachPatternMatched(this._onRouteMatched, this);
@@ -224,17 +223,13 @@ export default class Pos extends BaseController {
         impresaAppaltatrice: this._oModelPOS.getProperty("/impresaAppaltatrice"),
         ruoloImpresa: this._oModelPOS.getProperty("/ruoloImpresa"),
         codiceContrattoSuperiore: this._oModelPOS.getProperty("/codiceContrattoSuperiore"),
-        committente: this._oModelPOS.getProperty("/committente"),
+        statoPos: this._oModelPOS.getProperty("/statoPos"),
         datoreLavoro: sDatore,
         rspp: this._oModelPOS.getProperty("/rspp"),
         rls: sRls,
         medicocompetente: sMedico,
-        direttoreLavori: this._oModelPOS.getProperty("/direttoreLavori"),
         direttoreCantiere: this._oModelPOS.getProperty("/direttoreCantiere"),
-        capocantiere: this._oModelPOS.getProperty("/capocantiere"),
-        preposto: this._oModelPOS.getProperty("/preposto"),
-        addettiPrimoSoccorso: this._oModelPOS.getProperty("/addettiPrimoSoccorso"),
-        addettiPrimoAntincendio: this._oModelPOS.getProperty("/addettiPrimoAntincendio"),
+        direttoreTecnico: this._oModelPOS.getProperty("/direttoreTecnico"),
         revisione: parseInt(this._oModelPOS.getProperty("/revisione") || "0", 10),
         dataRedazione: this._oModelPOS.getProperty("/dataRedazione") || null,
         dataRicezioneCruscotto: this._oModelPOS.getProperty("/dataRicezioneCruscotto")

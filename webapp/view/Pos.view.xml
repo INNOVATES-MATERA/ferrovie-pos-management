@@ -75,9 +75,11 @@
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_company_role}">
                                         <form:fields>
-                                            <Input id="inpCompanyRole"
-                                                value="{POS>/ruoloImpresa}"
-                                                maxLength="50"/>
+                                            <Select id="selCompanyRole"
+                                                selectedKey="{POS>/ruoloImpresa}"
+                                                items="{path: 'CompanyRole>/', templateShareable: false}">
+                                                <core:Item key="{CompanyRole>key}" text="{CompanyRole>text}"/>
+                                            </Select>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_employer}">
@@ -127,7 +129,7 @@
                                     <form:FormElement label="{i18n>lbl_site_manager}">
                                         <form:fields>
                                             <Input id="inpSiteManager"
-                                                value="{POS>/capocantiere}"
+                                                value="{POS>/direttoreTecnico}"
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
@@ -137,6 +139,15 @@
                             <!-- Container 3: date -->
                             <form:FormContainer>
                                 <form:formElements>
+                                    <form:FormElement label="{i18n>lbl_pos_status}">
+                                        <form:fields>
+                                            <Select id="selStatoPos"
+                                                selectedKey="{POS>/statoPos}"
+                                                items="{path: 'PosStatus>/', templateShareable: false}">
+                                                <core:Item key="{PosStatus>key}" text="{PosStatus>text}"/>
+                                            </Select>
+                                        </form:fields>
+                                    </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_revision}">
                                         <form:fields>
                                             <Input id="inpRevision"

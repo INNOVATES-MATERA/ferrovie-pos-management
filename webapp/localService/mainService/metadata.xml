@@ -52,6 +52,17 @@
                     <NavigationPropertyBinding Path="tipoAbilitazione" Target="AnagraficaAbilitazioniSet"/>
                 </EntitySet>
                 <EntitySet Name="AnagraficaAbilitazioniSet" EntityType="AttiService.AnagraficaAbilitazioniSet"/>
+                <EntitySet Name="Subappalti" EntityType="AttiService.Subappalti">
+                    <NavigationPropertyBinding Path="integrazioni" Target="Integrazioni"/>
+                    <NavigationPropertyBinding Path="controlli" Target="AssociazioneControlli"/>
+                </EntitySet>
+                <EntitySet Name="AssociazioneControlli" EntityType="AttiService.AssociazioneControlli">
+                    <NavigationPropertyBinding Path="subappalto" Target="Subappalti"/>
+                </EntitySet>
+                <EntitySet Name="Integrazioni" EntityType="AttiService.Integrazioni">
+                    <NavigationPropertyBinding Path="subappalto" Target="Subappalti"/>
+                </EntitySet>
+                <EntitySet Name="AnagraficaControlli" EntityType="AttiService.AnagraficaControlli"/>
                 <EntitySet Name="AnagraficaSoa" EntityType="AttiService.AnagraficaSoa"/>
                 <ActionImport Name="deleteByAttoID" Action="AttiService.deleteByAttoID"/>
                 <ActionImport Name="deleteByContrattoID" Action="AttiService.deleteByContrattoID"/>
@@ -424,22 +435,22 @@
                 <Key>
                     <PropertyRef Name="idPos"/>
                 </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
                 <Property Name="idPos" Type="Edm.String" MaxLength="20" Nullable="false"/>
                 <Property Name="contratto" Type="Edm.String" MaxLength="50"/>
                 <Property Name="impresaAppaltatrice" Type="Edm.String" MaxLength="100"/>
                 <Property Name="ruoloImpresa" Type="Edm.String" MaxLength="50"/>
                 <Property Name="codiceContrattoSuperiore" Type="Edm.String" MaxLength="50"/>
-                <Property Name="committente" Type="Edm.String" MaxLength="100"/>
+                <Property Name="statoPos" Type="Edm.String" MaxLength="50"/>
                 <Property Name="datoreLavoro" Type="Edm.String" MaxLength="100" Nullable="false"/>
                 <Property Name="medicocompetente" Type="Edm.String" MaxLength="100" Nullable="false"/>
                 <Property Name="rls" Type="Edm.String" MaxLength="100" Nullable="false"/>
                 <Property Name="rspp" Type="Edm.String" MaxLength="100"/>
-                <Property Name="direttoreLavori" Type="Edm.String" MaxLength="100"/>
+                <Property Name="direttoreTecnico" Type="Edm.String" MaxLength="100"/>
                 <Property Name="direttoreCantiere" Type="Edm.String" MaxLength="100"/>
-                <Property Name="capocantiere" Type="Edm.String" MaxLength="100"/>
-                <Property Name="preposto" Type="Edm.String" MaxLength="100"/>
-                <Property Name="addettiPrimoSoccorso" Type="Edm.String" MaxLength="255"/>
-                <Property Name="addettiPrimoAntincendio" Type="Edm.String" MaxLength="255"/>
                 <Property Name="revisione" Type="Edm.Int32" DefaultValue="0"/>
                 <Property Name="dataRedazione" Type="Edm.Date"/>
                 <Property Name="dataRicezioneCruscotto" Type="Edm.DateTimeOffset"/>
@@ -455,6 +466,10 @@
                     <PropertyRef Name="posTestata_idPos"/>
                     <PropertyRef Name="idDipendente"/>
                 </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
                 <NavigationProperty Name="posTestata" Type="AttiService.PosTestataSet" Partner="personale">
                     <ReferentialConstraint Property="posTestata_idPos" ReferencedProperty="idPos"/>
                 </NavigationProperty>
@@ -474,6 +489,10 @@
                     <PropertyRef Name="personale_idDipendente"/>
                     <PropertyRef Name="tipoAbilitazione_codice"/>
                 </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
                 <NavigationProperty Name="personale" Type="AttiService.PosDettaglioPersonaleSet" Partner="abilitazioni">
                     <ReferentialConstraint Property="personale_posTestata_idPos" ReferencedProperty="posTestata_idPos"/>
                     <ReferentialConstraint Property="personale_idDipendente" ReferencedProperty="idDipendente"/>
@@ -492,9 +511,92 @@
                 <Key>
                     <PropertyRef Name="codice"/>
                 </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
                 <Property Name="codice" Type="Edm.String" MaxLength="20" Nullable="false"/>
                 <Property Name="categoria" Type="Edm.String" MaxLength="20"/>
                 <Property Name="descrizione" Type="Edm.String" MaxLength="100"/>
+            </EntityType>
+            <EntityType Name="Subappalti">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="tipologia" Type="Edm.String" MaxLength="50"/>
+                <Property Name="statoSubappalto" Type="Edm.String" MaxLength="50"/>
+                <Property Name="gestoreSubappalto" Type="Edm.String" MaxLength="100"/>
+                <Property Name="firmatarioRfi" Type="Edm.String" MaxLength="100"/>
+                <Property Name="impresaAppaltatriceMandataria" Type="Edm.String" MaxLength="150"/>
+                <Property Name="impresaSubappaltatrice" Type="Edm.String" MaxLength="150"/>
+                <Property Name="partitaIvaCf" Type="Edm.String" MaxLength="16"/>
+                <Property Name="istanza" Type="Edm.Date"/>
+                <Property Name="dataContrattoSub" Type="Edm.Date"/>
+                <Property Name="oggetto" Type="Edm.String" MaxLength="500"/>
+                <Property Name="importoPresuntoIniziale" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <Property Name="aq" Type="Edm.String" MaxLength="50"/>
+                <Property Name="contratto" Type="Edm.String" MaxLength="50"/>
+                <Property Name="dataInizioContratto" Type="Edm.Date"/>
+                <Property Name="dataFineContratto" Type="Edm.Date"/>
+                <Property Name="caCigDer" Type="Edm.String" MaxLength="50"/>
+                <Property Name="tipologiaCategoria" Type="Edm.String" MaxLength="50"/>
+                <Property Name="tipoCategoria" Type="Edm.String" MaxLength="50"/>
+                <NavigationProperty Name="integrazioni" Type="Collection(AttiService.Integrazioni)" Partner="subappalto">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="controlli" Type="Collection(AttiService.AssociazioneControlli)" Partner="subappalto">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="AssociazioneControlli">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <NavigationProperty Name="subappalto" Type="AttiService.Subappalti" Partner="controlli">
+                    <ReferentialConstraint Property="subappalto_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="subappalto_ID" Type="Edm.Int32"/>
+                <Property Name="codiceControllo" Type="Edm.String" MaxLength="50"/>
+                <Property Name="stato" Type="Edm.String" MaxLength="100"/>
+                <Property Name="validoDa" Type="Edm.Date"/>
+                <Property Name="validoA" Type="Edm.Date"/>
+            </EntityType>
+            <EntityType Name="Integrazioni">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <NavigationProperty Name="subappalto" Type="AttiService.Subappalti" Partner="integrazioni">
+                    <ReferentialConstraint Property="subappalto_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="subappalto_ID" Type="Edm.Int32"/>
+                <Property Name="tipoCategoria" Type="Edm.String" MaxLength="50"/>
+                <Property Name="importo" Type="Edm.Decimal" Precision="15" Scale="2"/>
+            </EntityType>
+            <EntityType Name="AnagraficaControlli">
+                <Key>
+                    <PropertyRef Name="codice"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="codice" Type="Edm.String" MaxLength="50" Nullable="false"/>
+                <Property Name="descrizione" Type="Edm.String" MaxLength="150"/>
             </EntityType>
             <EntityType Name="AnagraficaSoa">
                 <Key>
@@ -1075,6 +1177,34 @@
                 <Annotation Term="Core.Description" String="User's unique ID"/>
                 <Annotation Term="Common.Label" String="Changed By"/>
             </Annotations>
+            <Annotations Target="AttiService.PosTestataSet/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosTestataSet/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosTestataSet/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosTestataSet/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
             <Annotations Target="AttiService.PosTestataSet/datoreLavoro">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
@@ -1083,6 +1213,211 @@
             </Annotations>
             <Annotations Target="AttiService.PosTestataSet/rls">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioPersonaleSet/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioPersonaleSet/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioPersonaleSet/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioPersonaleSet/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioAbilitazioniSet/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioAbilitazioniSet/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioAbilitazioniSet/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.PosDettaglioAbilitazioniSet/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaAbilitazioniSet/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaAbilitazioniSet/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaAbilitazioniSet/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaAbilitazioniSet/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.Subappalti/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.Subappalti/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.Subappalti/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.Subappalti/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.Subappalti/ID">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="AttiService.AssociazioneControlli/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="AttiService.AssociazioneControlli/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.AssociazioneControlli/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.AssociazioneControlli/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.AssociazioneControlli/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.Integrazioni/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="AttiService.Integrazioni/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.Integrazioni/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.Integrazioni/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.Integrazioni/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaControlli/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaControlli/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaControlli/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="AttiService.AnagraficaControlli/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
             </Annotations>
         </Schema>
     </edmx:DataServices>
