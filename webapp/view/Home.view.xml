@@ -26,14 +26,14 @@
                 <!-- CARDS -->
                 <HBox wrap="Wrap"
                     class="sapUiSmallMarginBottom">
-                    <f:Card class="sapUiTinyMargin"
+                    <f:Card class="sapUiTinyMargin pos-stat-card"
                         width="20rem">
                         <f:header>
                             <card:NumericHeader title="{i18n>card_pos_inserted}"
                                 number="{Dashboard>/posInserted}"/>
                         </f:header>
                     </f:Card>
-                    <f:Card class="sapUiTinyMargin"
+                    <f:Card class="sapUiTinyMargin pos-stat-card"
                         width="20rem">
                         <f:header>
                             <card:NumericHeader title="{i18n>card_pos_to_insert}"

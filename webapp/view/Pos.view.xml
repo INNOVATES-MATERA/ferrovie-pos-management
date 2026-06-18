@@ -148,7 +148,8 @@
                                             <DatePicker id="dpDraftDate"
                                                 value="{POS>/dataRedazione}"
                                                 valueFormat="yyyy-MM-dd"
-                                                displayFormat="dd/MM/yyyy"/>
+                                                displayFormat="dd/MM/yyyy"
+                                                placeholder=" "/>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_reception_date}">
@@ -156,7 +157,8 @@
                                             <DatePicker id="dpReceptionDate"
                                                 value="{POS>/dataRicezioneCruscotto}"
                                                 valueFormat="yyyy-MM-dd"
-                                                displayFormat="dd/MM/yyyy"/>
+                                                displayFormat="dd/MM/yyyy"
+                                                placeholder=" "/>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_link}">
@@ -363,12 +365,14 @@
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
+                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
+                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                 </cells>
                                                             </ColumnListItem>
@@ -421,12 +425,14 @@
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
+                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
+                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                 </cells>
                                                             </ColumnListItem>
