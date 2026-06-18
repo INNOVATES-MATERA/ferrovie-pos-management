@@ -1,0 +1,27 @@
+/* ── Vista: PosList ── */
+
+.pagePosList .sapFDynamicPageTitle {
+  background-color: #90C4D4;
+  border-bottom: 3px solid #00617A;
+}
+
+.pagePosList .sapFDynamicPageContent {
+  background-color: #dceef5 !important;
+}
+
+/* Pulsante "Nuovo POS" nella PosList */
+.pagePosList .sapFDynamicPageTitle .sapMBtnEmphasized,
+.pagePosList .sapFDynamicPageTitle .sapMBtnEmphasized:hover {
+  background-color: #00617A !important;
+  border-color: #004457 !important;
+  color: #ffffff !important;
+}
+
+.pagePosList .sapFDynamicPageTitle .sapMBtnEmphasized:hover {
+  background-color: #004457 !important;
+}
+
+.pagePosList .sapFDynamicPageTitle .sapMBtnEmphasized .sapMBtnIcon,
+.pagePosList .sapFDynamicPageTitle .sapMBtnEmphasized .sapMBtnText {
+  color: #ffffff !important;
+}

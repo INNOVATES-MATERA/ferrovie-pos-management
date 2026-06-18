@@ -8,6 +8,17 @@
   background: var(--sapShellColor) !important;
 }
 
+/* Pulsante hamburger menu: icona e testo bianchi sull'header scuro */
+.sapUiShellHead .sapMBtn .sapMBtnIcon,
+.sapUiShellHead .sapMBtnTransparent,
+.sapUiShellHead .sapMBtnTransparent .sapMBtnIcon,
+.sapTntToolHeader .sapMBtn .sapMBtnIcon,
+.sapTntToolHeader .sapMBtnTransparent .sapMBtnIcon {
+  color: #ffffff !important;
+}
+
+
+
 .sapMPanel,
 .sapMObjectHeader {
   box-shadow: var(--pos-card-shadow);

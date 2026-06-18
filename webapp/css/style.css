@@ -1,8 +1,9 @@
 @import "./tokens.css";
 @import "./components.css";
 @import "./table.css";
-
-/* Enter your custom styles here */
+@import "./home.css";
+@import "./pos-list.css";
+@import "./pos.css";
 
 /* Sposta il badge dei pulsanti in alto a destra */
 .sapMBadge .sapMBadgeIndicator {

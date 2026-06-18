@@ -5,7 +5,7 @@
     xmlns:f="sap.f"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 
-    <f:DynamicPage showFooter="false">
+    <f:DynamicPage showFooter="false" class="pagePosList">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>

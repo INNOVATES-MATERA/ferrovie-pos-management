@@ -1,0 +1,27 @@
+/* ── Vista: Pos (form/dettaglio) ── */
+
+.pagePos .sapFDynamicPageTitle {
+  background-color: #E8B5B5;
+  border-bottom: 3px solid #C8102E;
+}
+
+.pagePos .sapFDynamicPageContent {
+  background-color: #f9e8e8 !important;
+}
+
+/* Pulsante "Salva" nel footer del form Pos */
+.pagePos .sapMIBar .sapMBtnEmphasized,
+.pagePos .sapMIBar .sapMBtnEmphasized:hover {
+  background-color: #C8102E !important;
+  border-color: #8b0b1f !important;
+  color: #ffffff !important;
+}
+
+.pagePos .sapMIBar .sapMBtnEmphasized:hover {
+  background-color: #8b0b1f !important;
+}
+
+.pagePos .sapMIBar .sapMBtnEmphasized .sapMBtnIcon,
+.pagePos .sapMIBar .sapMBtnEmphasized .sapMBtnText {
+  color: #ffffff !important;
+}

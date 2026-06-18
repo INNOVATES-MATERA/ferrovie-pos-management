@@ -9,7 +9,8 @@
     xmlns:sap.ui.fl="sap.ui.fl">
 
     <f:DynamicPage showFooter="true"
-        fitContent="true">
+        fitContent="true"
+        class="pagePos">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>

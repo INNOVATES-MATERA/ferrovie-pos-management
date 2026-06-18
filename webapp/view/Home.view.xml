@@ -6,7 +6,7 @@
     xmlns:card="sap.f.cards"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 
-    <f:DynamicPage showFooter="false">
+    <f:DynamicPage showFooter="false" class="pageHome">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
