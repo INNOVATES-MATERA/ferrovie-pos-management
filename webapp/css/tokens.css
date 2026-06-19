@@ -1,7 +1,7 @@
 :root {
   /* ── Brand / Accent (RFI) ── */
-  --sapBrandColor: #006B54;
-  --sapHighlightColor: #006B54;
+  --sapBrandColor: #006b54;
+  --sapHighlightColor: #006b54;
 
   /* ── Tipografia ── */
   --sapFontFamily: "Inter", "72", Arial, sans-serif;
@@ -18,7 +18,7 @@
 
   /* ── Superfici / Sfondi ── */
   --sapBackgroundColor: #f0f5f3;
-  --sapShellColor: #006B54;
+  --sapShellColor: #006b54;
   --sapTile_Background: #ffffff;
   --sapGroup_ContentBackground: #ffffff;
   --sapList_Background: #ffffff;

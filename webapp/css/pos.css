@@ -9,6 +9,10 @@
   background-color: #daf0f0 !important;
 }
 
+.pagePos .sapMPageEnableScrolling {
+  background-color: #daf0f0 !important;
+}
+
 /* Pulsante "Salva" nel footer del form Pos */
 .pagePos .sapMIBar .sapMBtnEmphasized,
 .pagePos .sapMIBar .sapMBtnEmphasized:hover {
