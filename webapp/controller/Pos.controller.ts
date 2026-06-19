@@ -162,7 +162,7 @@ export default class Pos extends BaseController {
       contratto: this._sContractCode,
       idPos: bIsEdit ? this._sPosId : generateRandomId(),
       isEdit: bIsEdit,
-      formTitle: bIsEdit ? this.getText("lbl_pos_form") + ": " + this._sPosId : this.getText("lbl_pos_form_create"),
+      formTitle: bIsEdit ? this.getText("lbl_pos_form") : this.getText("lbl_pos_form_create"),
     });
 
     this._oModelSkills.setData(structuredClone(DEFAULT_SKILLS));
@@ -239,8 +239,9 @@ export default class Pos extends BaseController {
         direttoreTecnico: this._oModelPOS.getProperty("/direttoreTecnico"),
         revisione: parseInt(this._oModelPOS.getProperty("/revisione") || "0", 10),
         dataRedazione: this._oModelPOS.getProperty("/dataRedazione") || null,
-        dataRicezioneCruscotto: this._oModelPOS.getProperty("/dataRicezioneCruscotto")
-          ? (this._oModelPOS.getProperty("/dataRicezioneCruscotto") as string) + "T00:00:00Z"
+        dataRicezioneCruscotto:
+          this._oModelPOS.getProperty("/dataRicezioneCruscotto") ?
+            (this._oModelPOS.getProperty("/dataRicezioneCruscotto") as string) + "T00:00:00Z"
           : null,
         inizioValidita: this._oModelPOS.getProperty("/inizioValidita") || null,
         fineValidita: this._oModelPOS.getProperty("/fineValidita") || null,
@@ -313,10 +314,30 @@ export default class Pos extends BaseController {
     const oFilter = new Filter({
       filters: [
         new Filter({ path: "codiceAtto", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
-        new Filter({ path: "codiceContratto", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
-        new Filter({ path: "titoloDelContratto", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
-        new Filter({ path: "codiceSAPOrganizzazioneAcquisti", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
-        new Filter({ path: "codiceSAPGruppoAcquisti", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+        new Filter({
+          path: "codiceContratto",
+          operator: FilterOperator.Contains,
+          value1: sValue,
+          caseSensitive: false,
+        }),
+        new Filter({
+          path: "titoloDelContratto",
+          operator: FilterOperator.Contains,
+          value1: sValue,
+          caseSensitive: false,
+        }),
+        new Filter({
+          path: "codiceSAPOrganizzazioneAcquisti",
+          operator: FilterOperator.Contains,
+          value1: sValue,
+          caseSensitive: false,
+        }),
+        new Filter({
+          path: "codiceSAPGruppoAcquisti",
+          operator: FilterOperator.Contains,
+          value1: sValue,
+          caseSensitive: false,
+        }),
       ],
       and: false,
     });
@@ -339,14 +360,12 @@ export default class Pos extends BaseController {
     if (!sContratto) return;
 
     const [oRtiResult, oSubResult] = await Promise.all([
-      this.getEntitySet<{ RagioneSociale: string; PartitaIVA: string; CodiceFiscale: string }>(
-        "/ComposizioniRTI_RTP",
-        { filters: [new Filter("ContrattoID", FilterOperator.EQ, sContratto)] }
-      ),
-      this.getEntitySet<{ impresaSubappaltatrice: string; partitaIvaCf: string }>(
-        "/Subappalti",
-        { filters: [new Filter("contratto", FilterOperator.EQ, sContratto)] }
-      ),
+      this.getEntitySet<{ RagioneSociale: string; PartitaIVA: string; CodiceFiscale: string }>("/ComposizioniRTI_RTP", {
+        filters: [new Filter("ContrattoID", FilterOperator.EQ, sContratto)],
+      }),
+      this.getEntitySet<{ impresaSubappaltatrice: string; partitaIvaCf: string }>("/Subappalti", {
+        filters: [new Filter("contratto", FilterOperator.EQ, sContratto)],
+      }),
     ]);
 
     const aRtiNorm = oRtiResult.data.map((r) => ({
@@ -406,7 +425,12 @@ export default class Pos extends BaseController {
     oBinding.filter([
       new Filter({
         filters: [
-          new Filter({ path: "ragioneSociale", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+          new Filter({
+            path: "ragioneSociale",
+            operator: FilterOperator.Contains,
+            value1: sValue,
+            caseSensitive: false,
+          }),
           new Filter({ path: "partitaIva", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
           new Filter({ path: "cf", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
         ],
@@ -423,16 +447,16 @@ export default class Pos extends BaseController {
   }
 
   public onSkillDateChange(oEvent: Event): void {
-    const oSource    = oEvent.getSource() as DatePicker;
-    const oListItem  = oSource.getParent() as ColumnListItem;
-    const aCells     = oListItem.getCells();
+    const oSource = oEvent.getSource() as DatePicker;
+    const oListItem = oSource.getParent() as ColumnListItem;
+    const aCells = oListItem.getCells();
     const oPickerInizio = aCells[1] as DatePicker;
-    const oPickerFine   = aCells[2] as DatePicker;
+    const oPickerFine = aCells[2] as DatePicker;
     const sInizio = oPickerInizio.getValue() || "";
-    const sFine   = oPickerFine.getValue()   || "";
-    const bError  = dateUtils.isDateAfter(sInizio, sFine);
-    const sState  = bError ? "Error" : "None";
-    const sText   = bError ? this.getText("msg_error_skill_range") : "";
+    const sFine = oPickerFine.getValue() || "";
+    const bError = dateUtils.isDateAfter(sInizio, sFine);
+    const sState = bError ? "Error" : "None";
+    const sText = bError ? this.getText("msg_error_skill_range") : "";
 
     oPickerInizio.setValueState(sState as any);
     oPickerInizio.setValueStateText(sText);
@@ -600,7 +624,7 @@ export default class Pos extends BaseController {
       ...oData,
       dataRicezioneCruscotto: dateUtils.formatISOStringToYYYYMMDD(oData.dataRicezioneCruscotto as string | null),
       isEdit: true,
-      formTitle: this.getText("lbl_pos_form") + ": " + this._sPosId,
+      formTitle: this.getText("lbl_pos_form"),
     });
 
     const aPersonale = (oData.personale as Record<string, unknown>[]) ?? [];

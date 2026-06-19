@@ -14,7 +14,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="{i18n>lbl_pos_form}"/>
+                    <Title text="{POS>/formTitle}"/>
                 </f:heading>
                 <f:expandedContent>
                     <Title text="{POS>/idPos}"
@@ -165,8 +165,7 @@
                                             <DatePicker id="dpDraftDate"
                                                 value="{POS>/dataRedazione}"
                                                 valueFormat="yyyy-MM-dd"
-                                                displayFormat="dd/MM/yyyy"
-                                                placeholder=" "/>
+                                                displayFormat="dd/MM/yyyy"/>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_reception_date}">
@@ -174,8 +173,7 @@
                                             <DatePicker id="dpReceptionDate"
                                                 value="{POS>/dataRicezioneCruscotto}"
                                                 valueFormat="yyyy-MM-dd"
-                                                displayFormat="dd/MM/yyyy"
-                                                placeholder=" "/>
+                                                displayFormat="dd/MM/yyyy"/>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lbl_link}">
@@ -384,14 +382,12 @@
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                 </cells>
                                                             </ColumnListItem>
@@ -444,14 +440,12 @@
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        placeholder=" "
                                                                         change="onSkillDateChange"/>
                                                                 </cells>
                                                             </ColumnListItem>
