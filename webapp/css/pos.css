@@ -1,24 +1,24 @@
 /* ── Vista: Pos (form/dettaglio) ── */
 
 .pagePos .sapFDynamicPageTitle {
-  background-color: #E8B5B5;
-  border-bottom: 3px solid #C8102E;
+  background-color: #80C4C4;
+  border-bottom: 3px solid #008080;
 }
 
 .pagePos .sapFDynamicPageContent {
-  background-color: #f9e8e8 !important;
+  background-color: #daf0f0 !important;
 }
 
 /* Pulsante "Salva" nel footer del form Pos */
 .pagePos .sapMIBar .sapMBtnEmphasized,
 .pagePos .sapMIBar .sapMBtnEmphasized:hover {
-  background-color: #C8102E !important;
-  border-color: #8b0b1f !important;
+  background-color: #008080 !important;
+  border-color: #005959 !important;
   color: #ffffff !important;
 }
 
 .pagePos .sapMIBar .sapMBtnEmphasized:hover {
-  background-color: #8b0b1f !important;
+  background-color: #005959 !important;
 }
 
 .pagePos .sapMIBar .sapMBtnEmphasized .sapMBtnIcon,
