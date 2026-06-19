@@ -23,7 +23,8 @@ echo "✅ Build completata: $MTAR_FILE"
 
 # 3. Definizione delle org/space (separate da virgola)
 declare -a DEPLOYMENTS=(
-  "INFR-RFI-DEV,INFR-RFI"
+  "INFR-RFI-DEV,INFR-RFI",
+  "INFR-RFI-QAS,INFR-RFI",
 )
 
 # 4. Deploy su ogni org/space
