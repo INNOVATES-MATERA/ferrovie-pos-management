@@ -67,7 +67,7 @@
                         </OverflowToolbar>
                     </headerToolbar>
                     <Table id="tblLatestPos"
-                        items="{path: '/PosTestataSet', parameters: {$count: true, $orderby: 'createdAt desc', $select: 'idPos,contratto,impresaAppaltatrice,ruoloImpresa,statoPos,dataRedazione,createdAt'}, length: 5}"
+                        items="{path: '/PosTestataSet', parameters: {$count: true, $orderby: 'modifiedAt desc', $select: 'idPos,contratto,impresaAppaltatrice,ruoloImpresa,statoPos,dataRedazione,modifiedAt'}, length: 5}"
                         mode="None"
                         fixedLayout="true"
                         growing="false"
@@ -109,10 +109,10 @@
                                         wrapping="false"/>
                                 </header>
                             </Column>
-                            <Column app:p13nKey="createdAt"
+                            <Column app:p13nKey="modifiedAt"
                                 width="10rem">
                                 <header>
-                                    <Label text="{i18n>lbl_created_at}"
+                                    <Label text="{i18n>lbl_modified_at}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -135,7 +135,7 @@
                                     </ObjectStatus>
                                     <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
                                         wrapping="false"/>
-                                    <Text text="{path: 'createdAt', formatter: '.dateUtils.formatDateTimeOffsetToDDMMYYYY'}"
+                                    <Text text="{path: 'modifiedAt', formatter: '.dateUtils.formatDateTimeOffsetToDDMMYYYY'}"
                                         wrapping="false"/>
                                 </cells>
                             </ColumnListItem>
