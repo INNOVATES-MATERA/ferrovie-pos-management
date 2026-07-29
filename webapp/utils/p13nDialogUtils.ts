@@ -80,12 +80,31 @@ function _buildMetadataHelper(oTable: Table): MetadataHelper {
             const sKey = (oColumn as any).data("p13nKey") as string;
             return {
                 key: sKey,
-                label: (oColumn.getHeader() as any).getText() as string,
+                label: _getColumnHeaderText(oColumn),
                 path: sKey,
             };
         });
 
     return new MetadataHelper(aMetadata);
+}
+
+/**
+ * Estrae il testo dell'header colonna. Se l'header è l'HBox con Link+Icon usato
+ * per l'ordinamento via click (vedi onColumnSort), il testo va preso dal Link
+ * (primo item); altrimenti l'header è un controllo semplice (Label/Text) con getText().
+ */
+function _getColumnHeaderText(oColumn: Column): string {
+    const oHeader = oColumn.getHeader() as any;
+    if (typeof oHeader.getText === "function") {
+        return oHeader.getText() as string;
+    }
+    if (typeof oHeader.getItems === "function") {
+        const oLink = oHeader.getItems()[0];
+        if (oLink && typeof oLink.getText === "function") {
+            return oLink.getText() as string;
+        }
+    }
+    return "";
 }
 
 /**

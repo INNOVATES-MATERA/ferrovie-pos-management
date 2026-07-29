@@ -46,4 +46,21 @@ function applyWidths(oState: any, oTable: Table): void {
     });
 }
 
-export default { applyVisibilityAndOrder, applyWidths };
+/**
+ * Returns the p13nKey of every column currently visible in the table, excluding
+ * columns explicitly marked app:searchable="false" (e.g. Date/Decimal/Int32 fields
+ * that FilterOperator.Contains cannot run against on the OData v4 backend).
+ * Used to scope free-text search to what the user actually sees.
+ */
+function getVisibleP13nKeys(oTable: Table): string[] {
+    return (oTable.getColumns() as Column[])
+        .filter(
+            (oColumn) =>
+                !!(oColumn as any).data("p13nKey") &&
+                oColumn.getVisible() &&
+                (oColumn as any).data("searchable") !== "false"
+        )
+        .map((oColumn) => (oColumn as any).data("p13nKey") as string);
+}
+
+export default { applyVisibilityAndOrder, applyWidths, getVisibleP13nKeys };

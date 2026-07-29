@@ -29,6 +29,8 @@
                         <OverflowToolbar style="Standard">
                             <Title text="{i18n>lbl_pos_table} ({Pos>/count})"
                                 level="H2"/>
+                            <SearchField search="onSearch"
+                                width="16rem"/>
                             <ToolbarSpacer/>
                             <Button icon="sap-icon://delete"
                                 text="{i18n>btn_delete}"
@@ -37,7 +39,9 @@
                                 icon="sap-icon://refresh"
                                 press="onReset"
                                 tooltip="{i18n>btn_reset}"/>
-                            <Button icon="sap-icon://sort"
+                            <!-- Sort/Filter di default nascosti: il sort avviene cliccando l'header colonna
+                                 (onColumnSort), il filtro tramite il SearchField sopra. -->
+                            <!--<Button icon="sap-icon://sort"
                                 press="onSettings"
                                 tooltip="{i18n>btn_sort}"
                                 app:panel="Sorter">
@@ -51,7 +55,7 @@
                                 <customData>
                                     <BadgeCustomData value="{Pos>/filterCount}"/>
                                 </customData>
-                            </Button>
+                            </Button>-->
                             <Button icon="sap-icon://action-settings"
                                 press="onSettings"
                                 app:panel="Columns"/>
@@ -73,40 +77,70 @@
                                 width="8rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_pos_id}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_pos_id}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="idPos"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
                             <Column app:p13nKey="contratto"
                                 width="10rem">
                                 <header>
-                                    <Label text="{i18n>lbl_contract_code}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_contract_code}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="contratto"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
                             <Column app:p13nKey="impresaAppaltatrice"
                                 width="15rem">
                                 <header>
-                                    <Label text="{i18n>lbl_contractor_company}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_contractor_company}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="impresaAppaltatrice"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
                             <Column app:p13nKey="ruoloImpresa"
                                 width="10rem">
                                 <header>
-                                    <Label text="{i18n>lbl_company_role}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_company_role}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="ruoloImpresa"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
                             <Column app:p13nKey="statoPos"
                                 width="8rem">
                                 <header>
-                                    <Label text="{i18n>lbl_pos_status}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_pos_status}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="statoPos"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
@@ -114,8 +148,14 @@
                                 width="12rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_employer}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_employer}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="datoreLavoro"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
@@ -123,8 +163,14 @@
                                 width="10rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_rspp}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_rspp}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="rspp"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
@@ -132,8 +178,14 @@
                                 width="10rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_rls}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_rls}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="rls"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
@@ -141,8 +193,14 @@
                                 width="12rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_medico_competente}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_medico_competente}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="medicocompetente"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
@@ -150,8 +208,14 @@
                                 width="12rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_works_director_site}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_works_director_site}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="direttoreCantiere"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
@@ -159,34 +223,61 @@
                                 width="10rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_site_manager}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_site_manager}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="direttoreTecnico"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
                             <Column app:p13nKey="revisione"
+                                app:searchable="false"
                                 width="6rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_revision}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_revision}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="revisione"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
                             <Column app:p13nKey="dataRedazione"
+                                app:searchable="false"
                                 width="9rem">
                                 <header>
-                                    <Label text="{i18n>lbl_draft_date}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_draft_date}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="dataRedazione"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
                             <Column app:p13nKey="dataRicezioneCruscotto"
+                                app:searchable="false"
                                 width="10rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_reception_date}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_reception_date}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="dataRicezioneCruscotto"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 
@@ -194,8 +285,14 @@
                                 width="12rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lbl_link}"
-                                        wrapping="false"/>
+                                    <HBox alignItems="Center" class="sortableColumnHeader">
+                                        <Link text="{i18n>lbl_link}" press="onColumnSort" class="sortableColumnHeaderLink">
+                                            <customData>
+                                                <core:CustomData key="sortKey" value="linkCde"/>
+                                            </customData>
+                                        </Link>
+                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
+                                    </HBox>
                                 </header>
                             </Column>
 

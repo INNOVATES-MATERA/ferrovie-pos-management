@@ -12,6 +12,10 @@
   padding: 0 !important;
 }
 
+.tablePanelContent .sapMPanelHeaderTB {
+  min-height: 2.5rem;
+}
+
 .posTable .sapMText {
   max-width: 15rem;
   overflow: hidden;
@@ -67,6 +71,18 @@
 
 .posTable tbody tr:nth-child(even).sapMLIBSelected td {
   background-color: var(--sapList_SelectionBackgroundColor, #e5f0fa);
+}
+
+/* Header di colonna cliccabile per l'ordinamento: aspetto neutro come una Label */
+.sortableColumnHeaderLink.sapMLnk {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sortableColumnHeaderLink.sapMLnk:hover {
+  text-decoration: none;
 }
 
 /* Badge colorati per gli stati POS */

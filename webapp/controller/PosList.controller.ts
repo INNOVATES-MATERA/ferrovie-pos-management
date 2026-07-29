@@ -2,10 +2,17 @@ import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import MessageBox from "sap/m/MessageBox";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
+import p13nColumnUtils from "../utils/p13nColumnUtils";
 import entityUtils from "../utils/entityUtils";
 import dateUtils from "../utils/dateUtils";
 import xlsxUtils from "../utils/xlsxUtils";
 import Table from "sap/m/Table";
+import Column from "sap/m/Column";
+import Icon from "sap/ui/core/Icon";
+import Link from "sap/m/Link";
+import Sorter from "sap/ui/model/Sorter";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 
 const DEFAULT_MODEL = {
@@ -22,6 +29,8 @@ export default class PosList extends BaseController {
 
   private _oModelPos!: JSONModel;
   private _bP13nRegistered = false;
+  private _oColumnSortState: { key: string; state: "asc" | "desc" } | null = null;
+  private _sSearchQuery = "";
 
   public onInit(): void {
     this._oModelPos = new JSONModel(structuredClone(DEFAULT_MODEL));
@@ -68,6 +77,84 @@ export default class PosList extends BaseController {
     const oTable = this.byId("tblPos") as Table;
     const sPanel = oEvent.getSource().data("panel") as string;
     p13nDialogUtils.open(oTable, sPanel as any, oEvent.getSource());
+  }
+
+  public onColumnSort(oEvent: any): void {
+    const oLink = oEvent.getSource() as Link;
+    const sKey = oLink.data("sortKey") as string;
+    const oCurrentState = this._oColumnSortState;
+    const bSameColumn = oCurrentState && oCurrentState.key === sKey;
+
+    let sNextState: "asc" | "desc" | null;
+    if (!bSameColumn) {
+      sNextState = "asc";
+    } else if (oCurrentState!.state === "asc") {
+      sNextState = "desc";
+    } else {
+      sNextState = null;
+    }
+
+    this._oColumnSortState = sNextState ? { key: sKey, state: sNextState } : null;
+    this._updateSortHeaders(sKey, sNextState);
+
+    const oTable = this.byId("tblPos") as Table;
+    const oBinding = oTable.getBinding("items") as ODataListBinding;
+    if (!oBinding) return;
+
+    const aSorters = this._oColumnSortState
+      ? [new Sorter(this._oColumnSortState.key, this._oColumnSortState.state === "desc")]
+      : [];
+    oBinding.sort(aSorters);
+  }
+
+  private _updateSortHeaders(sKey: string, sState: "asc" | "desc" | null): void {
+    const oTable = this.byId("tblPos") as Table;
+    if (!oTable) return;
+
+    (oTable.getColumns() as Column[]).forEach((oColumn) => {
+      const oHeader = oColumn.getHeader() as any;
+      if (!oHeader?.getItems) return;
+      const oLink = oHeader.getItems()[0] as Link;
+      const oIcon = oHeader.getItems()[1] as Icon;
+      if (!oLink || !oIcon) return;
+
+      if (oLink.data("sortKey") === sKey && sState) {
+        oIcon.setSrc(sState === "desc" ? "sap-icon://sort-descending" : "sap-icon://sort-ascending");
+        oIcon.setVisible(true);
+      } else {
+        oIcon.setVisible(false);
+      }
+    });
+  }
+
+  public onSearch(oEvent: any): void {
+    this._sSearchQuery = oEvent.getParameter("query") || oEvent.getParameter("newValue") || "";
+    this._applySearchFilter();
+  }
+
+  private _applySearchFilter(): void {
+    const oTable = this.byId("tblPos") as Table;
+    const oBinding = oTable.getBinding("items") as ODataListBinding;
+    if (!oBinding) return;
+
+    if (!this._sSearchQuery) {
+      oBinding.filter([]);
+      return;
+    }
+
+    // Solo le colonne attualmente visibili (app:searchable="false" esclude i campi
+    // non Edm.String, es. "revisione", su cui FilterOperator.Contains non è supportato).
+    const aSearchableFields = p13nColumnUtils.getVisibleP13nKeys(oTable);
+    const aOrFilters = aSearchableFields.map(
+      (sField) =>
+        new Filter({
+          path: sField,
+          operator: FilterOperator.Contains,
+          value1: this._sSearchQuery,
+          caseSensitive: false,
+        })
+    );
+    oBinding.filter([new Filter({ filters: aOrFilters, and: false })]);
   }
 
   public async onDownload(): Promise<void> {

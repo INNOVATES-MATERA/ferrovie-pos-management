@@ -7,6 +7,8 @@ import ColumnListItem from "sap/m/ColumnListItem";
 import Column from "sap/m/Column";
 import Label from "sap/m/Label";
 import Text from "sap/m/Text";
+import Link from "sap/m/Link";
+import Icon from "sap/ui/core/Icon";
 import TableSelectDialog from "sap/m/TableSelectDialog";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
@@ -15,6 +17,7 @@ import DatePicker from "sap/m/DatePicker";
 import Event from "sap/ui/base/Event";
 import entityUtils from "../utils/entityUtils";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
+import p13nColumnUtils from "../utils/p13nColumnUtils";
 import xlsxUtils from "../utils/xlsxUtils";
 import dateUtils from "../utils/dateUtils";
 
@@ -98,6 +101,9 @@ export default class Pos extends BaseController {
   private _oImpresaDialog?: TableSelectDialog;
   private _oSkillsCache = new Map<string, SkillItem[]>();
   private _aSkillTypes: { codice: string; categoria: string; descrizione: string }[] = [];
+  private _oStaffSortState: { key: string; state: "asc" | "desc" } | null = null;
+  private _sStaffSearchQuery = "";
+  private _aStaffAllRows: object[] = [];
 
   public onInit(): void {
     this._oModelPOS = new JSONModel(structuredClone(DEFAULT_POS));
@@ -167,6 +173,9 @@ export default class Pos extends BaseController {
 
     this._oModelSkills.setData(structuredClone(DEFAULT_SKILLS));
     this._oModelStaff.setData(structuredClone(DEFAULT_STAFF));
+    this._aStaffAllRows = [];
+    this._oStaffSortState = null;
+    this._sStaffSearchQuery = "";
 
     try {
       await this._loadSkillTypes();
@@ -207,7 +216,7 @@ export default class Pos extends BaseController {
       return;
     }
 
-    const aStaff = this._oModelStaff.getProperty("/data") as { reparto: string }[];
+    const aStaff = this._aStaffAllRows as { reparto: string }[];
     if (aStaff.some((p) => !p.reparto?.trim())) {
       MessageBox.error(this.getText("msg_reparto_required"));
       return;
@@ -467,14 +476,12 @@ export default class Pos extends BaseController {
   // ── Staff management ──────────────────────────────────────────────────────
 
   public onAddStaff(): void {
-    const aData = this._oModelStaff.getProperty("/data") as (typeof DEFAULT_STAFF_ROW)[];
-    aData.unshift({
+    this._aStaffAllRows.unshift({
       ...structuredClone(DEFAULT_STAFF_ROW),
       posTestata_idPos: this._sPosId,
       tmpId: generateRandomId(),
     });
-    this._oModelStaff.setProperty("/data", aData);
-    this._oModelStaff.setProperty("/count", aData.length);
+    this._refreshStaffTable();
   }
 
   public onDeleteStaff(): void {
@@ -487,15 +494,90 @@ export default class Pos extends BaseController {
     MessageBox.confirm(this.getText("msg_confirm_delete_employees"), {
       onClose: async (sAction: string | null) => {
         if (sAction === MessageBox.Action.OK) {
-          const aData = this._oModelStaff.getProperty("/data") as object[];
+          const aVisible = this._oModelStaff.getProperty("/data") as object[];
           const aIndicesToDelete = new Set(aSelected.map((item) => oTable.indexOfItem(item as any)));
-          const aFiltered = aData.filter((_, i) => !aIndicesToDelete.has(i));
-          this._oModelStaff.setProperty("/data", aFiltered);
-          this._oModelStaff.setProperty("/count", aFiltered.length);
+          const aRemoved = aVisible.filter((_, i) => aIndicesToDelete.has(i));
+          this._aStaffAllRows = this._aStaffAllRows.filter((row) => !aRemoved.includes(row));
+          this._refreshStaffTable();
           oTable.removeSelections(true);
         }
       },
     });
+  }
+
+  public onColumnSortStaff(oEvent: any): void {
+    const oLink = oEvent.getSource() as Link;
+    const sKey = oLink.data("sortKey") as string;
+    const oCurrentState = this._oStaffSortState;
+    const bSameColumn = oCurrentState && oCurrentState.key === sKey;
+
+    let sNextState: "asc" | "desc" | null;
+    if (!bSameColumn) {
+      sNextState = "asc";
+    } else if (oCurrentState!.state === "asc") {
+      sNextState = "desc";
+    } else {
+      sNextState = null;
+    }
+
+    this._oStaffSortState = sNextState ? { key: sKey, state: sNextState } : null;
+    this._updateSortHeadersStaff(sKey, sNextState);
+    this._refreshStaffTable();
+  }
+
+  private _updateSortHeadersStaff(sKey: string, sState: "asc" | "desc" | null): void {
+    const oTable = this.byId("tblStaff") as Table;
+    if (!oTable) return;
+
+    (oTable.getColumns() as Column[]).forEach((oColumn) => {
+      const oHeader = oColumn.getHeader() as any;
+      if (!oHeader?.getItems) return;
+      const oLink = oHeader.getItems()[0] as Link;
+      const oIcon = oHeader.getItems()[1] as Icon;
+      if (!oLink || !oIcon) return;
+
+      if (oLink.data("sortKey") === sKey && sState) {
+        oIcon.setSrc(sState === "desc" ? "sap-icon://sort-descending" : "sap-icon://sort-ascending");
+        oIcon.setVisible(true);
+      } else {
+        oIcon.setVisible(false);
+      }
+    });
+  }
+
+  public onSearchStaff(oEvent: any): void {
+    this._sStaffSearchQuery = (oEvent.getParameter("query") || oEvent.getParameter("newValue") || "") as string;
+    this._refreshStaffTable();
+  }
+
+  /** Ricalcola /data (visualizzati in tabella) da _aStaffAllRows applicando ricerca e sort correnti. */
+  private _refreshStaffTable(): void {
+    const sQuery = this._sStaffSearchQuery.toLowerCase();
+    const oTable = this.byId("tblStaff") as Table;
+    const aSearchableFields = oTable ? p13nColumnUtils.getVisibleP13nKeys(oTable) : [];
+
+    let aRows = !sQuery
+      ? this._aStaffAllRows
+      : this._aStaffAllRows.filter((row) =>
+          aSearchableFields.some((sField) =>
+            String((row as Record<string, unknown>)[sField] ?? "")
+              .toLowerCase()
+              .includes(sQuery),
+          ),
+        );
+
+    if (this._oStaffSortState) {
+      const { key, state } = this._oStaffSortState;
+      aRows = [...aRows].sort((a, b) => {
+        const vA = (a as Record<string, unknown>)[key] ?? "";
+        const vB = (b as Record<string, unknown>)[key] ?? "";
+        const iCompare = String(vA).localeCompare(String(vB), undefined, { numeric: true });
+        return state === "desc" ? -iCompare : iCompare;
+      });
+    }
+
+    this._oModelStaff.setProperty("/data", aRows);
+    this._oModelStaff.setProperty("/count", aRows.length);
   }
 
   // ── Skills management ─────────────────────────────────────────────────────
@@ -579,7 +661,7 @@ export default class Pos extends BaseController {
 
   /** Costruisce l'array personale (con abilitazioni) da inviare al backend. */
   private _buildPersonalePayload(sPosId: string): object[] {
-    const aStaff = this._oModelStaff.getProperty("/data") as {
+    const aStaff = this._aStaffAllRows as {
       idDipendente: string;
       tmpId: string;
       nome: string;
@@ -628,8 +710,8 @@ export default class Pos extends BaseController {
     });
 
     const aPersonale = (oData.personale as Record<string, unknown>[]) ?? [];
-    this._oModelStaff.setProperty("/data", aPersonale);
-    this._oModelStaff.setProperty("/count", aPersonale.length);
+    this._aStaffAllRows = aPersonale;
+    this._refreshStaffTable();
 
     this._oSkillsCache.clear();
     for (const persona of aPersonale) {

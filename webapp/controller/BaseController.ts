@@ -167,11 +167,13 @@ export default abstract class BaseController extends Controller {
     }
 
     protected _buildKey(oKey: Record<string, unknown>): string {
+        const encode = (value: unknown): string =>
+            typeof value === "string" ? `'${encodeURIComponent(value)}'` : String(value);
         const entries = Object.entries(oKey);
         if (entries.length === 1) {
             const [, value] = entries[0];
-            return `(${typeof value === "string" ? `'${value}'` : value})`;
+            return `(${encode(value)})`;
         }
-        return `(${entries.map(([k, v]) => `${k}=${typeof v === "string" ? `'${v}'` : v}`).join(",")})`;
+        return `(${entries.map(([k, v]) => `${k}=${encode(v)}`).join(",")})`;
     }
 }
