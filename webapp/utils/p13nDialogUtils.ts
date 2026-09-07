@@ -1,17 +1,17 @@
 import MetadataHelper from "sap/m/p13n/MetadataHelper";
 import SelectionController from "sap/m/p13n/SelectionController";
-import SortController from "sap/m/p13n/SortController";
-import FilterController from "sap/m/p13n/FilterController";
 import ColumnWidthController from "sap/m/table/ColumnWidthController";
 import Engine from "sap/m/p13n/Engine";
 import Table from "sap/m/Table";
 import Column from "sap/m/Column";
+import ColumnMenu from "sap/m/table/columnmenu/Menu";
+import QuickSort from "sap/m/table/columnmenu/QuickSort";
+import QuickSortItem from "sap/m/table/columnmenu/QuickSortItem";
+import { SortOrder } from "sap/ui/core/library";
 import p13nColumnUtils from "./p13nColumnUtils";
-import p13nSortUtils from "./p13nSortUtils";
-import p13nFilterUtils from "./p13nFilterUtils";
 
-/** Panel keys accepted by the P13n Engine. */
-export type P13nPanel = "Columns" | "Sorter" | "Filter";
+/** Panel keys accepted by the P13n Engine. Only column personalization (visibility/order/width). */
+export type P13nPanel = "Columns";
 
 /**
  * Initial state snapshot captured at register() time (= view-XML defaults).
@@ -22,14 +22,12 @@ const _mInitialStates = new Map<string, object>();
 // ── Registration ──────────────────────────────────────────────────────────────
 
 /**
- * Registers the table with the P13n Engine and wires up the state-change listener.
+ * Registers the table with the P13n Engine (column visibility/order/width only)
+ * and wires up the state-change listener.
  * Must be called once after the table is rendered (e.g. in onAfterRendering).
  * Captures the initial column state (visibility = view-XML defaults) for reset().
  */
-function register(
-    oTable: Table,
-    onStateChange?: (sortCount: number, filterCount: number) => void
-): void {
+function register(oTable: Table): void {
     const oMetadataHelper = _buildMetadataHelper(oTable);
 
     Engine.getInstance().register(oTable, {
@@ -37,12 +35,6 @@ function register(
         controller: {
             Columns: new SelectionController({
                 targetAggregation: "columns",
-                control: oTable,
-            }),
-            Sorter: new SortController({
-                control: oTable,
-            }),
-            Filter: new FilterController({
                 control: oTable,
             }),
             ColumnWidth: new ColumnWidthController({
@@ -62,14 +54,6 @@ function register(
 
         p13nColumnUtils.applyVisibilityAndOrder(oState, oTable);
         p13nColumnUtils.applyWidths(oState, oTable);
-        p13nSortUtils.applyFromState(oState, oTable);
-        p13nFilterUtils.applyFromState(oState, oTable);
-
-        if (onStateChange) {
-            const sortCount = (oState.Sorter || []).length;
-            const filterCount = Object.keys(oState.Filter || {}).length;
-            onStateChange(sortCount, filterCount);
-        }
     });
 }
 
@@ -89,20 +73,14 @@ function _buildMetadataHelper(oTable: Table): MetadataHelper {
 }
 
 /**
- * Estrae il testo dell'header colonna. Se l'header è l'HBox con Link+Icon usato
- * per l'ordinamento via click (vedi onColumnSort), il testo va preso dal Link
- * (primo item); altrimenti l'header è un controllo semplice (Label/Text) con getText().
+ * Extracts the column header text, needed both by the MetadataHelper (label shown
+ * in the column-settings dialog) and by assignColumnMenus (label shown in the
+ * QuickSort menu entry).
  */
 function _getColumnHeaderText(oColumn: Column): string {
     const oHeader = oColumn.getHeader() as any;
-    if (typeof oHeader.getText === "function") {
+    if (oHeader && typeof oHeader.getText === "function") {
         return oHeader.getText() as string;
-    }
-    if (typeof oHeader.getItems === "function") {
-        const oLink = oHeader.getItems()[0];
-        if (oLink && typeof oLink.getText === "function") {
-            return oLink.getText() as string;
-        }
     }
     return "";
 }
@@ -118,31 +96,70 @@ function _buildInitialState(oTable: Table): object {
 
     return {
         Columns: aVisibleColumns,
-        Sorter: [],
-        Filter: {},
         ColumnWidth: {},
     };
+}
+
+// ── QuickSort (column header menu) ────────────────────────────────────────────
+
+/**
+ * Assigns a header menu with a QuickSort action to every column carrying a
+ * `p13nKey`, matching the pattern used by the "Contratti Applicativi" table
+ * (fs_monitoraggio_cantieri_cardellini). Replaces the previous click-to-sort
+ * Link+Icon header combo.
+ *
+ * @param oTable  - The sap.m.Table instance.
+ * @param onSort  - Called with (sKey, sSortOrder) whenever the user picks a sort
+ *                  order from the menu. sSortOrder is "None" | "Ascending" | "Descending".
+ */
+function assignColumnMenus(oTable: Table, onSort: (sKey: string, sSortOrder: string) => void): void {
+    (oTable.getColumns() as Column[]).forEach((oColumn) => {
+        if (oColumn.getHeaderMenu()) return;
+
+        const sKey = (oColumn as any).data("p13nKey") as string;
+        const sLabel = _getColumnHeaderText(oColumn);
+        if (!sKey || !sLabel) return;
+
+        oColumn.setHeaderMenu(
+            new ColumnMenu({
+                quickActions: [
+                    new QuickSort({
+                        items: new QuickSortItem({ key: sKey, label: sLabel }),
+                        change: (oEvent: any) => {
+                            const oItem = oEvent.getParameter("item");
+                            const sSortOrder = oItem.getSortOrder() as SortOrder;
+
+                            (oTable.getColumns() as Column[]).forEach((oOtherColumn) => {
+                                oOtherColumn.setSortIndicator(oOtherColumn === oColumn ? sSortOrder : SortOrder.None);
+                            });
+
+                            onSort(oItem.getKey() as string, sSortOrder);
+                        },
+                    }),
+                ],
+            })
+        );
+    });
 }
 
 // ── Dialog ────────────────────────────────────────────────────────────────────
 
 /**
- * Opens the P13n settings dialog for the given table.
+ * Opens the P13n column-settings dialog for the given table.
  *
  * @param oTable   - The registered sap.m.Table instance.
- * @param aPanels  - One or more panel keys: "Columns", "Sorter", "Filter".
+ * @param aPanels  - One or more panel keys (only "Columns" is supported).
  * @param oSource  - The button that triggered the dialog (for popover positioning).
  */
 function open(oTable: Table, aPanels: P13nPanel | P13nPanel[], oSource: any): void {
     const aPanelList = Array.isArray(aPanels) ? aPanels : [aPanels];
-    const bMultiple = aPanelList.length > 1;
 
     Engine.getInstance().show(oTable, aPanelList, {
-        contentHeight: (bMultiple ? "50rem" : "35rem") as unknown as object,
-        contentWidth: (bMultiple ? "45rem" : "32rem") as unknown as object,
+        contentHeight: "35rem" as unknown as object,
+        contentWidth: "32rem" as unknown as object,
         source: oSource ?? oTable,
         // Intercept the "Resetta" button inside the dialog.
-        // Engine.reset() alone does not clear xConfig (where filter/sort state lives),
+        // Engine.reset() alone does not clear xConfig (where the state lives),
         // and does not fire stateChange — so we must do both manually.
         reset: async (oControl: any, aKeys: string[]) => {
             _clearXConfig(oControl);
@@ -151,8 +168,6 @@ function open(oTable: Table, aPanels: P13nPanel | P13nPanel[], oSource: any): vo
             if (oInitialState) {
                 p13nColumnUtils.applyVisibilityAndOrder(oInitialState, oControl);
                 p13nColumnUtils.applyWidths(oInitialState, oControl);
-                p13nSortUtils.applyFromState({ Sorter: [] }, oControl);
-                p13nFilterUtils.applyFromState({ Filter: {} }, oControl);
             }
         },
     } as any);
@@ -168,36 +183,4 @@ function _clearXConfig(oTable: Table): void {
     }
 }
 
-// ── Reset ─────────────────────────────────────────────────────────────────────
-
-/**
- * Resets all P13n personalization (columns, sort, filter, widths)
- * and restores the table to the state captured at register() time.
- *
- * Engine.reset() clears the internal Engine state for each controller,
- * which ensures dialogs re-open empty. Then we manually restore the
- * default column visibility and clear the OData binding sort/filters.
- */
-async function reset(oTable: Table): Promise<void> {
-    const oInitialState = _mInitialStates.get(oTable.getId()) as any;
-    if (!oInitialState) return;
-
-    // The P13n Engine stores all personalization (filter conditions, sort, column order)
-    // in a custom data entry keyed "xConfig" on the control. Without flex/variant
-    // management, Engine.reset() and applyState() do not clear this entry, so dialogs
-    // always re-open showing the old state. Removing the entry directly is the only
-    // reliable way to wipe it.
-    _clearXConfig(oTable);
-
-    // Re-initialize the Engine's internal registry so controllers refresh
-    // their cached state from the now-empty xConfig.
-    await (Engine.getInstance() as any).reset(oTable);
-
-    // Restore default column visibility/order and clear the OData binding.
-    p13nColumnUtils.applyVisibilityAndOrder(oInitialState, oTable);
-    p13nColumnUtils.applyWidths(oInitialState, oTable);
-    p13nSortUtils.applyFromState({ Sorter: [] }, oTable);
-    p13nFilterUtils.applyFromState({ Filter: {} }, oTable);
-}
-
-export default { register, open, reset };
+export default { register, open, assignColumnMenus };

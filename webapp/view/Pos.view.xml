@@ -5,8 +5,7 @@
     xmlns:f="sap.f"
     xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
-    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
-    xmlns:sap.ui.fl="sap.ui.fl">
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 
     <f:DynamicPage showFooter="true"
         fitContent="true"
@@ -34,7 +33,7 @@
             <VBox>
 
                 <!-- FORM POS (ex testata) -->
-                <Panel class="tablePanelContent">
+                <Panel>
                     <form:Form id="frmPosEdit"
                         editable="true">
                         <form:layout>
@@ -48,8 +47,8 @@
                                 emptySpanM="0"
                                 emptySpanS="0"
                                 columnsXL="3"
-                                columnsL="2"
-                                columnsM="1"
+                                columnsL="3"
+                                columnsM="2"
                                 singleContainerFullSize="false"/>
                         </form:layout>
                         <form:formContainers>
@@ -57,29 +56,27 @@
                             <!-- Container 1: Identificatori -->
                             <form:FormContainer>
                                 <form:formElements>
-                                    <form:FormElement label="{i18n>lbl_contract}">
+                                    <form:FormElement label="{i18n>lblContract}">
                                         <form:fields>
                                             <Input id="inpContractCode"
                                                 value="{POS>/contratto}"
                                                 editable="{= !${POS>/isEdit} }"
                                                 showValueHelp="{= !${POS>/isEdit} }"
-                                                valueHelpRequest="onContractValueHelp"
-                                                valueHelpOnly="true"
+                                                valueHelpRequest=".onContractValueHelp"
                                                 maxLength="50" />
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_contractor_company}">
+                                    <form:FormElement label="{i18n>lblContractorCompany}">
                                         <form:fields>
                                             <Input id="inpContractorCompany"
                                                 value="{POS>/impresaAppaltatrice}"
                                                 showValueHelp="true"
-                                                valueHelpRequest="onImpresaValueHelp"
-                                                editable="{= !!${POS>/contratto} }"
-                                                valueHelpOnly="true"
+                                                valueHelpRequest=".onImpresaValueHelp"
+                                                editable="false"
                                                 maxLength="150" />
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_company_role}">
+                                    <form:FormElement label="{i18n>lblCompanyRole}">
                                         <form:fields>
                                             <ComboBox id="selCompanyRole"
                                                 selectedKey="{POS>/ruoloImpresa}"
@@ -89,7 +86,7 @@
                                             </ComboBox>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_employer}">
+                                    <form:FormElement label="{i18n>lblEmployer}">
                                         <form:fields>
                                             <Input id="inpEmployer"
                                                 value="{POS>/datoreLavoro}"
@@ -97,7 +94,7 @@
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_rspp}">
+                                    <form:FormElement label="{i18n>lblRspp}">
                                         <form:fields>
                                             <Input id="inpRspp"
                                                 value="{POS>/rspp}"
@@ -110,7 +107,7 @@
                             <!-- Container 2: Figure di sicurezza -->
                             <form:FormContainer>
                                 <form:formElements>
-                                    <form:FormElement label="{i18n>lbl_rls}">
+                                    <form:FormElement label="{i18n>lblRls}">
                                         <form:fields>
                                             <Input id="inpRls"
                                                 value="{POS>/rls}"
@@ -118,7 +115,7 @@
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_medico_competente}">
+                                    <form:FormElement label="{i18n>lblMedicoCompetente}">
                                         <form:fields>
                                             <Input id="inpMedicoCompetente"
                                                 value="{POS>/medicocompetente}"
@@ -126,14 +123,14 @@
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_works_director_site}">
+                                    <form:FormElement label="{i18n>lblWorksDirectorSite}">
                                         <form:fields>
                                             <Input id="inpWorksDirectorSite"
                                                 value="{POS>/direttoreCantiere}"
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_site_manager}">
+                                    <form:FormElement label="{i18n>lblSiteManager}">
                                         <form:fields>
                                             <Input id="inpSiteManager"
                                                 value="{POS>/direttoreTecnico}"
@@ -146,7 +143,7 @@
                             <!-- Container 3: date -->
                             <form:FormContainer>
                                 <form:formElements>
-                                    <form:FormElement label="{i18n>lbl_pos_status}">
+                                    <form:FormElement label="{i18n>lblPosStatus}">
                                         <form:fields>
                                             <ComboBox id="selStatoPos"
                                                 selectedKey="{POS>/statoPos}"
@@ -156,14 +153,14 @@
                                             </ComboBox>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_revision}">
+                                    <form:FormElement label="{i18n>lblRevision}">
                                         <form:fields>
                                             <Input id="inpRevision"
                                                 value="{POS>/revisione}"
                                                 maxLength="6"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_draft_date}">
+                                    <form:FormElement label="{i18n>lblDraftDate}">
                                         <form:fields>
                                             <DatePicker id="dpDraftDate"
                                                 value="{POS>/dataRedazione}"
@@ -171,7 +168,7 @@
                                                 displayFormat="dd/MM/yyyy"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_reception_date}">
+                                    <form:FormElement label="{i18n>lblReceptionDate}">
                                         <form:fields>
                                             <DatePicker id="dpReceptionDate"
                                                 value="{POS>/dataRicezioneCruscotto}"
@@ -179,7 +176,7 @@
                                                 displayFormat="dd/MM/yyyy"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lbl_link}">
+                                    <form:FormElement label="{i18n>lblLink}">
                                         <form:fields>
                                             <Input id="inpLink"
                                                 value="{POS>/linkCde}"
@@ -203,55 +200,34 @@
                         <Page showHeader="false"
                             enableScrolling="true">
                             <content>
-                                <Panel class="tablePanelContent">
+                                <Panel>
                                     <headerToolbar>
                                         <OverflowToolbar style="Standard">
-                                            <Title text="{i18n>lbl_employees} ({Staff>/count})"
+                                            <Title text="{i18n>lblEmployees} ({Staff>/count})"
                                                 level="H2"/>
-                                            <SearchField search="onSearchStaff"
-                                                width="16rem"/>
                                             <ToolbarSpacer/>
+                                            <SearchField search=".onSearchStaff"
+                                                width="24rem"/>
                                             <Button icon="sap-icon://add"
-                                                text="{i18n>btn_add}"
-                                                press="onAddStaff"/>
-                                            <Button icon="sap-icon://delete"
-                                                text="{i18n>btn_delete}"
-                                                press="onDeleteStaff"/>
-                                            <Button id="btnStaffReset"
-                                                icon="sap-icon://refresh"
-                                                press="onReset"
-                                                tooltip="{i18n>btn_reset}"/>
-                                            <!-- Sort/Filter di default nascosti: il sort avviene cliccando l'header colonna
-                                                 (onColumnSortStaff), il filtro tramite il SearchField sopra. -->
-                                            <!--<Button icon="sap-icon://sort"
-                                                press="onSettings"
-                                                tooltip="{i18n>btn_sort}"
-                                                app:panel="Sorter">
-                                                <customData>
-                                                    <BadgeCustomData value="{Staff>/sortCount}"/>
-                                                </customData>
-                                            </Button>
-                                            <Button icon="sap-icon://filter"
-                                                press="onSettings"
-                                                app:panel="Filter">
-                                                <customData>
-                                                    <BadgeCustomData value="{Staff>/filterCount}"/>
-                                                </customData>
-                                            </Button>-->
+                                                text="{i18n>btnAdd}"
+                                                press=".onAddStaff"/>
                                             <Button icon="sap-icon://action-settings"
-                                                press="onSettings"
+                                                press=".onSettings"
+                                                tooltip="{i18n>btnSettings}"
                                                 app:panel="Columns"/>
                                             <Button icon="sap-icon://download"
-                                                press="onDownload"/>
+                                                press=".onDownload"
+                                                tooltip="{i18n>btnDownload}"/>
                                         </OverflowToolbar>
                                     </headerToolbar>
                                     <Table id="tblStaff"
                                         items="{Staff>/data}"
-                                        mode="MultiSelect"
+                                        mode="None"
                                         fixedLayout="true"
+                                        alternateRowColors="true"
+                                        sticky="ColumnHeaders"
                                         growing="true"
-                                        growingThreshold="5"
-                                        class="posTable">
+                                        growingThreshold="5">
 
                                         <columns>
 
@@ -259,74 +235,44 @@
                                                 width="9rem"
                                                 visible="false">
                                                 <header>
-                                                    <HBox alignItems="Center" class="sortableColumnHeader">
-                                                        <Link text="{i18n>lbl_employee_id}" press="onColumnSortStaff" class="sortableColumnHeaderLink">
-                                                            <customData>
-                                                                <core:CustomData key="sortKey" value="idDipendente"/>
-                                                            </customData>
-                                                        </Link>
-                                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
-                                                    </HBox>
+                                                    <Label text="{i18n>lblEmployeeId}"
+                                                        wrapping="false"/>
                                                 </header>
                                             </Column>
 
                                             <Column app:p13nKey="nome"
                                                 width="10rem">
                                                 <header>
-                                                    <HBox alignItems="Center" class="sortableColumnHeader">
-                                                        <Link text="{i18n>lbl_first_name}" press="onColumnSortStaff" class="sortableColumnHeaderLink">
-                                                            <customData>
-                                                                <core:CustomData key="sortKey" value="nome"/>
-                                                            </customData>
-                                                        </Link>
-                                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
-                                                    </HBox>
+                                                    <Label id="lblFirstNameStaff" text="{i18n>lblFirstName}"
+                                                        wrapping="false"/>
                                                 </header>
                                             </Column>
 
                                             <Column app:p13nKey="cognome"
                                                 width="10rem">
                                                 <header>
-                                                    <HBox alignItems="Center" class="sortableColumnHeader">
-                                                        <Link text="{i18n>lbl_last_name}" press="onColumnSortStaff" class="sortableColumnHeaderLink">
-                                                            <customData>
-                                                                <core:CustomData key="sortKey" value="cognome"/>
-                                                            </customData>
-                                                        </Link>
-                                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
-                                                    </HBox>
+                                                    <Label id="lblLastNameStaff" text="{i18n>lblLastName}"
+                                                        wrapping="false"/>
                                                 </header>
                                             </Column>
 
                                             <Column app:p13nKey="reparto"
                                                 width="12rem">
                                                 <header>
-                                                    <HBox alignItems="Center" class="sortableColumnHeader">
-                                                        <Link text="{i18n>lbl_department}" press="onColumnSortStaff" class="sortableColumnHeaderLink">
-                                                            <customData>
-                                                                <core:CustomData key="sortKey" value="reparto"/>
-                                                            </customData>
-                                                        </Link>
-                                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
-                                                    </HBox>
+                                                    <Label id="lblDepartmentStaff" text="{i18n>lblDepartment}"
+                                                        wrapping="false"/>
                                                 </header>
                                             </Column>
 
                                             <Column app:p13nKey="mansione"
                                                 width="10rem">
                                                 <header>
-                                                    <HBox alignItems="Center" class="sortableColumnHeader">
-                                                        <Link text="{i18n>lbl_role}" press="onColumnSortStaff" class="sortableColumnHeaderLink">
-                                                            <customData>
-                                                                <core:CustomData key="sortKey" value="mansione"/>
-                                                            </customData>
-                                                        </Link>
-                                                        <core:Icon src="sap-icon://sort" class="sapUiTinyMarginBegin sortIcon" size="0.85rem" visible="false"/>
-                                                    </HBox>
+                                                    <Label id="lblRoleStaff" text="{i18n>lblRole}"
+                                                        wrapping="false"/>
                                                 </header>
                                             </Column>
 
-                                            <Column width="3.5rem"
+                                            <Column width="6rem"
                                                 hAlign="Center">
                                                 <header>
                                                     <Label text=""/>
@@ -341,18 +287,28 @@
                                                     <Text text="{Staff>idDipendente}"
                                                         wrapping="false"/>
                                                     <Input value="{Staff>nome}"
-                                                        maxLength="50"/>
+                                                        maxLength="50"
+                                                        ariaLabelledBy="lblFirstNameStaff"/>
                                                     <Input value="{Staff>cognome}"
-                                                        maxLength="50"/>
+                                                        maxLength="50"
+                                                        ariaLabelledBy="lblLastNameStaff"/>
                                                     <Input value="{Staff>reparto}"
                                                         maxLength="50"
-                                                        required="true"/>
+                                                        required="true"
+                                                        ariaLabelledBy="lblDepartmentStaff"/>
                                                     <Input value="{Staff>mansione}"
-                                                        maxLength="50"/>
-                                                    <Button icon="sap-icon://permission"
-                                                        type="Transparent"
-                                                        press="onOpenSkills"
-                                                        tooltip="{i18n>btn_skills}"/>
+                                                        maxLength="50"
+                                                        ariaLabelledBy="lblRoleStaff"/>
+                                                    <HBox>
+                                                        <Button icon="sap-icon://permission"
+                                                            type="Transparent"
+                                                            press=".onOpenSkills"
+                                                            tooltip="{i18n>btnSkills}"/>
+                                                        <Button icon="sap-icon://delete"
+                                                            type="Transparent"
+                                                            press=".onDeleteStaff"
+                                                            tooltip="{i18n>btnDelete}"/>
+                                                    </HBox>
                                                 </cells>
                                             </ColumnListItem>
                                         </items>
@@ -364,9 +320,9 @@
 
                     <!-- Colonna detail: abilitazioni dipendente -->
                     <f:midColumnPages>
-                        <Page title="{= ${i18n>lbl_skills} + ' - ' + ${Skills>/nome} + ' ' + ${Skills>/cognome} }"
+                        <Page title="{= ${i18n>lblSkills} + ' - ' + ${Skills>/nome} + ' ' + ${Skills>/cognome} }"
                             showNavButton="true"
-                            navButtonPress="onCloseSkills">
+                            navButtonPress=".onCloseSkills">
                             <content>
                                 <VBox class="skillsPanel">
 
@@ -375,12 +331,12 @@
                                         <items>
 
                                             <!-- Tab 1: Abilitazioni Ferroviarie -->
-                                            <IconTabFilter text="{i18n>lbl_tab_ferroviaria}"
+                                            <IconTabFilter text="{i18n>lblTabFerroviaria}"
                                                 key="ferroviaria">
-                                                <Panel class="tablePanelContent">
+                                                <Panel>
                                                     <headerToolbar>
                                                         <OverflowToolbar style="Standard">
-                                                            <Title text="{i18n>lbl_tab_ferroviaria}"
+                                                            <Title text="{i18n>lblTabFerroviaria}"
                                                                 level="H2"/>
                                                             <ToolbarSpacer/>
                                                         </OverflowToolbar>
@@ -388,22 +344,22 @@
                                                     <Table id="tblFerroviaria"
                                                         items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'ferroviaria'}]}"
                                                         mode="MultiSelect"
-                                                        selectionChange="onSkillSelectionChange"
+                                                        selectionChange=".onSkillSelectionChange"
                                                         fixedLayout="false">
                                                         <columns>
                                                             <Column>
                                                                 <header>
-                                                                    <Label text="{i18n>lbl_skills}"/>
+                                                                    <Label text="{i18n>lblSkills}"/>
                                                                 </header>
                                                             </Column>
                                                             <Column width="10rem">
                                                                 <header>
-                                                                    <Label text="{i18n>lbl_skill_start}"/>
+                                                                    <Label id="lblSkillStartFerroviaria" text="{i18n>lblSkillStart}"/>
                                                                 </header>
                                                             </Column>
                                                             <Column width="10rem">
                                                                 <header>
-                                                                    <Label text="{i18n>lbl_skill_end}"/>
+                                                                    <Label id="lblSkillEndFerroviaria" text="{i18n>lblSkillEnd}"/>
                                                                 </header>
                                                             </Column>
                                                         </columns>
@@ -418,13 +374,15 @@
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        change="onSkillDateChange"/>
+                                                                        change=".onSkillDateChange"
+                                                                        ariaLabelledBy="lblSkillStartFerroviaria"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        change="onSkillDateChange"/>
+                                                                        change=".onSkillDateChange"
+                                                                        ariaLabelledBy="lblSkillEndFerroviaria"/>
                                                                 </cells>
                                                             </ColumnListItem>
                                                         </items>
@@ -433,12 +391,12 @@
                                             </IconTabFilter>
 
                                             <!-- Tab 2: Decreto 81/2008 -->
-                                            <IconTabFilter text="{i18n>lbl_tab_decreto}"
+                                            <IconTabFilter text="{i18n>lblTabDecreto}"
                                                 key="decreto">
-                                                <Panel class="tablePanelContent">
+                                                <Panel>
                                                     <headerToolbar>
                                                         <OverflowToolbar style="Standard">
-                                                            <Title text="{i18n>lbl_tab_decreto}"
+                                                            <Title text="{i18n>lblTabDecreto}"
                                                                 level="H2"/>
                                                             <ToolbarSpacer/>
                                                         </OverflowToolbar>
@@ -446,22 +404,22 @@
                                                     <Table id="tblDecreto"
                                                         items="{path: 'Skills>/items', filters: [{path: 'categoria', operator: 'EQ', value1: 'decreto'}]}"
                                                         mode="MultiSelect"
-                                                        selectionChange="onSkillSelectionChange"
+                                                        selectionChange=".onSkillSelectionChange"
                                                         fixedLayout="false">
                                                         <columns>
                                                             <Column>
                                                                 <header>
-                                                                    <Label text="{i18n>lbl_skills}"/>
+                                                                    <Label text="{i18n>lblSkills}"/>
                                                                 </header>
                                                             </Column>
                                                             <Column width="10rem">
                                                                 <header>
-                                                                    <Label text="{i18n>lbl_skill_start}"/>
+                                                                    <Label id="lblSkillStartDecreto" text="{i18n>lblSkillStart}"/>
                                                                 </header>
                                                             </Column>
                                                             <Column width="10rem">
                                                                 <header>
-                                                                    <Label text="{i18n>lbl_skill_end}"/>
+                                                                    <Label id="lblSkillEndDecreto" text="{i18n>lblSkillEnd}"/>
                                                                 </header>
                                                             </Column>
                                                         </columns>
@@ -476,13 +434,15 @@
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        change="onSkillDateChange"/>
+                                                                        change=".onSkillDateChange"
+                                                                        ariaLabelledBy="lblSkillStartDecreto"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
                                                                         displayFormat="dd/MM/yyyy"
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
-                                                                        change="onSkillDateChange"/>
+                                                                        change=".onSkillDateChange"
+                                                                        ariaLabelledBy="lblSkillEndDecreto"/>
                                                                 </cells>
                                                             </ColumnListItem>
                                                         </items>
@@ -505,17 +465,17 @@
 
         <f:footer>
             <OverflowToolbar>
-                <Button text="{i18n>btn_back}"
+                <Button text="{i18n>btnBack}"
                     icon="sap-icon://nav-back"
-                    press="onBack"
+                    press=".onBack"
                     type="Transparent"
                     visible="{POS>/isEdit}"/>
                 <ToolbarSpacer/>
                 <Button id="btnSave"
-                    text="{i18n>btn_save}"
+                    text="{i18n>btnSave}"
                     type="Emphasized"
                     icon="sap-icon://save"
-                    press="onSave"/>
+                    press=".onSave"/>
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>

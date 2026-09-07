@@ -6,17 +6,18 @@
     xmlns:card="sap.f.cards"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 
-    <f:DynamicPage showFooter="false" class="pageHome">
+    <f:DynamicPage showFooter="false"
+        class="pageHome">
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="{i18n>menu_home}"/>
+                    <Title text="{i18n>menuHome}"/>
                 </f:heading>
                 <f:actions>
-                    <Button text="{i18n>btn_new_pos}"
+                    <Button text="{i18n>btnNewPos}"
                         type="Emphasized"
                         icon="sap-icon://add"
-                        press="onNewPos"/>
+                        press=".onNewPos"/>
                 </f:actions>
             </f:DynamicPageTitle>
         </f:title>
@@ -30,38 +31,38 @@
                     <f:Card class="sapUiTinyMargin pos-stat-card"
                         width="20rem">
                         <f:header>
-                            <card:NumericHeader title="{i18n>card_pos_inserted}"
+                            <card:NumericHeader title="{i18n>cardPosInserted}"
                                 number="{Dashboard>/posInserted}"/>
                         </f:header>
                     </f:Card>
                     <f:Card class="sapUiTinyMargin pos-stat-card"
                         width="20rem">
                         <f:header>
-                            <card:NumericHeader title="{i18n>card_pos_to_insert}"
+                            <card:NumericHeader title="{i18n>cardPosToInsert}"
                                 number="{Dashboard>/posToInsert}"/>
                         </f:header>
                     </f:Card>
                     <f:Card class="sapUiTinyMargin pos-stat-card"
                         width="20rem">
                         <f:header>
-                            <card:NumericHeader title="{i18n>card_pos_scaduti}"
+                            <card:NumericHeader title="{i18n>cardPosScaduti}"
                                 number="{Dashboard>/posScaduti}"/>
                         </f:header>
                     </f:Card>
                     <f:Card class="sapUiTinyMargin pos-stat-card"
                         width="20rem">
                         <f:header>
-                            <card:NumericHeader title="{i18n>card_pos_superati}"
+                            <card:NumericHeader title="{i18n>cardPosSuperati}"
                                 number="{Dashboard>/posSuperati}"/>
                         </f:header>
                     </f:Card>
                 </HBox>
 
                 <!-- ULTIMI POS AGGIORNATI -->
-                <Panel class="sapUiTinyMarginTop tablePanelContent">
+                <Panel class="sapUiTinyMarginTop">
                     <headerToolbar>
                         <OverflowToolbar style="Standard">
-                            <Title text="{i18n>lbl_latest_pos}"
+                            <Title text="{i18n>lblLatestPos}"
                                 level="H2"/>
                             <ToolbarSpacer/>
                         </OverflowToolbar>
@@ -70,56 +71,56 @@
                         items="{path: '/PosTestataSet', parameters: {$count: true, $orderby: 'modifiedAt desc', $select: 'idPos,contratto,impresaAppaltatrice,ruoloImpresa,statoPos,dataRedazione,modifiedAt'}, length: 5}"
                         mode="None"
                         fixedLayout="true"
-                        growing="false"
-                        class="posTable">
+                        alternateRowColors="true"
+                        growing="false">
 
                         <columns>
                             <Column app:p13nKey="contratto"
                                 width="10rem">
                                 <header>
-                                    <Label text="{i18n>lbl_contract_code}"
+                                    <Label text="{i18n>lblContractCode}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
                             <Column app:p13nKey="impresaAppaltatrice"
                                 width="15rem">
                                 <header>
-                                    <Label text="{i18n>lbl_contractor_company}"
+                                    <Label text="{i18n>lblContractorCompany}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
                             <Column app:p13nKey="ruoloImpresa"
                                 width="10rem">
                                 <header>
-                                    <Label text="{i18n>lbl_company_role}"
+                                    <Label text="{i18n>lblCompanyRole}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
                             <Column app:p13nKey="statoPos"
                                 width="8rem">
                                 <header>
-                                    <Label text="{i18n>lbl_pos_status}"
+                                    <Label text="{i18n>lblPosStatus}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
                             <Column app:p13nKey="dataRedazione"
                                 width="9rem">
                                 <header>
-                                    <Label text="{i18n>lbl_draft_date}"
+                                    <Label text="{i18n>lblDraftDate}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
                             <Column app:p13nKey="modifiedAt"
                                 width="10rem">
                                 <header>
-                                    <Label text="{i18n>lbl_modified_at}"
+                                    <Label text="{i18n>lblModifiedAt}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
                         </columns>
 
                         <items>
-                            <ColumnListItem press="onOpenPos"
+                            <ColumnListItem press=".onOpenPos"
                                 type="Navigation">
                                 <cells>
                                     <Text text="{contratto}"
@@ -128,12 +129,10 @@
                                         wrapping="false"/>
                                     <Text text="{ruoloImpresa}"
                                         wrapping="false"/>
-                                    <ObjectStatus text="{statoPos}" class="posStatusBadge">
-                                        <customData>
-                                            <core:CustomData key="stato" value="{statoPos}" writeToDom="true"/>
-                                        </customData>
-                                    </ObjectStatus>
-                                    <Text text="{path: 'dataRedazione', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                    <ObjectStatus text="{statoPos}"
+                                        state="{= ${statoPos} === 'Valido' ? 'Success' : ${statoPos} === 'Scaduto' ? 'Error' : ${statoPos} === 'Superato' ? 'Warning' : 'None' }"/>
+                                    <Text core:require="{ ODataDate: 'sap/ui/model/odata/type/Date' }"
+                                        text="{path: 'dataRedazione', type: 'ODataDate', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
                                         wrapping="false"/>
                                     <Text text="{path: 'modifiedAt', formatter: '.dateUtils.formatDateTimeOffsetToDDMMYYYY'}"
                                         wrapping="false"/>

@@ -3,22 +3,17 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import MessageBox from "sap/m/MessageBox";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
 import p13nColumnUtils from "../utils/p13nColumnUtils";
-import entityUtils from "../utils/entityUtils";
 import dateUtils from "../utils/dateUtils";
 import xlsxUtils from "../utils/xlsxUtils";
 import Table from "sap/m/Table";
-import Column from "sap/m/Column";
-import Icon from "sap/ui/core/Icon";
-import Link from "sap/m/Link";
 import Sorter from "sap/ui/model/Sorter";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
+import FilterType from "sap/ui/model/FilterType";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 
 const DEFAULT_MODEL = {
   count: 0,
-  sortCount: 0,
-  filterCount: 0,
 };
 
 /**
@@ -29,7 +24,6 @@ export default class PosList extends BaseController {
 
   private _oModelPos!: JSONModel;
   private _bP13nRegistered = false;
-  private _oColumnSortState: { key: string; state: "asc" | "desc" } | null = null;
   private _sSearchQuery = "";
 
   public onInit(): void {
@@ -43,34 +37,28 @@ export default class PosList extends BaseController {
     if (this._bP13nRegistered) return;
     const oTable = this.byId("tblPos") as Table;
     if (oTable) {
-      p13nDialogUtils.register(oTable, (s, f) => {
-        this._oModelPos.setProperty("/sortCount", s);
-        this._oModelPos.setProperty("/filterCount", f);
-      });
+      p13nDialogUtils.register(oTable);
+      p13nDialogUtils.assignColumnMenus(oTable, this._onQuickSort.bind(this, oTable));
+      this._attachCountUpdate(oTable);
       this._bP13nRegistered = true;
     }
   }
 
-  private _onRouteMatched(): void {
-    const oTable = this.byId("tblPos") as Table;
+  private _attachCountUpdate(oTable: Table): void {
     const oBinding = oTable.getBinding("items") as ODataListBinding;
     if (!oBinding) return;
-    oBinding.attachEventOnce("dataReceived", async () => {
-      const iCount = await oBinding.getHeaderContext()!.requestProperty("$count");
-      this._oModelPos.setProperty("/count", iCount);
+
+    oBinding.attachEvent("change", () => {
+      const iCount = oBinding.getCount();
+      if (iCount !== undefined) {
+        this._oModelPos.setProperty("/count", iCount);
+      }
     });
-    oBinding.refresh();
   }
 
-  public async onReset(): Promise<void> {
-    try {
-      const oTable = this.byId("tblPos") as Table;
-      await p13nDialogUtils.reset(oTable);
-      this._oModelPos.setProperty("/sortCount", 0);
-      this._oModelPos.setProperty("/filterCount", 0);
-    } catch (e) {
-      entityUtils.handleError(e as Error);
-    }
+  private _onRouteMatched(): void {
+    const oTable = this.byId("tblPos") as Table;
+    (oTable.getBinding("items") as ODataListBinding)?.refresh();
   }
 
   public onSettings(oEvent: any): void {
@@ -79,52 +67,12 @@ export default class PosList extends BaseController {
     p13nDialogUtils.open(oTable, sPanel as any, oEvent.getSource());
   }
 
-  public onColumnSort(oEvent: any): void {
-    const oLink = oEvent.getSource() as Link;
-    const sKey = oLink.data("sortKey") as string;
-    const oCurrentState = this._oColumnSortState;
-    const bSameColumn = oCurrentState && oCurrentState.key === sKey;
-
-    let sNextState: "asc" | "desc" | null;
-    if (!bSameColumn) {
-      sNextState = "asc";
-    } else if (oCurrentState!.state === "asc") {
-      sNextState = "desc";
-    } else {
-      sNextState = null;
-    }
-
-    this._oColumnSortState = sNextState ? { key: sKey, state: sNextState } : null;
-    this._updateSortHeaders(sKey, sNextState);
-
-    const oTable = this.byId("tblPos") as Table;
+  private _onQuickSort(oTable: Table, sKey: string, sSortOrder: string): void {
     const oBinding = oTable.getBinding("items") as ODataListBinding;
     if (!oBinding) return;
 
-    const aSorters = this._oColumnSortState
-      ? [new Sorter(this._oColumnSortState.key, this._oColumnSortState.state === "desc")]
-      : [];
+    const aSorters = sSortOrder === "None" ? [] : [new Sorter(sKey, sSortOrder === "Descending")];
     oBinding.sort(aSorters);
-  }
-
-  private _updateSortHeaders(sKey: string, sState: "asc" | "desc" | null): void {
-    const oTable = this.byId("tblPos") as Table;
-    if (!oTable) return;
-
-    (oTable.getColumns() as Column[]).forEach((oColumn) => {
-      const oHeader = oColumn.getHeader() as any;
-      if (!oHeader?.getItems) return;
-      const oLink = oHeader.getItems()[0] as Link;
-      const oIcon = oHeader.getItems()[1] as Icon;
-      if (!oLink || !oIcon) return;
-
-      if (oLink.data("sortKey") === sKey && sState) {
-        oIcon.setSrc(sState === "desc" ? "sap-icon://sort-descending" : "sap-icon://sort-ascending");
-        oIcon.setVisible(true);
-      } else {
-        oIcon.setVisible(false);
-      }
-    });
   }
 
   public onSearch(oEvent: any): void {
@@ -138,7 +86,7 @@ export default class PosList extends BaseController {
     if (!oBinding) return;
 
     if (!this._sSearchQuery) {
-      oBinding.filter([]);
+      oBinding.filter([], FilterType.Control);
       return;
     }
 
@@ -154,13 +102,13 @@ export default class PosList extends BaseController {
           caseSensitive: false,
         })
     );
-    oBinding.filter([new Filter({ filters: aOrFilters, and: false })]);
+    oBinding.filter([new Filter({ filters: aOrFilters, and: false })], FilterType.Control);
   }
 
   public async onDownload(): Promise<void> {
     const oTable = this.byId("tblPos") as Table;
     const oBinding = oTable.getBinding("items") as ODataListBinding;
-    const aContexts = await oBinding.requestContexts(0, Infinity);
+    const aContexts = await this.getAllContexts(oBinding);
     const aData = aContexts.map((ctx) => ctx.getObject());
     const aColumns = xlsxUtils.getColumnsFromTable(this, oTable);
     await xlsxUtils.generateSpreadsheet(aColumns, aData, "GestionePOS.xlsx");
@@ -180,29 +128,20 @@ export default class PosList extends BaseController {
     });
   }
 
-  public onDelete(): void {
-    const oTable = this.byId("tblPos") as Table;
-    const aSelected = oTable.getSelectedItems();
-    if (!aSelected.length) {
-      MessageBox.warning(this.getText("msg_no_selection"));
-      return;
-    }
-    MessageBox.confirm(this.getText("msg_confirm_delete_pos"), {
+  public onDelete(oEvent: any): void {
+    const oContext = oEvent.getSource().getBindingContext();
+    if (!oContext) return;
+    const oRow = oContext.getObject() as { idPos: string };
+
+    MessageBox.confirm(this.getText("msgConfirmDeletePos"), {
       onClose: async (sAction: string | null) => {
-        if (sAction === MessageBox.Action.OK) {
-          const aIds = aSelected.map((item) => {
-            const oCtx = item.getBindingContext();
-            return (oCtx?.getObject() as { idPos: string }).idPos;
-          });
-          const bSuccess = await this.deleteEntitiesBatch(
-            "/PosTestataSet",
-            aIds.map((sId) => ({ idPos: sId }))
-          );
-          if (bSuccess) {
-            MessageBox.success(this.getText("msg_delete_success"));
-          }
-          (oTable.getBinding("items") as ODataListBinding).refresh();
+        if (sAction !== MessageBox.Action.OK) return;
+        const oTable = this.byId("tblPos") as Table;
+        const bSuccess = await this.deleteEntitiesBatch("/PosTestataSet", [{ idPos: oRow.idPos }]);
+        if (bSuccess) {
+          MessageBox.success(this.getText("msgDeleteSuccess"));
         }
+        (oTable.getBinding("items") as ODataListBinding).refresh();
       },
     });
   }

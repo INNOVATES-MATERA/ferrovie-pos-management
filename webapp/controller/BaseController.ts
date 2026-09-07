@@ -7,6 +7,8 @@ import ResourceModel from "sap/ui/model/resource/ResourceModel";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
+import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
+import Context from "sap/ui/model/odata/v4/Context";
 
 /**
  * @namespace posmanagement.controller
@@ -164,6 +166,20 @@ export default abstract class BaseController extends Controller {
             throw new Error(json?.error?.message ?? `HTTP error! status: ${response.status}`);
         }
         return (await response.json()) as T;
+    }
+
+    /**
+     * Requests every context of an OData V4 list binding, not just the ones already
+     * loaded/rendered by growing. Used for export (xlsx) so long lists are not
+     * silently truncated. Falls back to the currently loaded contexts when the
+     * total count is not known.
+     */
+    public async getAllContexts(oBinding: ODataListBinding): Promise<Context[]> {
+        const iCount = oBinding.getCount();
+        if (iCount === undefined) {
+            return oBinding.getAllCurrentContexts();
+        }
+        return oBinding.requestContexts(0, iCount);
     }
 
     protected _buildKey(oKey: Record<string, unknown>): string {

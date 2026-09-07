@@ -7,8 +7,6 @@ import ColumnListItem from "sap/m/ColumnListItem";
 import Column from "sap/m/Column";
 import Label from "sap/m/Label";
 import Text from "sap/m/Text";
-import Link from "sap/m/Link";
-import Icon from "sap/ui/core/Icon";
 import TableSelectDialog from "sap/m/TableSelectDialog";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
@@ -48,7 +46,7 @@ const DEFAULT_POS = {
   formTitle: "",
 };
 
-const DEFAULT_STAFF = { data: [] as object[], count: 0, sortCount: 0, filterCount: 0 };
+const DEFAULT_STAFF = { data: [] as object[], count: 0 };
 
 const DEFAULT_STAFF_ROW = {
   posTestata_idPos: "",
@@ -124,22 +122,9 @@ export default class Pos extends BaseController {
     if (this._bP13nRegistered) return;
     const oTable = this.byId("tblStaff") as Table;
     if (oTable) {
-      p13nDialogUtils.register(oTable, (s, f) => {
-        this._oModelStaff.setProperty("/sortCount", s);
-        this._oModelStaff.setProperty("/filterCount", f);
-      });
+      p13nDialogUtils.register(oTable);
+      p13nDialogUtils.assignColumnMenus(oTable, this._onQuickSortStaff.bind(this, oTable));
       this._bP13nRegistered = true;
-    }
-  }
-
-  public async onReset(): Promise<void> {
-    try {
-      const oTable = this.byId("tblStaff") as Table;
-      await p13nDialogUtils.reset(oTable);
-      this._oModelStaff.setProperty("/sortCount", 0);
-      this._oModelStaff.setProperty("/filterCount", 0);
-    } catch (e) {
-      entityUtils.handleError(e as Error);
     }
   }
 
@@ -168,7 +153,7 @@ export default class Pos extends BaseController {
       contratto: this._sContractCode,
       idPos: bIsEdit ? this._sPosId : generateRandomId(),
       isEdit: bIsEdit,
-      formTitle: bIsEdit ? this.getText("lbl_pos_form") : this.getText("lbl_pos_form_create"),
+      formTitle: bIsEdit ? this.getText("lblPosForm") : this.getText("lblPosFormCreate"),
     });
 
     this._oModelSkills.setData(structuredClone(DEFAULT_SKILLS));
@@ -188,7 +173,7 @@ export default class Pos extends BaseController {
   }
 
   public onSave(): void {
-    MessageBox.confirm(this.getText("msg_confirm_save"), {
+    MessageBox.confirm(this.getText("msgConfirmSave"), {
       onClose: async (sAction: string | null) => {
         if (sAction === MessageBox.Action.OK) {
           await this._executeSave();
@@ -207,18 +192,18 @@ export default class Pos extends BaseController {
     const sContratto = (this._oModelPOS.getProperty("/contratto") as string) ?? "";
 
     if (!sContratto.trim()) {
-      MessageBox.error(this.getText("msg_contract_required"));
+      MessageBox.error(this.getText("msgContractRequired"));
       return;
     }
 
     if (!sDatore.trim() || !sMedico.trim() || !sRls.trim()) {
-      MessageBox.error(this.getText("msg_mandatory_fields"));
+      MessageBox.error(this.getText("msgMandatoryFields"));
       return;
     }
 
     const aStaff = this._aStaffAllRows as { reparto: string }[];
     if (aStaff.some((p) => !p.reparto?.trim())) {
-      MessageBox.error(this.getText("msg_reparto_required"));
+      MessageBox.error(this.getText("msgRepartoRequired"));
       return;
     }
 
@@ -227,7 +212,7 @@ export default class Pos extends BaseController {
     const aSkillItems = (this._oModelSkills.getProperty("/items") as SkillItem[]) || [];
     for (const skill of aSkillItems) {
       if (skill.flagAttiva && dateUtils.isDateAfter(skill.inizioAbilitazione, skill.scadenzaAbilitazione)) {
-        MessageBox.error(this.getText("msg_error_save_date"));
+        MessageBox.error(this.getText("msgErrorSaveDate"));
         return;
       }
     }
@@ -260,14 +245,14 @@ export default class Pos extends BaseController {
 
       if (bIsEdit) {
         await this.updateEntity("/PosTestataSet", { idPos: sPosId }, oPosPayload);
-        MessageBox.success(this.getText("msg_save_success"), {
+        MessageBox.success(this.getText("msgSaveSuccess"), {
           onClose: () => {
             this.getRouter().navTo("RoutePosList");
           },
         });
       } else {
         await this.createEntity("/PosTestataSet", oPosPayload);
-        MessageBox.success(this.getText("msg_save_success"), {
+        MessageBox.success(this.getText("msgSaveSuccess"), {
           onClose: () => {
             this.getRouter().navTo("RoutePosList");
           },
@@ -285,16 +270,16 @@ export default class Pos extends BaseController {
   public onContractValueHelp(): void {
     if (!this._oContractDialog) {
       this._oContractDialog = new TableSelectDialog({
-        title: this.getText("lbl_select_contract"),
+        title: this.getText("lblSelectContract"),
         search: (oEvt: any) => this._filterContractDialog(oEvt.getParameter("value") as string),
         liveChange: (oEvt: any) => this._filterContractDialog(oEvt.getParameter("value") as string),
         confirm: (oEvt: any) => this._onContractSelected(oEvt),
         columns: [
-          new Column({ header: new Label({ text: this.getText("lbl_act_code") }) }),
-          new Column({ header: new Label({ text: this.getText("lbl_contract_code") }) }),
-          new Column({ header: new Label({ text: this.getText("lbl_contract_title") }) }),
-          new Column({ header: new Label({ text: this.getText("lbl_sap_purchase_org_code") }) }),
-          new Column({ header: new Label({ text: this.getText("lbl_sap_purchase_group_code") }) }),
+          new Column({ header: new Label({ text: this.getText("lblActCode") }) }),
+          new Column({ header: new Label({ text: this.getText("lblContractCode") }) }),
+          new Column({ header: new Label({ text: this.getText("lblContractTitle") }) }),
+          new Column({ header: new Label({ text: this.getText("lblSapPurchaseOrgCode") }) }),
+          new Column({ header: new Label({ text: this.getText("lblSapPurchaseGroupCode") }) }),
         ],
       });
       this._oContractDialog.bindAggregation("items", {
@@ -397,14 +382,14 @@ export default class Pos extends BaseController {
 
     if (!this._oImpresaDialog) {
       this._oImpresaDialog = new TableSelectDialog({
-        title: this.getText("lbl_select_impresa"),
+        title: this.getText("lblSelectImpresa"),
         search: (oEvt: any) => this._filterImpresaDialog(oEvt.getParameter("value") as string),
         liveChange: (oEvt: any) => this._filterImpresaDialog(oEvt.getParameter("value") as string),
         confirm: (oEvt: any) => this._onImpresaSelected(oEvt),
         columns: [
-          new Column({ header: new Label({ text: this.getText("lbl_ragione_sociale") }) }),
-          new Column({ header: new Label({ text: this.getText("lbl_partita_iva") }) }),
-          new Column({ header: new Label({ text: this.getText("lbl_codice_fiscale") }) }),
+          new Column({ header: new Label({ text: this.getText("lblRagioneSociale") }) }),
+          new Column({ header: new Label({ text: this.getText("lblPartitaIva") }) }),
+          new Column({ header: new Label({ text: this.getText("lblCodiceFiscale") }) }),
         ],
       });
       this._oImpresaDialog.setModel(new JSONModel({ items: [] }), "ImpresaList");
@@ -465,7 +450,7 @@ export default class Pos extends BaseController {
     const sFine = oPickerFine.getValue() || "";
     const bError = dateUtils.isDateAfter(sInizio, sFine);
     const sState = bError ? "Error" : "None";
-    const sText = bError ? this.getText("msg_error_skill_range") : "";
+    const sText = bError ? this.getText("msgErrorSkillRange") : "";
 
     oPickerInizio.setValueState(sState as any);
     oPickerInizio.setValueStateText(sText);
@@ -484,65 +469,24 @@ export default class Pos extends BaseController {
     this._refreshStaffTable();
   }
 
-  public onDeleteStaff(): void {
-    const oTable = this.byId("tblStaff") as Table;
-    const aSelected = oTable.getSelectedItems();
-    if (!aSelected.length) {
-      MessageBox.warning(this.getText("msg_no_selection"));
-      return;
-    }
-    MessageBox.confirm(this.getText("msg_confirm_delete_employees"), {
-      onClose: async (sAction: string | null) => {
+  public onDeleteStaff(oEvent: any): void {
+    const oContext = oEvent.getSource().getBindingContext("Staff");
+    if (!oContext) return;
+    const oRow = oContext.getObject() as object;
+
+    MessageBox.confirm(this.getText("msgConfirmDeleteEmployee"), {
+      onClose: (sAction: string | null) => {
         if (sAction === MessageBox.Action.OK) {
-          const aVisible = this._oModelStaff.getProperty("/data") as object[];
-          const aIndicesToDelete = new Set(aSelected.map((item) => oTable.indexOfItem(item as any)));
-          const aRemoved = aVisible.filter((_, i) => aIndicesToDelete.has(i));
-          this._aStaffAllRows = this._aStaffAllRows.filter((row) => !aRemoved.includes(row));
+          this._aStaffAllRows = this._aStaffAllRows.filter((row) => row !== oRow);
           this._refreshStaffTable();
-          oTable.removeSelections(true);
         }
       },
     });
   }
 
-  public onColumnSortStaff(oEvent: any): void {
-    const oLink = oEvent.getSource() as Link;
-    const sKey = oLink.data("sortKey") as string;
-    const oCurrentState = this._oStaffSortState;
-    const bSameColumn = oCurrentState && oCurrentState.key === sKey;
-
-    let sNextState: "asc" | "desc" | null;
-    if (!bSameColumn) {
-      sNextState = "asc";
-    } else if (oCurrentState!.state === "asc") {
-      sNextState = "desc";
-    } else {
-      sNextState = null;
-    }
-
-    this._oStaffSortState = sNextState ? { key: sKey, state: sNextState } : null;
-    this._updateSortHeadersStaff(sKey, sNextState);
+  private _onQuickSortStaff(_oTable: Table, sKey: string, sSortOrder: string): void {
+    this._oStaffSortState = sSortOrder === "None" ? null : { key: sKey, state: sSortOrder === "Descending" ? "desc" : "asc" };
     this._refreshStaffTable();
-  }
-
-  private _updateSortHeadersStaff(sKey: string, sState: "asc" | "desc" | null): void {
-    const oTable = this.byId("tblStaff") as Table;
-    if (!oTable) return;
-
-    (oTable.getColumns() as Column[]).forEach((oColumn) => {
-      const oHeader = oColumn.getHeader() as any;
-      if (!oHeader?.getItems) return;
-      const oLink = oHeader.getItems()[0] as Link;
-      const oIcon = oHeader.getItems()[1] as Icon;
-      if (!oLink || !oIcon) return;
-
-      if (oLink.data("sortKey") === sKey && sState) {
-        oIcon.setSrc(sState === "desc" ? "sap-icon://sort-descending" : "sap-icon://sort-ascending");
-        oIcon.setVisible(true);
-      } else {
-        oIcon.setVisible(false);
-      }
-    });
   }
 
   public onSearchStaff(oEvent: any): void {
@@ -706,7 +650,7 @@ export default class Pos extends BaseController {
       ...oData,
       dataRicezioneCruscotto: dateUtils.formatISOStringToYYYYMMDD(oData.dataRicezioneCruscotto as string | null),
       isEdit: true,
-      formTitle: this.getText("lbl_pos_form"),
+      formTitle: this.getText("lblPosForm"),
     });
 
     const aPersonale = (oData.personale as Record<string, unknown>[]) ?? [];

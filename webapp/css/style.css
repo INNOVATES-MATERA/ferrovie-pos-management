@@ -5,15 +5,6 @@
 @import "./pos-list.css";
 @import "./pos.css";
 
-/* Sposta il badge dei pulsanti in alto a destra */
-.sapMBadge .sapMBadgeIndicator {
-  position: absolute !important;
-  top: -8px !important;
-  right: -8px !important;
-  bottom: auto !important;
-  left: auto !important;
-}
-
 .skillsPanel {
   margin: 0 !important;
   padding: 8px !important;
