@@ -63,6 +63,7 @@
                     <NavigationPropertyBinding Path="oda" Target="ODA"/>
                 </EntitySet>
                 <EntitySet Name="PosTestataSet" EntityType="AttiService.PosTestataSet">
+                    <NavigationPropertyBinding Path="contratto" Target="Contratti"/>
                     <NavigationPropertyBinding Path="personale" Target="PosDettaglioPersonaleSet"/>
                 </EntitySet>
                 <EntitySet Name="PosDettaglioPersonaleSet" EntityType="AttiService.PosDettaglioPersonaleSet">
@@ -75,6 +76,7 @@
                 </EntitySet>
                 <EntitySet Name="AnagraficaAbilitazioniSet" EntityType="AttiService.AnagraficaAbilitazioniSet"/>
                 <EntitySet Name="Subappalti" EntityType="AttiService.Subappalti">
+                    <NavigationPropertyBinding Path="contratto" Target="Contratti"/>
                     <NavigationPropertyBinding Path="integrazioni" Target="Integrazioni"/>
                     <NavigationPropertyBinding Path="controlli" Target="AssociazioneControlli"/>
                 </EntitySet>
@@ -131,6 +133,7 @@
                 <EntitySet Name="AnagraficaSoa" EntityType="AttiService.AnagraficaSoa"/>
                 <ActionImport Name="deleteByAttoID" Action="AttiService.deleteByAttoID"/>
                 <ActionImport Name="deleteByContrattoID" Action="AttiService.deleteByContrattoID"/>
+                <FunctionImport Name="getImpreseContratto" Function="AttiService.getImpreseContratto"/>
             </EntityContainer>
             <EntityType Name="Atti">
                 <Key>
@@ -634,11 +637,15 @@
                 <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
                 <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
                 <Property Name="idPos" Type="Edm.String" MaxLength="20" Nullable="false"/>
-                <Property Name="contratto" Type="Edm.String" MaxLength="50"/>
+                <NavigationProperty Name="contratto" Type="AttiService.Contratti">
+                    <ReferentialConstraint Property="contratto_codiceContratto" ReferencedProperty="codiceContratto"/>
+                </NavigationProperty>
+                <Property Name="contratto_codiceContratto" Type="Edm.String" MaxLength="50"/>
                 <Property Name="impresaAppaltatrice" Type="Edm.String" MaxLength="100"/>
                 <Property Name="ruoloImpresa" Type="Edm.String" MaxLength="50"/>
                 <Property Name="codiceContrattoSuperiore" Type="Edm.String" MaxLength="50"/>
                 <Property Name="statoPos" Type="Edm.String" MaxLength="50"/>
+                <Property Name="note" Type="Edm.String" MaxLength="250"/>
                 <Property Name="datoreLavoro" Type="Edm.String" MaxLength="100" Nullable="false"/>
                 <Property Name="medicocompetente" Type="Edm.String" MaxLength="100" Nullable="false"/>
                 <Property Name="rls" Type="Edm.String" MaxLength="100" Nullable="false"/>
@@ -647,7 +654,7 @@
                 <Property Name="direttoreCantiere" Type="Edm.String" MaxLength="100"/>
                 <Property Name="revisione" Type="Edm.Int32" DefaultValue="0"/>
                 <Property Name="dataRedazione" Type="Edm.Date"/>
-                <Property Name="dataRicezioneCruscotto" Type="Edm.DateTimeOffset"/>
+                <Property Name="dataProtocollo" Type="Edm.Date"/>
                 <Property Name="inizioValidita" Type="Edm.Date"/>
                 <Property Name="fineValidita" Type="Edm.Date"/>
                 <Property Name="linkCde" Type="Edm.String" MaxLength="1000"/>
@@ -734,12 +741,17 @@
                 <Property Name="oggetto" Type="Edm.String" MaxLength="500"/>
                 <Property Name="importoPresuntoIniziale" Type="Edm.Decimal" Precision="15" Scale="2"/>
                 <Property Name="aq" Type="Edm.String" MaxLength="50"/>
-                <Property Name="contratto" Type="Edm.String" MaxLength="50"/>
+                <NavigationProperty Name="contratto" Type="AttiService.Contratti">
+                    <ReferentialConstraint Property="contratto_codiceContratto" ReferencedProperty="codiceContratto"/>
+                </NavigationProperty>
+                <Property Name="contratto_codiceContratto" Type="Edm.String" MaxLength="50"/>
                 <Property Name="dataInizioContratto" Type="Edm.Date"/>
                 <Property Name="dataFineContratto" Type="Edm.Date"/>
                 <Property Name="caCigDer" Type="Edm.String" MaxLength="50"/>
                 <Property Name="tipologiaCategoria" Type="Edm.String" MaxLength="50"/>
                 <Property Name="tipoCategoria" Type="Edm.String" MaxLength="50"/>
+                <Property Name="nProtocolloIstanza" Type="Edm.String" MaxLength="50"/>
+                <Property Name="nOdsAutorizzazione" Type="Edm.String" MaxLength="50"/>
                 <NavigationProperty Name="integrazioni" Type="Collection(AttiService.Integrazioni)" Partner="subappalto">
                     <OnDelete Action="Cascade"/>
                 </NavigationProperty>
@@ -762,6 +774,7 @@
                 <Property Name="subappalto_ID" Type="Edm.Int32"/>
                 <Property Name="codiceControllo" Type="Edm.String" MaxLength="50"/>
                 <Property Name="stato" Type="Edm.String" MaxLength="100"/>
+                <Property Name="note" Type="Edm.String" MaxLength="150"/>
                 <Property Name="validoDa" Type="Edm.Date"/>
                 <Property Name="validoA" Type="Edm.Date"/>
             </EntityType>
@@ -796,12 +809,14 @@
                 <Property Name="contratto_codiceContratto" Type="Edm.String" MaxLength="50"/>
                 <Property Name="dataCEL" Type="Edm.Date"/>
                 <Property Name="protocollo" Type="Edm.String" MaxLength="50"/>
+                <Property Name="dataProtocollo" Type="Edm.Date"/>
                 <Property Name="statoCEL" Type="Edm.String" MaxLength="50"/>
                 <Property Name="dataDichiarazione" Type="Edm.Date"/>
                 <Property Name="testoDichiarazione" Type="Edm.String"/>
                 <Property Name="statoDichiarazione" Type="Edm.String" MaxLength="50"/>
                 <Property Name="importo_base_asta" Type="Edm.Decimal" Precision="15" Scale="2"/>
                 <Property Name="importo_oneri_sicurezza" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <Property Name="note" Type="Edm.String" MaxLength="250"/>
                 <NavigationProperty Name="ripartizioni" Type="Collection(AttiService.CELRipartizioniCategorie)" Partner="cel">
                     <OnDelete Action="Cascade"/>
                 </NavigationProperty>
@@ -1039,6 +1054,11 @@
                 <Property Name="SistQualifica" Type="Edm.String" MaxLength="50"/>
                 <Property Name="Settore" Type="Edm.String" MaxLength="50"/>
             </EntityType>
+            <ComplexType Name="ImpresaContratto">
+                <Property Name="nomeImpresa" Type="Edm.String" MaxLength="150"/>
+                <Property Name="codiceFiscale" Type="Edm.String" MaxLength="128"/>
+                <Property Name="ruolo" Type="Edm.String" MaxLength="30"/>
+            </ComplexType>
             <Action Name="deleteByAttoID" IsBound="false">
                 <Parameter Name="attoID" Type="Edm.String"/>
                 <ReturnType Type="Edm.String"/>
@@ -1047,6 +1067,10 @@
                 <Parameter Name="contrattoID" Type="Edm.String"/>
                 <ReturnType Type="Edm.String"/>
             </Action>
+            <Function Name="getImpreseContratto" IsBound="false" IsComposable="false">
+                <Parameter Name="codiceContratto" Type="Edm.String" MaxLength="50"/>
+                <ReturnType Type="Collection(AttiService.ImpresaContratto)" Nullable="true"/>
+            </Function>
             <Annotations Target="AttiService.Atti/createdAt">
                 <Annotation Term="UI.HiddenFilter" Bool="true"/>
                 <Annotation Term="UI.ExcludeFromNavigationContext" Bool="true"/>
@@ -2344,6 +2368,11 @@
                 <Annotation Term="Core.Computed" Bool="true"/>
                 <Annotation Term="Core.Description" String="User's unique ID"/>
                 <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="AttiService.getImpreseContratto(Edm.String)/codiceContratto">
+                <Annotation Term="Core.OptionalParameter">
+                    <Record Type="Core.OptionalParameterType"/>
+                </Annotation>
             </Annotations>
         </Schema>
     </edmx:DataServices>

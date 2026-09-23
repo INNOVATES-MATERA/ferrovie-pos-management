@@ -1,10 +1,10 @@
 /*global QUnit*/
-import Controller from "posmanagement/controller/Home.controller";
+import Controller from "posmanagement/controller/PosList.controller";
 
-QUnit.module("Home Controller");
+QUnit.module("PosList Controller");
 
-QUnit.test("I should test the Home controller", function (assert: Assert) {
-	const oAppController = new Controller("Home");
+QUnit.test("I should test the PosList controller", function (assert: Assert) {
+	const oAppController = new Controller("PosList");
 	oAppController.onInit();
 	assert.ok(oAppController);
 });

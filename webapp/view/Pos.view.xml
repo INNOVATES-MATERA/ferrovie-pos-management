@@ -66,6 +66,13 @@
                                                 maxLength="50" />
                                         </form:fields>
                                     </form:FormElement>
+                                    <form:FormElement label="{i18n>lblNumeroAQ}">
+                                        <form:fields>
+                                            <Input id="inpNumeroAQ"
+                                                value="{POS>/codiceAtto}"
+                                                editable="false"/>
+                                        </form:fields>
+                                    </form:FormElement>
                                     <form:FormElement label="{i18n>lblContractorCompany}">
                                         <form:fields>
                                             <Input id="inpContractorCompany"
@@ -86,6 +93,30 @@
                                             </ComboBox>
                                         </form:fields>
                                     </form:FormElement>
+                                    <form:FormElement label="{i18n>lblPosStatus}">
+                                        <form:fields>
+                                            <ComboBox id="selStatoPos"
+                                                selectedKey="{POS>/statoPos}"
+                                                items="{path: 'PosStatus>/', templateShareable: false}">
+                                                <core:Item key="{PosStatus>key}"
+                                                    text="{PosStatus>text}"/>
+                                            </ComboBox>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lblNote}">
+                                        <form:fields>
+                                            <Input id="inpNote"
+                                                value="{POS>/note}"
+                                                placeholder="{i18n>placeholderNote}"
+                                                maxLength="250"/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                </form:formElements>
+                            </form:FormContainer>
+
+                            <!-- Container 2: Figure di sicurezza -->
+                            <form:FormContainer>
+                                <form:formElements>
                                     <form:FormElement label="{i18n>lblEmployer}">
                                         <form:fields>
                                             <Input id="inpEmployer"
@@ -101,12 +132,6 @@
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
-                                </form:formElements>
-                            </form:FormContainer>
-
-                            <!-- Container 2: Figure di sicurezza -->
-                            <form:FormContainer>
-                                <form:formElements>
                                     <form:FormElement label="{i18n>lblRls}">
                                         <form:fields>
                                             <Input id="inpRls"
@@ -143,21 +168,13 @@
                             <!-- Container 3: date -->
                             <form:FormContainer>
                                 <form:formElements>
-                                    <form:FormElement label="{i18n>lblPosStatus}">
+                                    <form:FormElement label="{i18n>lblPresentedDate}">
                                         <form:fields>
-                                            <ComboBox id="selStatoPos"
-                                                selectedKey="{POS>/statoPos}"
-                                                items="{path: 'PosStatus>/', templateShareable: false}">
-                                                <core:Item key="{PosStatus>key}"
-                                                    text="{PosStatus>text}"/>
-                                            </ComboBox>
-                                        </form:fields>
-                                    </form:FormElement>
-                                    <form:FormElement label="{i18n>lblRevision}">
-                                        <form:fields>
-                                            <Input id="inpRevision"
-                                                value="{POS>/revisione}"
-                                                maxLength="6"/>
+                                            <DatePicker id="dpReceptionDate"
+                                                value="{POS>/dataProtocollo}"
+                                                valueFormat="yyyy-MM-dd"
+                                                displayFormat="dd/MM/yyyy"
+                                                placeholder=" "/>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lblDraftDate}">
@@ -165,15 +182,23 @@
                                             <DatePicker id="dpDraftDate"
                                                 value="{POS>/dataRedazione}"
                                                 valueFormat="yyyy-MM-dd"
-                                                displayFormat="dd/MM/yyyy"/>
+                                                displayFormat="dd/MM/yyyy"
+                                                placeholder=" "/>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lblReceptionDate}">
                                         <form:fields>
-                                            <DatePicker id="dpReceptionDate"
-                                                value="{POS>/dataRicezioneCruscotto}"
+                                            <DatePicker id="dpValidationDate"
+                                                value="{POS>/inizioValidita}"
                                                 valueFormat="yyyy-MM-dd"
-                                                displayFormat="dd/MM/yyyy"/>
+                                                displayFormat="dd/MM/yyyy"
+                                                placeholder=" "/>
+                                        </form:fields>
+                                    </form:FormElement>
+                                    <form:FormElement label="{i18n>lblDocRef}">
+                                        <form:fields>
+                                            <Input id="inpDocRef"
+                                                maxLength="50"/>
                                         </form:fields>
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lblLink}">
@@ -375,6 +400,7 @@
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
                                                                         change=".onSkillDateChange"
+                                                                        placeholder=" "
                                                                         ariaLabelledBy="lblSkillStartFerroviaria"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
@@ -382,6 +408,7 @@
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
                                                                         change=".onSkillDateChange"
+                                                                        placeholder=" "
                                                                         ariaLabelledBy="lblSkillEndFerroviaria"/>
                                                                 </cells>
                                                             </ColumnListItem>
@@ -435,6 +462,7 @@
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
                                                                         change=".onSkillDateChange"
+                                                                        placeholder=" "
                                                                         ariaLabelledBy="lblSkillStartDecreto"/>
                                                                     <DatePicker value="{Skills>scadenzaAbilitazione}"
                                                                         valueFormat="yyyy-MM-dd"
@@ -442,6 +470,7 @@
                                                                         visible="{Skills>flagAttiva}"
                                                                         width="9rem"
                                                                         change=".onSkillDateChange"
+                                                                        placeholder=" "
                                                                         ariaLabelledBy="lblSkillEndDecreto"/>
                                                                 </cells>
                                                             </ColumnListItem>

@@ -4,6 +4,7 @@ import MessageBox from "sap/m/MessageBox";
 import p13nDialogUtils from "../utils/p13nDialogUtils";
 import p13nColumnUtils from "../utils/p13nColumnUtils";
 import dateUtils from "../utils/dateUtils";
+import entityUtils from "../utils/entityUtils";
 import xlsxUtils from "../utils/xlsxUtils";
 import Table from "sap/m/Table";
 import Sorter from "sap/ui/model/Sorter";
@@ -14,7 +15,17 @@ import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 
 const DEFAULT_MODEL = {
   count: 0,
+  filters: { statoContratto: "" },
 };
+
+const DEFAULT_DASHBOARD = {
+  posToInsert: 0,
+};
+
+// Stati Contratto (campo "stato" su Contratti, esposto tramite $expand=contratto) che
+// compongono il filtro rapido "Collaudati e Cancellati": OR tra due valori, non gestibile
+// dal generico EQ single-value usato per gli altri filtri.
+const STATI_COLLAUDATO_CANCELLATO = ["Collaudato", "Cancellato"];
 
 /**
  * @namespace posmanagement.controller
@@ -23,12 +34,15 @@ export default class PosList extends BaseController {
   public dateUtils = dateUtils;
 
   private _oModelPos!: JSONModel;
+  private _oModelDashboard!: JSONModel;
   private _bP13nRegistered = false;
   private _sSearchQuery = "";
 
   public onInit(): void {
     this._oModelPos = new JSONModel(structuredClone(DEFAULT_MODEL));
     this.setModel(this._oModelPos, "Pos");
+    this._oModelDashboard = new JSONModel(structuredClone(DEFAULT_DASHBOARD));
+    this.setModel(this._oModelDashboard, "Dashboard");
 
     this.getRouter().getRoute("RoutePosList")!.attachPatternMatched(this._onRouteMatched, this);
   }
@@ -56,9 +70,81 @@ export default class PosList extends BaseController {
     });
   }
 
+  // ── Dashboard KPI (ex Home) ──────────────────────────────────────────────────
+  // "POS da Inserire" conta i contratti attivi (stato "In Corso/Attivo") che non hanno
+  // ancora un POS associato: un contratto attivo senza POS è una situazione di alert.
+
+  private async _loadDashboard(): Promise<void> {
+    try {
+      const [oPos, oContracts] = await Promise.all([
+        this.getEntitySet<{ contratto_codiceContratto: string }>("/PosTestataSet"),
+        this.getEntitySet<{ codiceContratto: string }>("/Contratti", {
+          filters: [new Filter("stato", FilterOperator.EQ, "In Corso/Attivo")],
+        }),
+      ]);
+
+      const aContractsWithPos = new Set(oPos.data.map((p) => p.contratto_codiceContratto));
+      const iToInsert = oContracts.data.filter((c) => !aContractsWithPos.has(c.codiceContratto)).length;
+
+      this._oModelDashboard.setProperty("/posToInsert", iToInsert);
+    } catch (e) {
+      entityUtils.handleError(e as Error);
+    }
+  }
+
   private _onRouteMatched(): void {
     const oTable = this.byId("tblPos") as Table;
     (oTable.getBinding("items") as ODataListBinding)?.refresh();
+    void this._loadDashboard();
+  }
+
+  // ── Pulsanti filtro rapido per Stato Contratto ──────────────────────────────
+  // Il filtro agisce su "contratto/stato" tramite $expand della NavigationProperty
+  // contratto (vedi $expand=contratto nella tabella in PosList.view.xml).
+
+  public onFilterStatoContrattoAll(): void {
+    this._oModelPos.setProperty("/filters/statoContratto", "");
+    this._applyStatoContrattoFilter();
+  }
+
+  public onFilterStatoContratto(oEvent: any): void {
+    const sStato = oEvent.getSource().data("statoContratto") as string;
+    const sCurrent = this._oModelPos.getProperty("/filters/statoContratto") as string;
+    this._oModelPos.setProperty("/filters/statoContratto", sCurrent === sStato ? "" : sStato);
+    this._applyStatoContrattoFilter();
+  }
+
+  public onFilterStatoContrattoCollaudatoCancellato(): void {
+    const sCurrent = this._oModelPos.getProperty("/filters/statoContratto") as string;
+    this._oModelPos.setProperty(
+      "/filters/statoContratto",
+      sCurrent === "CollaudatoCancellato" ? "" : "CollaudatoCancellato",
+    );
+    this._applyStatoContrattoFilter();
+  }
+
+  private _applyStatoContrattoFilter(): void {
+    const oTable = this.byId("tblPos") as Table;
+    const oBinding = oTable.getBinding("items") as ODataListBinding;
+    if (!oBinding) return;
+
+    const sStato = this._oModelPos.getProperty("/filters/statoContratto") as string;
+    if (!sStato) {
+      oBinding.filter([], FilterType.Application);
+      return;
+    }
+
+    const aStatiMatch = sStato === "CollaudatoCancellato" ? STATI_COLLAUDATO_CANCELLATO : [sStato];
+
+    oBinding.filter(
+      [
+        new Filter({
+          filters: aStatiMatch.map((s) => new Filter("contratto/stato", FilterOperator.EQ, s)),
+          and: false,
+        }),
+      ],
+      FilterType.Application,
+    );
   }
 
   public onSettings(oEvent: any): void {
@@ -121,9 +207,9 @@ export default class PosList extends BaseController {
   public onDetail(oEvent: any): void {
     const oContext = oEvent.getSource().getBindingContext();
     if (!oContext) return;
-    const oRow = oContext.getObject() as { idPos: string; contratto: string };
+    const oRow = oContext.getObject() as { idPos: string; contratto_codiceContratto: string };
     this.navTo("RoutePos", {
-      contractCode: oRow.contratto,
+      contractCode: oRow.contratto_codiceContratto,
       posId: oRow.idPos,
     });
   }

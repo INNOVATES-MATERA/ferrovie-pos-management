@@ -26,19 +26,20 @@ function generateRandomId(): string {
 const DEFAULT_POS = {
   idPos: "",
   contratto: "",
+  codiceAtto: "",
   impresaAppaltatrice: "",
   ruoloImpresa: "",
   codiceContrattoSuperiore: "",
   statoPos: "",
+  note: "",
   datoreLavoro: "",
   rspp: "",
   rls: "",
   medicocompetente: "",
   direttoreCantiere: "",
   direttoreTecnico: "",
-  revisione: "",
   dataRedazione: "",
-  dataRicezioneCruscotto: "",
+  dataProtocollo: "",
   inizioValidita: "",
   fineValidita: "",
   linkCde: "",
@@ -220,23 +221,20 @@ export default class Pos extends BaseController {
     try {
       const oPosPayload = {
         idPos: sPosId,
-        contratto: this._oModelPOS.getProperty("/contratto"),
+        contratto_codiceContratto: this._oModelPOS.getProperty("/contratto"),
         impresaAppaltatrice: this._oModelPOS.getProperty("/impresaAppaltatrice"),
         ruoloImpresa: this._oModelPOS.getProperty("/ruoloImpresa"),
         codiceContrattoSuperiore: this._oModelPOS.getProperty("/codiceContrattoSuperiore"),
         statoPos: this._oModelPOS.getProperty("/statoPos"),
+        note: this._oModelPOS.getProperty("/note"),
         datoreLavoro: sDatore,
         rspp: this._oModelPOS.getProperty("/rspp"),
         rls: sRls,
         medicocompetente: sMedico,
         direttoreCantiere: this._oModelPOS.getProperty("/direttoreCantiere"),
         direttoreTecnico: this._oModelPOS.getProperty("/direttoreTecnico"),
-        revisione: parseInt(this._oModelPOS.getProperty("/revisione") || "0", 10),
         dataRedazione: this._oModelPOS.getProperty("/dataRedazione") || null,
-        dataRicezioneCruscotto:
-          this._oModelPOS.getProperty("/dataRicezioneCruscotto") ?
-            (this._oModelPOS.getProperty("/dataRicezioneCruscotto") as string) + "T00:00:00Z"
-          : null,
+        dataProtocollo: this._oModelPOS.getProperty("/dataProtocollo") || null,
         inizioValidita: this._oModelPOS.getProperty("/inizioValidita") || null,
         fineValidita: this._oModelPOS.getProperty("/fineValidita") || null,
         linkCde: this._oModelPOS.getProperty("/linkCde"),
@@ -341,12 +339,13 @@ export default class Pos extends BaseController {
   private _onContractSelected(oEvent: any): void {
     const oItem = oEvent.getParameter("selectedItem");
     if (!oItem) return;
-    const oRow = oItem.getBindingContext()!.getObject() as { codiceContratto: string };
+    const oRow = oItem.getBindingContext()!.getObject() as { codiceContratto: string; codiceAtto?: string };
     const sOldContratto = this._oModelPOS.getProperty("/contratto") as string;
     if (sOldContratto !== oRow.codiceContratto) {
       this._oModelPOS.setProperty("/impresaAppaltatrice", "");
     }
     this._oModelPOS.setProperty("/contratto", oRow.codiceContratto);
+    this._oModelPOS.setProperty("/codiceAtto", oRow.codiceAtto ?? "");
   }
 
   public async onImpresaValueHelp(): Promise<void> {
@@ -358,7 +357,7 @@ export default class Pos extends BaseController {
         filters: [new Filter("ContrattoID", FilterOperator.EQ, sContratto)],
       }),
       this.getEntitySet<{ impresaSubappaltatrice: string; partitaIvaCf: string }>("/Subappalti", {
-        filters: [new Filter("contratto", FilterOperator.EQ, sContratto)],
+        filters: [new Filter("contratto_codiceContratto", FilterOperator.EQ, sContratto)],
       }),
     ]);
 
@@ -640,15 +639,14 @@ export default class Pos extends BaseController {
 
   /** Carica il POS esistente con il personale e le abilitazioni, popola modelli e cache skill. */
   private async _loadPOSWithPersonale(): Promise<void> {
-    const oData = await this.getEntity<Record<string, unknown>>(
-      "/PosTestataSet",
-      { idPos: this._sPosId },
-      { expand: ["personale($expand=abilitazioni)"] },
-    );
+    const oData = await this.getEntity<
+      Record<string, unknown> & { contratto_codiceContratto?: string; contratto?: { codiceAtto?: string } }
+    >("/PosTestataSet", { idPos: this._sPosId }, { expand: ["personale($expand=abilitazioni)", "contratto"] });
 
     this._oModelPOS.setData({
       ...oData,
-      dataRicezioneCruscotto: dateUtils.formatISOStringToYYYYMMDD(oData.dataRicezioneCruscotto as string | null),
+      contratto: oData.contratto_codiceContratto,
+      codiceAtto: oData.contratto?.codiceAtto ?? "",
       isEdit: true,
       formTitle: this.getText("lblPosForm"),
     });

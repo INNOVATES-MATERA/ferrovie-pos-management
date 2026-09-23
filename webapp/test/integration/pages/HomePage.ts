@@ -1,6 +1,6 @@
 import Opa5 from "sap/ui/test/Opa5";
 
-const sViewName = "Home";
+const sViewName = "PosList";
 
 export default class HomePage extends Opa5 {
 	// Actions

@@ -8,20 +8,3 @@
 .pageHome .sapFDynamicPageContent {
   background-color: #e0f0ec !important;
 }
-
-/* Pulsante "Nuovo POS" nella Home */
-.pageHome .sapFDynamicPageTitle .sapMBtnEmphasized,
-.pageHome .sapFDynamicPageTitle .sapMBtnEmphasized:hover {
-  background-color: #006B54 !important;
-  border-color: #004d3a !important;
-  color: #ffffff !important;
-}
-
-.pageHome .sapFDynamicPageTitle .sapMBtnEmphasized:hover {
-  background-color: #004d3a !important;
-}
-
-.pageHome .sapFDynamicPageTitle .sapMBtnEmphasized .sapMBtnIcon,
-.pageHome .sapFDynamicPageTitle .sapMBtnEmphasized .sapMBtnText {
-  color: #ffffff !important;
-}

@@ -114,7 +114,7 @@
           "name": "RouteHome",
           "pattern": ":?query:",
           "target": [
-            "TargetHome"
+            "TargetPosList"
           ]
         },
         {
@@ -140,10 +140,6 @@
         }
       ],
       "targets": {
-        "TargetHome": {
-          "id": "Home",
-          "name": "Home"
-        },
         "TargetPosList": {
           "id": "PosList",
           "name": "PosList"

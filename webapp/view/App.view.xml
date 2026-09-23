@@ -15,12 +15,9 @@
         </tnt:header>
         <tnt:sideContent>
             <tnt:SideNavigation id="sideNavigation"
-                selectedKey="home"
+                selectedKey="posList"
                 itemSelect=".onNav">
                 <tnt:NavigationList>
-                    <tnt:NavigationListItem text="{i18n>menuHome}"
-                        icon="sap-icon://home"
-                        key="home"/>
                     <tnt:NavigationListItem text="{i18n>menuPosList}"
                         icon="sap-icon://building"
                         key="posList"/>

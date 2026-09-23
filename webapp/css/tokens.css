@@ -26,6 +26,13 @@
   --sapList_SelectionBackgroundColor: #e0eeea;
   --sapList_Hover_Background: #eef5f3;
 
+  /* ── Pulsanti Emphasized (es. "Nuovo POS", "Salva") ── */
+  --sapButton_Emphasized_Background: #006b54;
+  --sapButton_Emphasized_BorderColor: #004d3a;
+  --sapButton_Emphasized_TextColor: #ffffff;
+  --sapButton_Emphasized_Hover_Background: #004d3a;
+  --sapButton_Emphasized_Hover_BorderColor: #003a2c;
+
   /* ── Bordi / Separatori ── */
   --sapField_BorderColor: #b0c8c1;
   --sapField_Hover_BorderColor: var(--sapBrandColor);
@@ -37,4 +44,13 @@
   --sapTextColor: #0a1f1a;
   --sapContent_LabelColor: #3d6358;
   --sapContent_DisabledTextColor: #8aada5;
+}
+
+/* ToggleButton type="Emphasized" selezionato (es. filtri Stato Contratto): inverte i
+   colori del token Emphasized invece di lasciare lo sfondo pieno anche da premuto. */
+.sapMBtnEmphasized.sapMToggleBtnPressed,
+.sapMBtnEmphasized.sapMToggleBtnPressed:hover {
+  background-color: #e0f0ec !important;
+  color: var(--sapButton_Emphasized_Background) !important;
+  border-color: var(--sapButton_Emphasized_Background) !important;
 }

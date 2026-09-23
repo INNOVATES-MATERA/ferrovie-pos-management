@@ -3,9 +3,11 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:f="sap.f"
+    xmlns:card="sap.f.cards"
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 
     <f:DynamicPage showFooter="false"
+        backgroundDesign="List"
         class="pagePosList">
         <f:title>
             <f:DynamicPageTitle>
@@ -23,6 +25,19 @@
 
         <f:content>
             <VBox>
+
+                <!-- CARDS KPI -->
+                <HBox wrap="Wrap"
+                    class="sapUiSmallMarginBottom">
+                    <f:Card class="sapUiTinyMargin pos-stat-card"
+                        width="20rem">
+                        <f:header>
+                            <card:NumericHeader title="{i18n>cardPosToInsert}"
+                                number="{Dashboard>/posToInsert}"
+                                state="{= ${Dashboard>/posToInsert} > 0 ? 'Error' : 'Neutral' }"/>
+                        </f:header>
+                    </f:Card>
+                </HBox>
 
                 <!-- TABELLA POS -->
                 <Panel class="sapUiTinyMarginTop">
@@ -42,8 +57,36 @@
                                 tooltip="{i18n>btnDownload}"/>
                         </OverflowToolbar>
                     </headerToolbar>
+
+                    <Toolbar style="Clear"
+                        class="sapUiTinyMarginBottom sapUiListBackgroundColor">
+                        <ToggleButton text="{i18n>btnFilterAll}"
+                            type="Emphasized"
+                            pressed="{= ${Pos>/filters/statoContratto} === '' }"
+                            press=".onFilterStatoContrattoAll"/>
+                        <ToggleButton text="{i18n>optStatoContrattoInCorsoAttivo}"
+                            type="Emphasized"
+                            pressed="{= ${Pos>/filters/statoContratto} === 'In Corso/Attivo' }"
+                            press=".onFilterStatoContratto"
+                            app:statoContratto="In Corso/Attivo"/>
+                        <ToggleButton text="{i18n>optStatoContrattoSospesi}"
+                            type="Emphasized"
+                            pressed="{= ${Pos>/filters/statoContratto} === 'Sospeso' }"
+                            press=".onFilterStatoContratto"
+                            app:statoContratto="Sospeso"/>
+                        <ToggleButton text="{i18n>optStatoContrattoChiusiCollaudo}"
+                            type="Emphasized"
+                            pressed="{= ${Pos>/filters/statoContratto} === 'Chiuso in attesa di collaudo' }"
+                            press=".onFilterStatoContratto"
+                            app:statoContratto="Chiuso in attesa di collaudo"/>
+                        <ToggleButton text="{i18n>optStatoContrattoCollaudatiCancellati}"
+                            type="Emphasized"
+                            pressed="{= ${Pos>/filters/statoContratto} === 'CollaudatoCancellato' }"
+                            press=".onFilterStatoContrattoCollaudatoCancellato"/>
+                    </Toolbar>
+
                     <Table id="tblPos"
-                        items="{path: '/PosTestataSet', parameters: {$count: true}}"
+                        items="{path: '/PosTestataSet', parameters: {$count: true, $expand: 'contratto'}}"
                         mode="None"
                         fixedLayout="true"
                         alternateRowColors="true"
@@ -58,14 +101,38 @@
                                 visible="false">
                                 <header>
                                     <Label text="{i18n>lblPosId}"
+                                        tooltip="{i18n>lblPosId}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="contratto"
+                            <Column app:p13nKey="numeroAQ"
+                                width="10rem"
+                                app:searchable="false"
+                                app:sortable="false">
+                                <header>
+                                    <Label text="{i18n>lblNumeroAQ}"
+                                        tooltip="{i18n>lblNumeroAQ}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="contratto_codiceContratto"
                                 width="10rem">
                                 <header>
                                     <Label text="{i18n>lblContractCode}"
+                                        tooltip="{i18n>lblContractCode}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="statoContratto"
+                                width="12rem"
+                                app:searchable="false"
+                                app:sortable="false">
+                                <header>
+                                    <Label text="{i18n>lblStatoContratto}"
+                                        tooltip="{i18n>lblStatoContratto}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -74,6 +141,7 @@
                                 width="15rem">
                                 <header>
                                     <Label text="{i18n>lblContractorCompany}"
+                                        tooltip="{i18n>lblContractorCompany}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -82,78 +150,17 @@
                                 width="10rem">
                                 <header>
                                     <Label text="{i18n>lblCompanyRole}"
+                                        tooltip="{i18n>lblCompanyRole}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="statoPos"
-                                width="8rem">
-                                <header>
-                                    <Label text="{i18n>lblPosStatus}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="datoreLavoro"
-                                width="12rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lblEmployer}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="rspp"
-                                width="10rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lblRspp}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="rls"
-                                width="10rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lblRls}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="medicocompetente"
-                                width="12rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lblMedicoCompetente}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="direttoreCantiere"
-                                width="12rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lblWorksDirectorSite}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="direttoreTecnico"
-                                width="10rem"
-                                visible="false">
-                                <header>
-                                    <Label text="{i18n>lblSiteManager}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="revisione"
+                            <Column app:p13nKey="dataProtocollo"
                                 app:searchable="false"
-                                width="6rem"
-                                visible="false">
+                                width="10rem">
                                 <header>
-                                    <Label text="{i18n>lblRevision}"
+                                    <Label text="{i18n>lblPresentedDate}"
+                                        tooltip="{i18n>lblPresentedDate}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -163,16 +170,87 @@
                                 width="9rem">
                                 <header>
                                     <Label text="{i18n>lblDraftDate}"
+                                        tooltip="{i18n>lblDraftDate}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
 
-                            <Column app:p13nKey="dataRicezioneCruscotto"
-                                app:searchable="false"
+                            <Column app:p13nKey="datoreLavoro"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lblEmployer}"
+                                        tooltip="{i18n>lblEmployer}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="rspp"
                                 width="10rem"
                                 visible="false">
                                 <header>
-                                    <Label text="{i18n>lblReceptionDate}"
+                                    <Label text="{i18n>lblRspp}"
+                                        tooltip="{i18n>lblRspp}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="rls"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lblRls}"
+                                        tooltip="{i18n>lblRls}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="medicocompetente"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lblMedicoCompetente}"
+                                        tooltip="{i18n>lblMedicoCompetente}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="direttoreCantiere"
+                                width="12rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lblWorksDirectorSite}"
+                                        tooltip="{i18n>lblWorksDirectorSite}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="direttoreTecnico"
+                                width="10rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lblSiteManager}"
+                                        tooltip="{i18n>lblSiteManager}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="statoPos"
+                                width="8rem">
+                                <header>
+                                    <Label text="{i18n>lblPosStatus}"
+                                        tooltip="{i18n>lblPosStatus}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="docRef"
+                                app:searchable="false"
+                                app:sortable="false"
+                                width="10rem">
+                                <header>
+                                    <Label text="{i18n>lblDocRef}"
+                                        tooltip="{i18n>lblDocRef}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -182,6 +260,16 @@
                                 visible="false">
                                 <header>
                                     <Label text="{i18n>lblLink}"
+                                        tooltip="{i18n>lblLink}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
+                            <Column app:p13nKey="note"
+                                width="14rem">
+                                <header>
+                                    <Label text="{i18n>lblNote}"
+                                        tooltip="{i18n>lblNote}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -201,14 +289,22 @@
                                 <cells>
                                     <Text text="{idPos}"
                                         wrapping="false"/>
-                                    <Text text="{contratto}"
+                                    <Text text="{contratto/codiceAtto}"
+                                        wrapping="false"/>
+                                    <Text text="{contratto_codiceContratto}"
+                                        wrapping="false"/>
+                                    <Text text="{contratto/stato}"
                                         wrapping="false"/>
                                     <Text text="{impresaAppaltatrice}"
                                         wrapping="false"/>
                                     <Text text="{ruoloImpresa}"
                                         wrapping="false"/>
-                                    <ObjectStatus text="{statoPos}"
-                                        state="{= ${statoPos} === 'Valido' ? 'Success' : ${statoPos} === 'Scaduto' ? 'Error' : ${statoPos} === 'Superato' ? 'Warning' : 'None' }"/>
+                                    <Text core:require="{ ODataDate: 'sap/ui/model/odata/type/Date' }"
+                                        text="{path: 'dataProtocollo', type: 'ODataDate', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text core:require="{ ODataDate: 'sap/ui/model/odata/type/Date' }"
+                                        text="{path: 'dataRedazione', type: 'ODataDate', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
                                     <Text text="{datoreLavoro}"
                                         wrapping="false"/>
                                     <Text text="{rspp}"
@@ -221,15 +317,13 @@
                                         wrapping="false"/>
                                     <Text text="{direttoreTecnico}"
                                         wrapping="false"/>
-                                    <Text text="{revisione}"
-                                        wrapping="false"/>
-                                    <Text core:require="{ ODataDate: 'sap/ui/model/odata/type/Date' }"
-                                        text="{path: 'dataRedazione', type: 'ODataDate', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
-                                        wrapping="false"/>
-                                    <Text core:require="{ ODataDateTimeOffset: 'sap/ui/model/odata/type/DateTimeOffset' }"
-                                        text="{path: 'dataRicezioneCruscotto', type: 'ODataDateTimeOffset', formatOptions: {pattern: 'dd/MM/yyyy'}}"
+                                    <ObjectStatus text="{statoPos}"
+                                        state="{= ${statoPos} === 'Valido' ? 'Success' : ${statoPos} === 'Non Valido' ? 'Error' : ( ${statoPos} === 'In Verifica' || ${statoPos} === 'In Attesa di Integrazioni' ) ? 'Warning' : 'None' }"/>
+                                    <Text text=""
                                         wrapping="false"/>
                                     <Text text="{linkCde}"
+                                        wrapping="false"/>
+                                    <Text text="{note}"
                                         wrapping="false"/>
                                     <Button icon="sap-icon://delete"
                                         tooltip="{i18n>btnDelete}"

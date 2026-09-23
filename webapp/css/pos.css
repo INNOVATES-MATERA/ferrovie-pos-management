@@ -13,19 +13,3 @@
   background-color: #daf0f0 !important;
 }
 
-/* Pulsante "Salva" nel footer del form Pos */
-.pagePos .sapMIBar .sapMBtnEmphasized,
-.pagePos .sapMIBar .sapMBtnEmphasized:hover {
-  background-color: #008080 !important;
-  border-color: #005959 !important;
-  color: #ffffff !important;
-}
-
-.pagePos .sapMIBar .sapMBtnEmphasized:hover {
-  background-color: #005959 !important;
-}
-
-.pagePos .sapMIBar .sapMBtnEmphasized .sapMBtnIcon,
-.pagePos .sapMIBar .sapMBtnEmphasized .sapMBtnText {
-  color: #ffffff !important;
-}

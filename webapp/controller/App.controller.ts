@@ -3,15 +3,15 @@ import SideNavigation from "sap/tnt/SideNavigation";
 import ToolPage from "sap/tnt/ToolPage";
 
 const KEY_TO_ROUTE: Record<string, string> = {
-  home: "RouteHome",
   posList: "RoutePosList",
   newPos: "RoutePosNew",
 };
 
 const ROUTE_TO_KEY: Record<string, string> = {
-  RouteHome: "home",
+  RouteHome: "posList",
   RoutePosList: "posList",
   RoutePosNew: "newPos",
+  RoutePos: "posList",
 };
 
 /**

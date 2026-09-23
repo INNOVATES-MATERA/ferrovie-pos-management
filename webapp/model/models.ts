@@ -9,9 +9,10 @@ export function createDeviceModel () {
 
 export function createPosStatusModel(): JSONModel {
     return new JSONModel([
-        { key: "Valido",    text: "Valido" },
-        { key: "Superato",  text: "Superato" },
-        { key: "Scaduto",   text: "Scaduto" },
+        { key: "In Verifica",                 text: "In Verifica" },
+        { key: "In Attesa di Integrazioni",   text: "In Attesa di Integrazioni" },
+        { key: "Valido",                      text: "Valido" },
+        { key: "Non Valido",                  text: "Non Valido" },
     ]);
 }
 
