@@ -78,6 +78,32 @@ export default abstract class BaseController extends Controller {
         return (await oBind.requestObject()) as T;
     }
 
+    public async callFunctionImport<T = object>(
+        sFunctionName: string,
+        oParameters: Record<string, unknown> = {},
+        { model = undefined as string | undefined } = {}
+    ): Promise<T> {
+        const oModel = this.getODataModel(model);
+        const oBind = oModel.bindContext(`/${sFunctionName}(...)`);
+        Object.entries(oParameters).forEach(([key, value]) => oBind.setParameter(key, value));
+        await oBind.execute();
+        return oBind.getBoundContext().getObject() as T;
+    }
+
+    // Le function import con ReturnType Collection(...) restituiscono il payload
+    // OData grezzo { "@odata.context": ..., "value": [...] }: il vero array è sotto "value".
+    public async callFunctionImportCollection<T = object>(
+        sFunctionName: string,
+        oParameters: Record<string, unknown> = {},
+        { model = undefined as string | undefined } = {}
+    ): Promise<T[]> {
+        const oModel = this.getODataModel(model);
+        const oBind = oModel.bindContext(`/${sFunctionName}(...)`);
+        Object.entries(oParameters).forEach(([key, value]) => oBind.setParameter(key, value));
+        await oBind.execute();
+        return (oBind.getBoundContext().getObject("value") as T[]) ?? [];
+    }
+
     public async createEntity<T = object>(
         sEntityName: string,
         oData: Record<string, unknown>,

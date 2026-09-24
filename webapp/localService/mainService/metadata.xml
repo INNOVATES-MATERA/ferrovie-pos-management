@@ -158,7 +158,7 @@
                 <Property Name="fineValidita" Type="Edm.Date"/>
                 <Property Name="durataGg" Type="Edm.Int32"/>
                 <Property Name="dataCollaudo" Type="Edm.Date"/>
-                <Property Name="rup" Type="Edm.String"/>
+                <Property Name="cup" Type="Edm.String" MaxLength="15"/>
                 <Property Name="codOrgAcq" Type="Edm.String" MaxLength="4"/>
                 <Property Name="descOrgAcq" Type="Edm.String" MaxLength="50"/>
                 <Property Name="codGruppoAcq" Type="Edm.String" MaxLength="3"/>
@@ -740,6 +740,7 @@
                 <Property Name="dataContrattoSub" Type="Edm.Date"/>
                 <Property Name="oggetto" Type="Edm.String" MaxLength="500"/>
                 <Property Name="importoPresuntoIniziale" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <Property Name="onerisicurezza" Type="Edm.Decimal" Precision="15" Scale="2"/>
                 <Property Name="aq" Type="Edm.String" MaxLength="50"/>
                 <NavigationProperty Name="contratto" Type="AttiService.Contratti">
                     <ReferentialConstraint Property="contratto_codiceContratto" ReferencedProperty="codiceContratto"/>
@@ -752,6 +753,7 @@
                 <Property Name="tipoCategoria" Type="Edm.String" MaxLength="50"/>
                 <Property Name="nProtocolloIstanza" Type="Edm.String" MaxLength="50"/>
                 <Property Name="nOdsAutorizzazione" Type="Edm.String" MaxLength="50"/>
+                <Property Name="pmRdpe" Type="Edm.String" MaxLength="50"/>
                 <NavigationProperty Name="integrazioni" Type="Collection(AttiService.Integrazioni)" Partner="subappalto">
                     <OnDelete Action="Cascade"/>
                 </NavigationProperty>
@@ -817,6 +819,8 @@
                 <Property Name="importo_base_asta" Type="Edm.Decimal" Precision="15" Scale="2"/>
                 <Property Name="importo_oneri_sicurezza" Type="Edm.Decimal" Precision="15" Scale="2"/>
                 <Property Name="note" Type="Edm.String" MaxLength="250"/>
+                <Property Name="rdpe" Type="Edm.String" MaxLength="50"/>
+                <Property Name="direttorelavori" Type="Edm.String" MaxLength="50"/>
                 <NavigationProperty Name="ripartizioni" Type="Collection(AttiService.CELRipartizioniCategorie)" Partner="cel">
                     <OnDelete Action="Cascade"/>
                 </NavigationProperty>

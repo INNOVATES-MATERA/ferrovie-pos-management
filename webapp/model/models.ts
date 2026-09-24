@@ -15,10 +15,3 @@ export function createPosStatusModel(): JSONModel {
         { key: "Non Valido",                  text: "Non Valido" },
     ]);
 }
-
-export function createCompanyRoleModel(): JSONModel {
-    return new JSONModel([
-        { key: "Appaltatrice",    text: "Appaltatrice" },
-        { key: "Subappaltatrice", text: "Subappaltatrice" },
-    ]);
-}

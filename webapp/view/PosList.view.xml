@@ -60,6 +60,12 @@
 
                     <Toolbar style="Clear"
                         class="sapUiTinyMarginBottom sapUiListBackgroundColor">
+                        <core:Icon src="sap-icon://filter"
+                            class="sapUiTinyMarginEnd"/>
+                        <Label text="{i18n>lblStatiContratto}"
+                            showColon="true"
+                            design="Bold"
+                            class="sapUiTinyMarginEnd"/>
                         <ToggleButton text="{i18n>btnFilterAll}"
                             type="Emphasized"
                             pressed="{= ${Pos>/filters/statoContratto} === '' }"
@@ -107,7 +113,7 @@
                             </Column>
 
                             <Column app:p13nKey="numeroAQ"
-                                width="10rem"
+                                width="7rem"
                                 app:searchable="false"
                                 app:sortable="false">
                                 <header>
@@ -157,7 +163,7 @@
 
                             <Column app:p13nKey="dataProtocollo"
                                 app:searchable="false"
-                                width="10rem">
+                                width="8rem">
                                 <header>
                                     <Label text="{i18n>lblPresentedDate}"
                                         tooltip="{i18n>lblPresentedDate}"
@@ -167,7 +173,8 @@
 
                             <Column app:p13nKey="dataRedazione"
                                 app:searchable="false"
-                                width="9rem">
+                                width="9rem"
+                                visible="false">
                                 <header>
                                     <Label text="{i18n>lblDraftDate}"
                                         tooltip="{i18n>lblDraftDate}"
@@ -236,21 +243,10 @@
                             </Column>
 
                             <Column app:p13nKey="statoPos"
-                                width="8rem">
+                                width="6rem">
                                 <header>
                                     <Label text="{i18n>lblPosStatus}"
                                         tooltip="{i18n>lblPosStatus}"
-                                        wrapping="false"/>
-                                </header>
-                            </Column>
-
-                            <Column app:p13nKey="docRef"
-                                app:searchable="false"
-                                app:sortable="false"
-                                width="10rem">
-                                <header>
-                                    <Label text="{i18n>lblDocRef}"
-                                        tooltip="{i18n>lblDocRef}"
                                         wrapping="false"/>
                                 </header>
                             </Column>
@@ -274,8 +270,8 @@
                                 </header>
                             </Column>
 
-                            <Column width="2.5rem"
-                                hAlign="Center">
+                            <Column width="5rem"
+                                hAlign="End">
                                 <header>
                                     <Text text=""/>
                                 </header>
@@ -284,8 +280,7 @@
                         </columns>
 
                         <items>
-                            <ColumnListItem press=".onDetail"
-                                type="Navigation">
+                            <ColumnListItem press=".onDetail">
                                 <cells>
                                     <Text text="{idPos}"
                                         wrapping="false"/>
@@ -319,16 +314,20 @@
                                         wrapping="false"/>
                                     <ObjectStatus text="{statoPos}"
                                         state="{= ${statoPos} === 'Valido' ? 'Success' : ${statoPos} === 'Non Valido' ? 'Error' : ( ${statoPos} === 'In Verifica' || ${statoPos} === 'In Attesa di Integrazioni' ) ? 'Warning' : 'None' }"/>
-                                    <Text text=""
-                                        wrapping="false"/>
                                     <Text text="{linkCde}"
                                         wrapping="false"/>
                                     <Text text="{note}"
                                         wrapping="false"/>
-                                    <Button icon="sap-icon://delete"
-                                        tooltip="{i18n>btnDelete}"
-                                        type="Transparent"
-                                        press=".onDelete"/>
+                                    <HBox justifyContent="End">
+                                        <Button icon="sap-icon://edit"
+                                            tooltip="{i18n>btnEdit}"
+                                            type="Transparent"
+                                            press=".onDetail"/>
+                                        <Button icon="sap-icon://delete"
+                                            tooltip="{i18n>btnDelete}"
+                                            type="Transparent"
+                                            press=".onDelete"/>
+                                    </HBox>
                                 </cells>
                             </ColumnListItem>
                         </items>

@@ -1,10 +1,12 @@
 import BaseController from "./BaseController";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import { createPosStatusModel, createCompanyRoleModel } from "../model/models";
+import { createPosStatusModel } from "../model/models";
 import MessageBox from "sap/m/MessageBox";
 import Table from "sap/m/Table";
 import ColumnListItem from "sap/m/ColumnListItem";
 import Column from "sap/m/Column";
+import Input from "sap/m/Input";
+import Item from "sap/ui/core/Item";
 import Label from "sap/m/Label";
 import Text from "sap/m/Text";
 import TableSelectDialog from "sap/m/TableSelectDialog";
@@ -23,11 +25,29 @@ function generateRandomId(): string {
   return Math.random().toString(36).substring(2, 10).toUpperCase();
 }
 
+interface IContractRow {
+  codiceContratto: string;
+  codiceAtto?: string;
+  titoloDelContratto?: string;
+  codiceSAPOrganizzazioneAcquisti?: string;
+  codiceSAPGruppoAcquisti?: string;
+}
+
+interface IImpresaRow {
+  nomeImpresa: string;
+  codiceFiscale?: string;
+  ruolo?: string;
+}
+
 const DEFAULT_POS = {
   idPos: "",
   contratto: "",
+  contrattoValueState: "None" as string,
+  contrattoValueStateText: "",
   codiceAtto: "",
   impresaAppaltatrice: "",
+  impresaValueState: "None" as string,
+  impresaValueStateText: "",
   ruoloImpresa: "",
   codiceContrattoSuperiore: "",
   statoPos: "",
@@ -113,7 +133,6 @@ export default class Pos extends BaseController {
     this.setModel(this._oModelStaff, "Staff");
     this.setModel(this._oModelSkills, "Skills");
     this.setModel(createPosStatusModel(), "PosStatus");
-    this.setModel(createCompanyRoleModel(), "CompanyRole");
 
     this.getRouter().getRoute("RoutePos")!.attachPatternMatched(this._onRouteMatched, this);
     this.getRouter().getRoute("RoutePosNew")!.attachPatternMatched(this._onRouteMatched, this);
@@ -163,6 +182,8 @@ export default class Pos extends BaseController {
     this._oStaffSortState = null;
     this._sStaffSearchQuery = "";
 
+    void this._getContractsCache();
+
     try {
       await this._loadSkillTypes();
       if (bIsEdit) {
@@ -194,11 +215,6 @@ export default class Pos extends BaseController {
 
     if (!sContratto.trim()) {
       MessageBox.error(this.getText("msgContractRequired"));
-      return;
-    }
-
-    if (!sDatore.trim() || !sMedico.trim() || !sRls.trim()) {
-      MessageBox.error(this.getText("msgMandatoryFields"));
       return;
     }
 
@@ -339,45 +355,144 @@ export default class Pos extends BaseController {
   private _onContractSelected(oEvent: any): void {
     const oItem = oEvent.getParameter("selectedItem");
     if (!oItem) return;
-    const oRow = oItem.getBindingContext()!.getObject() as { codiceContratto: string; codiceAtto?: string };
+    this._selectContract(oItem.getBindingContext()!.getObject() as IContractRow);
+  }
+
+  private _selectContract(oRow: IContractRow): void {
     const sOldContratto = this._oModelPOS.getProperty("/contratto") as string;
     if (sOldContratto !== oRow.codiceContratto) {
       this._oModelPOS.setProperty("/impresaAppaltatrice", "");
+      this._oModelPOS.setProperty("/ruoloImpresa", "");
+      this._setImpresaValueState("None");
+      this._aImpreseCache = undefined;
     }
+    this._setContractValueState("None");
     this._oModelPOS.setProperty("/contratto", oRow.codiceContratto);
     this._oModelPOS.setProperty("/codiceAtto", oRow.codiceAtto ?? "");
+  }
+
+  private _setContractValueState(sState: "None" | "Error", sText = ""): void {
+    this._oModelPOS.setProperty("/contrattoValueState", sState);
+    this._oModelPOS.setProperty("/contrattoValueStateText", sText);
+  }
+
+  private _resetContractDerivedData(): void {
+    this._oModelPOS.setProperty("/codiceAtto", "");
+    this._oModelPOS.setProperty("/impresaAppaltatrice", "");
+    this._oModelPOS.setProperty("/ruoloImpresa", "");
+    this._setImpresaValueState("None");
+    this._aImpreseCache = undefined;
+  }
+
+  // ── Contract suggestions ──────────────────────────────────────────────────────
+  // Elenco contratti caricato una sola volta e tenuto in memoria: il filtro alla
+  // digitazione è locale (JSONModel), quindi istantaneo e senza una request per lettera.
+
+  private _aContractsCache?: IContractRow[];
+  private _oContractSuggestModel?: JSONModel;
+
+  private async _getContractsCache(): Promise<IContractRow[]> {
+    if (!this._aContractsCache) {
+      try {
+        const oBinding = this.getView()!.getModel()!.bindList("/Contratti", undefined, [], [], {
+          $select: "codiceAtto,codiceContratto,titoloDelContratto,codiceSAPOrganizzazioneAcquisti,codiceSAPGruppoAcquisti",
+        }) as ODataListBinding;
+        const aContexts = await oBinding.requestContexts(0, 10000);
+        this._aContractsCache = aContexts.map((oCtx) => oCtx.getObject() as IContractRow);
+      } catch (e) {
+        entityUtils.handleError(e as Error);
+        return [];
+      }
+    }
+    return this._aContractsCache;
+  }
+
+  public async onContractSuggest(oEvent: any): Promise<void> {
+    const oInput = oEvent.getSource() as Input;
+    const sValue = ((oEvent.getParameter("suggestValue") as string) || "").toLowerCase();
+
+    if (!this._oContractSuggestModel) {
+      this._oContractSuggestModel = new JSONModel({ rows: [] });
+      oInput.bindAggregation("suggestionItems", {
+        path: "contractSuggest>/rows",
+        template: new Item({ text: "{contractSuggest>codiceContratto}" }),
+      });
+      oInput.setModel(this._oContractSuggestModel, "contractSuggest");
+    }
+
+    const aContracts = await this._getContractsCache();
+    const aFiltered = sValue
+      ? aContracts.filter(
+          (oRow) =>
+            oRow.codiceAtto?.toLowerCase().includes(sValue) ||
+            oRow.codiceContratto?.toLowerCase().includes(sValue) ||
+            oRow.titoloDelContratto?.toLowerCase().includes(sValue),
+        )
+      : aContracts;
+
+    this._oContractSuggestModel.setProperty("/rows", aFiltered);
+  }
+
+  public onContractSuggestionItemSelected(oEvent: any): void {
+    const oItem = oEvent.getParameter("selectedItem");
+    if (!oItem) return;
+    this._selectContract(oItem.getBindingContext("contractSuggest")!.getObject() as IContractRow);
+  }
+
+  // Il contratto deve essere uno di quelli esistenti: se l'utente digita un valore libero
+  // (o lo cancella) senza scegliere un suggerimento, validiamo contro la cache all'uscita
+  // dal campo e, se non corrisponde a nessun codiceContratto, segnaliamo errore e puliamo
+  // i dati derivati dal contratto precedente.
+  public async onContractChange(oEvent: any): Promise<void> {
+    const sValue = (oEvent.getParameter("value") as string) || "";
+
+    if (!sValue) {
+      this._setContractValueState("None");
+      this._resetContractDerivedData();
+      return;
+    }
+
+    const aContracts = await this._getContractsCache();
+    const oMatch = aContracts.find((oRow) => oRow.codiceContratto === sValue);
+
+    if (!oMatch) {
+      this._setContractValueState("Error", this.getText("msgContrattoInesistente"));
+      this._resetContractDerivedData();
+      return;
+    }
+
+    this._selectContract(oMatch);
+  }
+
+  // ── Impresa suggestions ────────────────────────────────────────────────────────
+  // Elenco imprese caricato dalla function import getImpreseContratto, in base al
+  // contratto selezionato, e tenuto in cache: il filtro alla digitazione è locale.
+
+  private _aImpreseCache?: IImpresaRow[];
+  private _oImpresaSuggestModel?: JSONModel;
+
+  private async _getImpreseCache(): Promise<IImpresaRow[]> {
+    const sContratto = this._oModelPOS.getProperty("/contratto") as string;
+    if (!sContratto) return [];
+
+    if (!this._aImpreseCache) {
+      try {
+        this._aImpreseCache = await this.callFunctionImportCollection<IImpresaRow>("getImpreseContratto", {
+          codiceContratto: sContratto,
+        });
+      } catch (e) {
+        entityUtils.handleError(e as Error);
+        return [];
+      }
+    }
+    return this._aImpreseCache;
   }
 
   public async onImpresaValueHelp(): Promise<void> {
     const sContratto = this._oModelPOS.getProperty("/contratto") as string;
     if (!sContratto) return;
 
-    const [oRtiResult, oSubResult] = await Promise.all([
-      this.getEntitySet<{ RagioneSociale: string; PartitaIVA: string; CodiceFiscale: string }>("/ComposizioniRTI_RTP", {
-        filters: [new Filter("ContrattoID", FilterOperator.EQ, sContratto)],
-      }),
-      this.getEntitySet<{ impresaSubappaltatrice: string; partitaIvaCf: string }>("/Subappalti", {
-        filters: [new Filter("contratto_codiceContratto", FilterOperator.EQ, sContratto)],
-      }),
-    ]);
-
-    const aRtiNorm = oRtiResult.data.map((r) => ({
-      ragioneSociale: r.RagioneSociale ?? "",
-      partitaIva: r.PartitaIVA ?? "",
-      cf: r.CodiceFiscale ?? "",
-    }));
-    const aSubNorm = oSubResult.data.map((s) => ({
-      ragioneSociale: s.impresaSubappaltatrice ?? "",
-      partitaIva: s.partitaIvaCf ?? "",
-      cf: s.partitaIvaCf ?? "",
-    }));
-
-    const mSeen = new Set<string>();
-    const aAll = [...aRtiNorm, ...aSubNorm].filter((item) => {
-      if (!item.ragioneSociale || mSeen.has(item.ragioneSociale)) return false;
-      mSeen.add(item.ragioneSociale);
-      return true;
-    });
+    const aImprese = await this._getImpreseCache();
 
     if (!this._oImpresaDialog) {
       this._oImpresaDialog = new TableSelectDialog({
@@ -387,22 +502,22 @@ export default class Pos extends BaseController {
         confirm: (oEvt: any) => this._onImpresaSelected(oEvt),
         columns: [
           new Column({ header: new Label({ text: this.getText("lblRagioneSociale") }) }),
-          new Column({ header: new Label({ text: this.getText("lblPartitaIva") }) }),
           new Column({ header: new Label({ text: this.getText("lblCodiceFiscale") }) }),
+          new Column({ header: new Label({ text: this.getText("lblCompanyRole") }) }),
         ],
       });
       this._oImpresaDialog.setModel(new JSONModel({ items: [] }), "ImpresaList");
       this.getView()!.addDependent(this._oImpresaDialog);
     }
 
-    (this._oImpresaDialog.getModel("ImpresaList") as JSONModel).setProperty("/items", aAll);
+    (this._oImpresaDialog.getModel("ImpresaList") as JSONModel).setProperty("/items", aImprese);
     this._oImpresaDialog.bindAggregation("items", {
       path: "ImpresaList>/items",
       template: new ColumnListItem({
         cells: [
-          new Text({ text: "{ImpresaList>ragioneSociale}", wrapping: false }),
-          new Text({ text: "{ImpresaList>partitaIva}", wrapping: false }),
-          new Text({ text: "{ImpresaList>cf}", wrapping: false }),
+          new Text({ text: "{ImpresaList>nomeImpresa}", wrapping: false }),
+          new Text({ text: "{ImpresaList>codiceFiscale}", wrapping: false }),
+          new Text({ text: "{ImpresaList>ruolo}", wrapping: false }),
         ],
       }),
     });
@@ -419,24 +534,91 @@ export default class Pos extends BaseController {
       new Filter({
         filters: [
           new Filter({
-            path: "ragioneSociale",
+            path: "nomeImpresa",
             operator: FilterOperator.Contains,
             value1: sValue,
             caseSensitive: false,
           }),
-          new Filter({ path: "partitaIva", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
-          new Filter({ path: "cf", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+          new Filter({
+            path: "codiceFiscale",
+            operator: FilterOperator.Contains,
+            value1: sValue,
+            caseSensitive: false,
+          }),
+          new Filter({ path: "ruolo", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
         ],
         and: false,
       }),
     ]);
   }
 
+  private _selectImpresa(oRow: IImpresaRow): void {
+    this._setImpresaValueState("None");
+    this._oModelPOS.setProperty("/impresaAppaltatrice", oRow.nomeImpresa);
+    this._oModelPOS.setProperty("/ruoloImpresa", oRow.ruolo ?? "");
+  }
+
+  private _setImpresaValueState(sState: "None" | "Error", sText = ""): void {
+    this._oModelPOS.setProperty("/impresaValueState", sState);
+    this._oModelPOS.setProperty("/impresaValueStateText", sText);
+  }
+
   private _onImpresaSelected(oEvent: any): void {
     const oItem = oEvent.getParameter("selectedItem");
     if (!oItem) return;
-    const oRow = oItem.getBindingContext("ImpresaList")!.getObject() as { ragioneSociale: string };
-    this._oModelPOS.setProperty("/impresaAppaltatrice", oRow.ragioneSociale);
+    const oRow = oItem.getBindingContext("ImpresaList")!.getObject() as IImpresaRow;
+    this._selectImpresa(oRow);
+  }
+
+  public async onImpresaSuggest(oEvent: any): Promise<void> {
+    const oInput = oEvent.getSource() as Input;
+    const sValue = ((oEvent.getParameter("suggestValue") as string) || "").toLowerCase();
+
+    if (!this._oImpresaSuggestModel) {
+      this._oImpresaSuggestModel = new JSONModel({ rows: [] });
+      oInput.bindAggregation("suggestionItems", {
+        path: "impresaSuggest>/rows",
+        template: new Item({ text: "{impresaSuggest>nomeImpresa}" }),
+      });
+      oInput.setModel(this._oImpresaSuggestModel, "impresaSuggest");
+    }
+
+    const aImprese = await this._getImpreseCache();
+    const aFiltered = sValue
+      ? aImprese.filter(
+          (oRow) =>
+            oRow.nomeImpresa?.toLowerCase().includes(sValue) || oRow.codiceFiscale?.toLowerCase().includes(sValue),
+        )
+      : aImprese;
+
+    this._oImpresaSuggestModel.setProperty("/rows", aFiltered);
+  }
+
+  public onImpresaSuggestionItemSelected(oEvent: any): void {
+    const oItem = oEvent.getParameter("selectedItem");
+    if (!oItem) return;
+    this._selectImpresa(oItem.getBindingContext("impresaSuggest")!.getObject() as IImpresaRow);
+  }
+
+  public async onImpresaChange(oEvent: any): Promise<void> {
+    const sValue = (oEvent.getParameter("value") as string) || "";
+
+    if (!sValue) {
+      this._setImpresaValueState("None");
+      this._oModelPOS.setProperty("/ruoloImpresa", "");
+      return;
+    }
+
+    const aImprese = await this._getImpreseCache();
+    const oMatch = aImprese.find((oRow) => oRow.nomeImpresa === sValue);
+
+    if (!oMatch) {
+      this._setImpresaValueState("Error", this.getText("msgImpresaInesistente"));
+      this._oModelPOS.setProperty("/ruoloImpresa", "");
+      return;
+    }
+
+    this._selectImpresa(oMatch);
   }
 
   public onSkillDateChange(oEvent: Event): void {
