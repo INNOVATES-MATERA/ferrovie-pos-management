@@ -471,7 +471,7 @@ export default class Pos extends BaseController {
   private _aImpreseCache?: IImpresaRow[];
   private _oImpresaSuggestModel?: JSONModel;
 
-  private async _getImpreseCache(): Promise<IImpresaRow[]> {
+  private async _getImpreseCache(): Promise<IImpresaRow[] | undefined> {
     const sContratto = this._oModelPOS.getProperty("/contratto") as string;
     if (!sContratto) return [];
 
@@ -482,7 +482,7 @@ export default class Pos extends BaseController {
         });
       } catch (e) {
         entityUtils.handleError(e as Error);
-        return [];
+        return undefined;
       }
     }
     return this._aImpreseCache;
@@ -493,6 +493,7 @@ export default class Pos extends BaseController {
     if (!sContratto) return;
 
     const aImprese = await this._getImpreseCache();
+    if (!aImprese) return;
 
     if (!this._oImpresaDialog) {
       this._oImpresaDialog = new TableSelectDialog({
@@ -583,7 +584,7 @@ export default class Pos extends BaseController {
       oInput.setModel(this._oImpresaSuggestModel, "impresaSuggest");
     }
 
-    const aImprese = await this._getImpreseCache();
+    const aImprese = (await this._getImpreseCache()) ?? [];
     const aFiltered = sValue
       ? aImprese.filter(
           (oRow) =>
@@ -610,6 +611,7 @@ export default class Pos extends BaseController {
     }
 
     const aImprese = await this._getImpreseCache();
+    if (!aImprese) return;
     const oMatch = aImprese.find((oRow) => oRow.nomeImpresa === sValue);
 
     if (!oMatch) {
