@@ -4,11 +4,22 @@ import * as exportLib from "sap/ui/export/library";
 const xlsxUtils = {
     EdmType: exportLib.EdmType,
 
+    /**
+     * Sostituisce nei dati da esportare i valori booleani con una "X" (vero) o con una cella vuota (falso).
+     * @param oRow riga di dati da esportare
+     * @returns copia della riga con i booleani convertiti
+     */
+    formatBooleans(oRow: object): object {
+        return Object.fromEntries(
+            Object.entries(oRow).map(([sKey, vValue]) => [sKey, typeof vValue === "boolean" ? (vValue ? "X" : "") : vValue]),
+        );
+    },
+
     generateSpreadsheet(aColumns: object[], aData: object[], sFileName: string): Promise<void> {
         return new Promise((resolve, reject) => {
             const oSheet = new Spreadsheet({
                 workbook: { columns: aColumns },
-                dataSource: aData,
+                dataSource: aData.map((oRow) => xlsxUtils.formatBooleans(oRow)),
                 fileName: sFileName,
             });
             oSheet.build().then(resolve as any).catch(reject).finally(() => oSheet.destroy());
@@ -23,11 +34,9 @@ const xlsxUtils = {
                 const sProp = (c.data("prop") as string) || sKey;
                 if (!sKey) return null;
                 const sLabel = c.getHeader()?.getText?.() ?? sKey;
-                const bBoolean = (c.data("edmType") as string) === "Boolean";
                 return {
                     label: sLabel,
                     property: sProp,
-                    ...(bBoolean ? { type: exportLib.EdmType.Boolean } : {}),
                 };
             })
             .filter(Boolean) as object[];

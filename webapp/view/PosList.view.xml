@@ -314,7 +314,13 @@
                                     <Text text="{direttoreTecnico}"
                                         wrapping="false"/>
                                     <ObjectStatus text="{statoPos}"
-                                        state="{= ${statoPos} === 'Valido' ? 'Success' : ${statoPos} === 'Non Valido' ? 'Error' : ( ${statoPos} === 'In Verifica' || ${statoPos} === 'In Attesa di Integrazioni' ) ? 'Warning' : 'None' }"/>
+                                        class="posStatusBadge">
+                                        <customData>
+                                            <core:CustomData key="stato"
+                                                value="{statoPos}"
+                                                writeToDom="true"/>
+                                        </customData>
+                                    </ObjectStatus>
                                     <Text text="{linkCde}"
                                         wrapping="false"/>
                                     <Text text="{note}"

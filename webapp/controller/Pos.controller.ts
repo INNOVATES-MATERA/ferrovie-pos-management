@@ -163,7 +163,8 @@ export default class Pos extends BaseController {
     const oTable = this.byId("tblStaff") as Table;
     const aData = this._oModelStaff.getProperty("/data") as object[];
     const aColumns = xlsxUtils.getColumnsFromTable(this, oTable);
-    await xlsxUtils.generateSpreadsheet(aColumns, aData, "ListaStaff.xlsx");
+    const sPosId = (this._oModelPOS.getProperty("/idPos") as string) ?? "";
+    await xlsxUtils.generateSpreadsheet(aColumns, aData, `lavoratori_pos_${sPosId}.xlsx`);
   }
 
   private async _onRouteMatched(oEvent: any): Promise<void> {

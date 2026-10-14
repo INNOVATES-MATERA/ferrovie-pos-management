@@ -197,7 +197,7 @@ export default class PosList extends BaseController {
     const aContexts = await this.getAllContexts(oBinding);
     const aData = aContexts.map((ctx) => ctx.getObject());
     const aColumns = xlsxUtils.getColumnsFromTable(this, oTable);
-    await xlsxUtils.generateSpreadsheet(aColumns, aData, "GestionePOS.xlsx");
+    await xlsxUtils.generateSpreadsheet(aColumns, aData, "pos.xlsx");
   }
 
   public onNewPos(): void {
