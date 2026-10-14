@@ -182,6 +182,17 @@
                                 </header>
                             </Column>
 
+                            <Column app:p13nKey="inizioValidita"
+                                app:searchable="false"
+                                width="9rem"
+                                visible="false">
+                                <header>
+                                    <Label text="{i18n>lblReceptionDate}"
+                                        tooltip="{i18n>lblReceptionDate}"
+                                        wrapping="false"/>
+                                </header>
+                            </Column>
+
                             <Column app:p13nKey="datoreLavoro"
                                 width="12rem"
                                 visible="false">
@@ -300,6 +311,9 @@
                                         wrapping="false"/>
                                     <Text core:require="{ ODataDate: 'sap/ui/model/odata/type/Date' }"
                                         text="{path: 'dataRedazione', type: 'ODataDate', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
+                                        wrapping="false"/>
+                                    <Text core:require="{ ODataDate: 'sap/ui/model/odata/type/Date' }"
+                                        text="{path: 'inizioValidita', type: 'ODataDate', formatOptions: {style: 'short', pattern: 'dd/MM/yyyy'}}"
                                         wrapping="false"/>
                                     <Text text="{datoreLavoro}"
                                         wrapping="false"/>
