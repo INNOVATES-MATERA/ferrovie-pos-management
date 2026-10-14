@@ -59,7 +59,7 @@
                                     <form:FormElement label="{i18n>lblContract}">
                                         <form:fields>
                                             <Input id="inpContractCode"
-                                                value="{POS>/contratto}"
+                                                value="{POS>/contrattoDisplay}"
                                                 required="true"
                                                 editable="{= !${POS>/isEdit} }"
                                                 showValueHelp="{= !${POS>/isEdit} }"
@@ -129,7 +129,10 @@
                             <!-- Container 2: Figure di sicurezza -->
                             <form:FormContainer>
                                 <form:formElements>
-                                    <form:FormElement label="{i18n>lblEmployer}">
+                                    <form:FormElement>
+                                        <form:label>
+                                            <Label text="{i18n>lblEmployer}" required="true"/>
+                                        </form:label>
                                         <form:fields>
                                             <Input id="inpEmployer"
                                                 value="{POS>/datoreLavoro}"
@@ -143,14 +146,20 @@
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lblRls}">
+                                    <form:FormElement>
+                                        <form:label>
+                                            <Label text="{i18n>lblRls}" required="true"/>
+                                        </form:label>
                                         <form:fields>
                                             <Input id="inpRls"
                                                 value="{POS>/rls}"
                                                 maxLength="100"/>
                                         </form:fields>
                                     </form:FormElement>
-                                    <form:FormElement label="{i18n>lblMedicoCompetente}">
+                                    <form:FormElement>
+                                        <form:label>
+                                            <Label text="{i18n>lblMedicoCompetente}" required="true"/>
+                                        </form:label>
                                         <form:fields>
                                             <Input id="inpMedicoCompetente"
                                                 value="{POS>/medicocompetente}"
@@ -300,6 +309,36 @@
                                                 </header>
                                             </Column>
 
+                                            <Column app:p13nKey="prontosoccorso"
+                                                app:edmType="Boolean"
+                                                width="9rem"
+                                                hAlign="Center">
+                                                <header>
+                                                    <Label text="{i18n>lblFirstAidTeam}"
+                                                        wrapping="true"/>
+                                                </header>
+                                            </Column>
+
+                                            <Column app:p13nKey="antincendio"
+                                                app:edmType="Boolean"
+                                                width="9rem"
+                                                hAlign="Center">
+                                                <header>
+                                                    <Label text="{i18n>lblFireTeam}"
+                                                        wrapping="true"/>
+                                                </header>
+                                            </Column>
+
+                                            <Column app:p13nKey="emergenze"
+                                                app:edmType="Boolean"
+                                                width="9rem"
+                                                hAlign="Center">
+                                                <header>
+                                                    <Label text="{i18n>lblEmergencyManagement}"
+                                                        wrapping="true"/>
+                                                </header>
+                                            </Column>
+
                                             <Column width="6rem"
                                                 hAlign="Center">
                                                 <header>
@@ -334,6 +373,12 @@
                                                     <Input value="{Staff>mansione}"
                                                         maxLength="50"
                                                         ariaLabelledBy="lblRoleStaff"/>
+                                                    <CheckBox selected="{Staff>prontosoccorso}"
+                                                        tooltip="{i18n>lblFirstAidTeam}"/>
+                                                    <CheckBox selected="{Staff>antincendio}"
+                                                        tooltip="{i18n>lblFireTeam}"/>
+                                                    <CheckBox selected="{Staff>emergenze}"
+                                                        tooltip="{i18n>lblEmergencyManagement}"/>
                                                     <Button icon="sap-icon://permission"
                                                         type="Transparent"
                                                         press=".onOpenSkills"

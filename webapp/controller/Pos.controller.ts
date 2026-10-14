@@ -20,6 +20,7 @@ import p13nDialogUtils from "../utils/p13nDialogUtils";
 import p13nColumnUtils from "../utils/p13nColumnUtils";
 import xlsxUtils from "../utils/xlsxUtils";
 import dateUtils from "../utils/dateUtils";
+import contractUtils from "../utils/contractUtils";
 
 function generateRandomId(): string {
   return Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -42,6 +43,7 @@ interface IImpresaRow {
 const DEFAULT_POS = {
   idPos: "",
   contratto: "",
+  contrattoDisplay: "",
   contrattoValueState: "None" as string,
   contrattoValueStateText: "",
   codiceAtto: "",
@@ -77,6 +79,9 @@ const DEFAULT_STAFF_ROW = {
   cognome: "",
   reparto: "",
   mansione: "",
+  prontosoccorso: false,
+  antincendio: false,
+  emergenze: false,
 };
 
 type SkillItem = {
@@ -171,6 +176,7 @@ export default class Pos extends BaseController {
     this._oModelPOS.setData({
       ...structuredClone(DEFAULT_POS),
       contratto: this._sContractCode,
+      contrattoDisplay: contractUtils.getContractNumberSuffix(this._sContractCode),
       idPos: bIsEdit ? this._sPosId : generateRandomId(),
       isEdit: bIsEdit,
       formTitle: bIsEdit ? this.getText("lblPosForm") : this.getText("lblPosFormCreate"),
@@ -218,6 +224,12 @@ export default class Pos extends BaseController {
       return;
     }
 
+    // Datore di Lavoro, Medico Competente e RLS sono obbligatori sul servizio (ASSERT_MANDATORY): una stringa vuota viene rifiutata
+    if (!sDatore.trim() || !sMedico.trim() || !sRls.trim()) {
+      MessageBox.error(this.getText("msgMandatoryFields"));
+      return;
+    }
+
     const aStaff = this._aStaffAllRows as { reparto: string }[];
     if (aStaff.some((p) => !p.reparto?.trim())) {
       MessageBox.error(this.getText("msgRepartoRequired"));
@@ -259,22 +271,32 @@ export default class Pos extends BaseController {
 
       if (bIsEdit) {
         await this.updateEntity("/PosTestataSet", { idPos: sPosId }, oPosPayload);
-        MessageBox.success(this.getText("msgSaveSuccess"), {
-          onClose: () => {
-            this.getRouter().navTo("RoutePosList");
-          },
-        });
       } else {
         await this.createEntity("/PosTestataSet", oPosPayload);
-        MessageBox.success(this.getText("msgSaveSuccess"), {
-          onClose: () => {
-            this.getRouter().navTo("RoutePosList");
-          },
-        });
+        // Dopo la creazione i salvataggi successivi devono aggiornare il POS appena creato
+        this._sPosId = sPosId;
+        this._oModelPOS.setProperty("/isEdit", true);
+        this._oModelPOS.setProperty("/formTitle", this.getText("lblPosForm"));
       }
+      this._showPostSaveDialog();
     } catch (e) {
       entityUtils.handleError(e as Error);
     }
+  }
+
+  /** Mostra il message box di fine salvataggio, che permette di tornare alla lista o di restare nel POS. */
+  private _showPostSaveDialog(): void {
+    const sBackAction = this.getText("btnBackToList");
+    const sStayAction = this.getText("btnStayInPos");
+    MessageBox.success(this.getText("msgSaveSuccessWhere"), {
+      actions: [sBackAction, sStayAction],
+      emphasizedAction: sStayAction,
+      onClose: (sAction: string | null) => {
+        if (sAction === sBackAction) {
+          this.getRouter().navTo("RoutePosList");
+        }
+      },
+    });
   }
 
   public onBack(): void {
@@ -301,7 +323,13 @@ export default class Pos extends BaseController {
         template: new ColumnListItem({
           cells: [
             new Text({ text: "{codiceAtto}", wrapping: false }),
-            new Text({ text: "{codiceContratto}", wrapping: false }),
+            new Text({
+              text: {
+                path: "codiceContratto",
+                formatter: (sCode?: string) => contractUtils.getContractNumberSuffix(sCode),
+              },
+              wrapping: false,
+            }),
             new Text({ text: "{titoloDelContratto}", wrapping: false }),
             new Text({ text: "{codiceSAPOrganizzazioneAcquisti}", wrapping: false }),
             new Text({ text: "{codiceSAPGruppoAcquisti}", wrapping: false }),
@@ -368,6 +396,7 @@ export default class Pos extends BaseController {
     }
     this._setContractValueState("None");
     this._oModelPOS.setProperty("/contratto", oRow.codiceContratto);
+    this._oModelPOS.setProperty("/contrattoDisplay", contractUtils.getContractNumberSuffix(oRow.codiceContratto));
     this._oModelPOS.setProperty("/codiceAtto", oRow.codiceAtto ?? "");
   }
 
@@ -415,7 +444,12 @@ export default class Pos extends BaseController {
       this._oContractSuggestModel = new JSONModel({ rows: [] });
       oInput.bindAggregation("suggestionItems", {
         path: "contractSuggest>/rows",
-        template: new Item({ text: "{contractSuggest>codiceContratto}" }),
+        template: new Item({
+          text: {
+            path: "contractSuggest>codiceContratto",
+            formatter: (sCode?: string) => contractUtils.getContractNumberSuffix(sCode),
+          },
+        }),
       });
       oInput.setModel(this._oContractSuggestModel, "contractSuggest");
     }
@@ -447,15 +481,21 @@ export default class Pos extends BaseController {
     const sValue = (oEvent.getParameter("value") as string) || "";
 
     if (!sValue) {
+      this._oModelPOS.setProperty("/contratto", "");
+      this._oModelPOS.setProperty("/contrattoDisplay", "");
       this._setContractValueState("None");
       this._resetContractDerivedData();
       return;
     }
 
+    // Il campo mostra solo il suffisso: si accetta sia il codice completo sia il suffisso digitato
     const aContracts = await this._getContractsCache();
-    const oMatch = aContracts.find((oRow) => oRow.codiceContratto === sValue);
+    const oMatch =
+      aContracts.find((oRow) => oRow.codiceContratto === sValue) ??
+      aContracts.find((oRow) => contractUtils.getContractNumberSuffix(oRow.codiceContratto) === sValue);
 
     if (!oMatch) {
+      this._oModelPOS.setProperty("/contratto", sValue);
       this._setContractValueState("Error", this.getText("msgContrattoInesistente"));
       this._resetContractDerivedData();
       return;
@@ -795,6 +835,9 @@ export default class Pos extends BaseController {
       cognome: string;
       reparto: string;
       mansione: string;
+      prontosoccorso?: boolean;
+      antincendio?: boolean;
+      emergenze?: boolean;
     }[];
     return aStaff.map((persona) => {
       const sKey = persona.idDipendente || persona.tmpId;
@@ -814,6 +857,9 @@ export default class Pos extends BaseController {
         cognome: persona.cognome,
         reparto: persona.reparto,
         mansione: persona.mansione,
+        prontosoccorso: !!persona.prontosoccorso,
+        antincendio: !!persona.antincendio,
+        emergenze: !!persona.emergenze,
         abilitazioni: aAbilitazioni,
       };
     });
@@ -830,6 +876,7 @@ export default class Pos extends BaseController {
     this._oModelPOS.setData({
       ...oData,
       contratto: oData.contratto_codiceContratto,
+      contrattoDisplay: contractUtils.getContractNumberSuffix(oData.contratto_codiceContratto),
       codiceAtto: oData.contratto?.codiceAtto ?? "",
       isEdit: true,
       formTitle: this.getText("lblPosForm"),

@@ -23,9 +23,11 @@ const xlsxUtils = {
                 const sProp = (c.data("prop") as string) || sKey;
                 if (!sKey) return null;
                 const sLabel = c.getHeader()?.getText?.() ?? sKey;
+                const bBoolean = (c.data("edmType") as string) === "Boolean";
                 return {
                     label: sLabel,
                     property: sProp,
+                    ...(bBoolean ? { type: exportLib.EdmType.Boolean } : {}),
                 };
             })
             .filter(Boolean) as object[];

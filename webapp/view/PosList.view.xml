@@ -286,7 +286,8 @@
                                         wrapping="false"/>
                                     <Text text="{contratto/codiceAtto}"
                                         wrapping="false"/>
-                                    <Text text="{contratto_codiceContratto}"
+                                    <Text core:require="{ContractUtils: 'posmanagement/utils/contractUtils'}"
+                                        text="{path: 'contratto_codiceContratto', formatter: 'ContractUtils.getContractNumberSuffix'}"
                                         wrapping="false"/>
                                     <Text text="{contratto/stato}"
                                         wrapping="false"/>
