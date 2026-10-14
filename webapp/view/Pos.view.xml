@@ -16,14 +16,14 @@
                     <Title text="{POS>/formTitle}"/>
                 </f:heading>
                 <f:expandedContent>
-                    <Label text="{POS>/idPos}"
+                    <Title text="{POS>/idPos}"
                         visible="{POS>/isEdit}"
-                        design="Bold"/>
+            titleStyle="H4"/>
                 </f:expandedContent>
                 <f:snappedContent>
-                    <Label text="{POS>/idPos}"
+                    <Title text="{POS>/idPos}"
                         visible="{POS>/isEdit}"
-                        design="Bold"/>
+            titleStyle="H4"/>
                 </f:snappedContent>
             </f:DynamicPageTitle>
         </f:title>
