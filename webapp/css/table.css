@@ -42,3 +42,10 @@
   background: #fee2e2;
   color: #991b1b;
 }
+
+/* Pulsanti di azione (modifica, elimina, ...) in colonne separate e attaccate:
+   senza padding laterale restano visibili anche quando la tabella scorre in orizzontale. */
+.sapMListTbl .actionButtonColumn {
+  padding-left: 0;
+  padding-right: 0;
+}

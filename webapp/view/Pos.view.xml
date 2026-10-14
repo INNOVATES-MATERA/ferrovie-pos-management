@@ -346,8 +346,8 @@
                                                 </header>
                                             </Column>
 
-                                            <Column width="3.5rem"
-                                                hAlign="Center">
+                                            <Column width="2.25rem"
+                                                hAlign="Center" styleClass="actionButtonColumn">
                                                 <header>
                                                     <Label text=""/>
                                                 </header>

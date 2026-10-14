@@ -32,9 +32,15 @@
                     <f:Card class="sapUiTinyMargin pos-stat-card"
                         width="20rem">
                         <f:header>
-                            <card:NumericHeader title="{i18n>cardPosToInsert}"
-                                number="{Dashboard>/posToInsert}"
-                                state="{= ${Dashboard>/posToInsert} > 0 ? 'Error' : 'Neutral' }"/>
+                            <card:NumericHeader title="{i18n>cardPosInVerifica}"
+                                number="{Dashboard>/posInVerifica}"/>
+                        </f:header>
+                    </f:Card>
+                    <f:Card class="sapUiTinyMargin pos-stat-card"
+                        width="20rem">
+                        <f:header>
+                            <card:NumericHeader title="{i18n>cardPosInAttesaIntegrazioni}"
+                                number="{Dashboard>/posInAttesaIntegrazioni}"/>
                         </f:header>
                     </f:Card>
                 </HBox>
@@ -70,6 +76,11 @@
                             type="Emphasized"
                             pressed="{= ${Pos>/filters/statoContratto} === '' }"
                             press=".onFilterStatoContrattoAll"/>
+                        <ToggleButton text="{i18n>optStatoContrattoInStipula}"
+                            type="Emphasized"
+                            pressed="{= ${Pos>/filters/statoContratto} === 'In Stipula' }"
+                            press=".onFilterStatoContratto"
+                            app:statoContratto="In Stipula"/>
                         <ToggleButton text="{i18n>optStatoContrattoInCorsoAttivo}"
                             type="Emphasized"
                             pressed="{= ${Pos>/filters/statoContratto} === 'In Corso/Attivo' }"
@@ -281,8 +292,14 @@
                                 </header>
                             </Column>
 
-                            <Column width="6rem"
-                                hAlign="End">
+                            <Column width="2.25rem"
+                                hAlign="Center" styleClass="actionButtonColumn">
+                                <header>
+                                    <Text text=""/>
+                                </header>
+                            </Column>
+                            <Column width="2.25rem"
+                                hAlign="Center" styleClass="actionButtonColumn">
                                 <header>
                                     <Text text=""/>
                                 </header>
@@ -339,8 +356,7 @@
                                         wrapping="false"/>
                                     <Text text="{note}"
                                         wrapping="false"/>
-                                    <HBox justifyContent="End">
-                                        <Button icon="sap-icon://edit"
+                                    <Button icon="sap-icon://edit"
                                             tooltip="{i18n>btnEdit}"
                                             type="Transparent"
                                             press=".onDetail"/>
@@ -348,7 +364,6 @@
                                             tooltip="{i18n>btnDelete}"
                                             type="Transparent"
                                             press=".onDelete"/>
-                                    </HBox>
                                 </cells>
                             </ColumnListItem>
                         </items>

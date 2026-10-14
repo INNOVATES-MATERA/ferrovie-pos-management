@@ -19,7 +19,8 @@ const DEFAULT_MODEL = {
 };
 
 const DEFAULT_DASHBOARD = {
-  posToInsert: 0,
+  posInVerifica: 0,
+  posInAttesaIntegrazioni: 0,
 };
 
 // Stati Contratto (campo "stato" su Contratti, esposto tramite $expand=contratto) che
@@ -71,22 +72,20 @@ export default class PosList extends BaseController {
   }
 
   // ── Dashboard KPI (ex Home) ──────────────────────────────────────────────────
-  // "POS da Inserire" conta i contratti attivi (stato "In Corso/Attivo") che non hanno
-  // ancora un POS associato: un contratto attivo senza POS è una situazione di alert.
+  // "POS in Verifica" e "POS in Attesa di Integrazioni" contano i POS per stato (statoPos).
 
   private async _loadDashboard(): Promise<void> {
     try {
-      const [oPos, oContracts] = await Promise.all([
-        this.getEntitySet<{ contratto_codiceContratto: string }>("/PosTestataSet"),
-        this.getEntitySet<{ codiceContratto: string }>("/Contratti", {
-          filters: [new Filter("stato", FilterOperator.EQ, "In Corso/Attivo")],
-        }),
+      const fnCountByStatoPos = (sStato: string) =>
+        this.getEntitySet("/PosTestataSet", { filters: [new Filter("statoPos", FilterOperator.EQ, sStato)], top: 0 });
+
+      const [oInVerifica, oInAttesaIntegrazioni] = await Promise.all([
+        fnCountByStatoPos("In Verifica"),
+        fnCountByStatoPos("In Attesa di Integrazioni"),
       ]);
 
-      const aContractsWithPos = new Set(oPos.data.map((p) => p.contratto_codiceContratto));
-      const iToInsert = oContracts.data.filter((c) => !aContractsWithPos.has(c.codiceContratto)).length;
-
-      this._oModelDashboard.setProperty("/posToInsert", iToInsert);
+      this._oModelDashboard.setProperty("/posInVerifica", oInVerifica.count);
+      this._oModelDashboard.setProperty("/posInAttesaIntegrazioni", oInAttesaIntegrazioni.count);
     } catch (e) {
       entityUtils.handleError(e as Error);
     }
