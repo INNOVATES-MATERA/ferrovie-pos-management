@@ -270,7 +270,7 @@
                                 </header>
                             </Column>
 
-                            <Column width="5rem"
+                            <Column width="6rem"
                                 hAlign="End">
                                 <header>
                                     <Text text=""/>
