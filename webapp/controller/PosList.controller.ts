@@ -45,6 +45,8 @@ export default class PosList extends BaseController {
     this._oModelDashboard = new JSONModel(structuredClone(DEFAULT_DASHBOARD));
     this.setModel(this._oModelDashboard, "Dashboard");
 
+    // RouteHome (URL vuoto, primo ingresso) e RoutePosList mostrano la stessa view: entrambe devono caricare i KPI
+    this.getRouter().getRoute("RouteHome")!.attachPatternMatched(this._onRouteMatched, this);
     this.getRouter().getRoute("RoutePosList")!.attachPatternMatched(this._onRouteMatched, this);
   }
 
