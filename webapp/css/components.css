@@ -57,3 +57,8 @@
   box-shadow: var(--pos-card-shadow-hover);
   transform: translateY(-2px);
 }
+
+/* Asterisco rosso sui campi obbligatori */
+.sapMLabel.sapMLabelRequired::before {
+  color: var(--sapNegativeElementColor, #d20a0a);
+}

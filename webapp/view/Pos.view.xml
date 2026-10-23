@@ -550,8 +550,7 @@
                 <Button text="{i18n>btnBack}"
                     icon="sap-icon://nav-back"
                     press=".onBack"
-                    type="Transparent"
-                    visible="{POS>/isEdit}"/>
+                    type="Transparent"/>
                 <ToolbarSpacer/>
                 <Button id="btnSave"
                     text="{i18n>btnSave}"

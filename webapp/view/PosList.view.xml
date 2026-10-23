@@ -103,7 +103,7 @@
                     </Toolbar>
 
                     <Table id="tblPos"
-                        items="{path: '/PosTestataSet', parameters: {$count: true, $expand: 'contratto'}}"
+                        items="{path: '/PosTestataSet', parameters: {$count: true, $expand: 'contratto'}, sorter: {path: 'dataProtocollo', descending: true}}"
                         mode="None"
                         fixedLayout="true"
                         alternateRowColors="true"
