@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
     <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
         <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
     </edmx:Reference>
@@ -10,7 +10,7 @@
         <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
     </edmx:Reference>
     <edmx:DataServices>
-        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="AttiService">
+        <Schema Namespace="AttiService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
             <Annotation Term="Core.Links">
                 <Collection>
                     <Record>
@@ -277,6 +277,7 @@
                 <Property Name="settore" Type="Edm.String" MaxLength="50"/>
                 <Property Name="sistemaQualifica" Type="Edm.String" MaxLength="50"/>
                 <Property Name="codiceMacroCategoria" Type="Edm.String" MaxLength="100"/>
+                <Property Name="descrizioneMacroCategoria" Type="Edm.String" MaxLength="255"/>
                 <Property Name="importo" Type="Edm.Decimal" Precision="15" Scale="2"/>
             </EntityType>
             <EntityType Name="NoteAtto">
@@ -487,6 +488,7 @@
                 <Property Name="Settore" Type="Edm.String" MaxLength="50"/>
                 <Property Name="SistemaQualifica" Type="Edm.String" MaxLength="50"/>
                 <Property Name="CodiceMacroCategoria" Type="Edm.String" MaxLength="100"/>
+                <Property Name="descrizioneMacroCategoria" Type="Edm.String" MaxLength="255"/>
                 <Property Name="Importo" Type="Edm.Decimal" Precision="17" Scale="2"/>
             </EntityType>
             <EntityType Name="NomineContratto">
