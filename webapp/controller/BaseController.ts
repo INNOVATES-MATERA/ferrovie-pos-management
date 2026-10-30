@@ -52,13 +52,20 @@ export default abstract class BaseController extends Controller {
         return this.getView()!.getModel(sName) as ODataModel;
     }
 
+    /**
+     * Legge un entity set. Se non viene indicato top, la chiamata parte senza $top (nessun limite implicito di 100 record).
+     * @param sEntityName nome dell'entity set
+     * @param options opzioni di lettura (filters, skip, top, model)
+     * @returns record letti e relativo conteggio
+     */
     public async getEntitySet<T = object>(
         sEntityName: string,
         { filters = [] as Filter[], skip = undefined as number | undefined, top = undefined as number | undefined, model = undefined as string | undefined } = {}
     ): Promise<{ data: T[]; count: number }> {
         const oModel = this.getODataModel(model);
         const oBind = oModel.bindList(sEntityName, undefined, [], filters, { $count: true });
-        const aContexts = await oBind.requestContexts(skip, top);
+        // Senza top esplicito si passa Infinity: UI5 non aggiunge $top (altrimenti userebbe il size limit di 100)
+        const aContexts = await oBind.requestContexts(skip, top ?? Infinity);
         return { data: aContexts.map((c) => c.getObject() as T), count: oBind.getLength() };
     }
 
@@ -127,7 +134,8 @@ export default abstract class BaseController extends Controller {
             Object.entries(oKey).map(([key, value]) => new Filter(key, FilterOperator.EQ, value))
         );
         const oBind = oModel.bindList(sEntityName, undefined, [], aFilters);
-        const aContexts = await oBind.requestContexts();
+        // Infinity: nessun $top, così vengono letti tutti i record filtrati e non solo i primi 100
+        const aContexts = await oBind.requestContexts(0, Infinity);
         const aResults = await Promise.all(aContexts.map(async (c) => { await c.delete(); return c.isDeleted(); }));
         return aResults.every((r) => r === true);
     }
@@ -147,7 +155,8 @@ export default abstract class BaseController extends Controller {
         );
         const oOrFilter = new Filter({ filters: aFilters, and: false });
         const oBind = oModel.bindList(sEntityName, undefined, [], aFilters.length > 1 ? [oOrFilter] : aFilters, { $$groupId: "$auto" } as any);
-        const aContexts = await oBind.requestContexts();
+        // Infinity: nessun $top, così vengono letti tutti i record filtrati e non solo i primi 100
+        const aContexts = await oBind.requestContexts(0, Infinity);
         await Promise.all(aContexts.map((c) => c.delete("$auto")));
         await oModel.submitBatch("$auto");
         return true;
