@@ -300,6 +300,20 @@ export default class Pos extends BaseController {
     });
   }
 
+  /**
+   * Apre in una nuova scheda il link al documento inserito nel POS.
+   * Antepone "https://" se manca lo schema, altrimenti il browser lo tratterebbe come percorso relativo.
+   */
+  public onOpenLink(): void {
+    const sLink = ((this._oModelPOS.getProperty("/linkCde") as string) || "").trim();
+    if (!sLink) {
+      MessageBox.warning(this.getText("msgLinkNotSet"));
+      return;
+    }
+    const sUrl = /^https?:\/\//i.test(sLink) ? sLink : `https://${sLink}`;
+    window.open(sUrl, "_blank", "noopener,noreferrer");
+  }
+
   public onBack(): void {
     this.getRouter().navTo("RoutePosList");
   }

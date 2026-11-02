@@ -215,9 +215,19 @@
                                     </form:FormElement>
                                     <form:FormElement label="{i18n>lblLink}">
                                         <form:fields>
-                                            <Input id="inpLink"
-                                                value="{POS>/linkCde}"
-                                                maxLength="1000"/>
+                                            <HBox alignItems="Center"
+                                                width="100%">
+                                                <Input id="inpLink"
+                                                    value="{POS>/linkCde}"
+                                                    maxLength="1000">
+                                                    <layoutData>
+                                                        <FlexItemData growFactor="1"/>
+                                                    </layoutData>
+                                                </Input>
+                                                <Button icon="sap-icon://internet-browser"
+                                                    tooltip="{i18n>tooltipOpenLink}"
+                                                    press=".onOpenLink"/>
+                                            </HBox>
                                         </form:fields>
                                     </form:FormElement>
                                 </form:formElements>
